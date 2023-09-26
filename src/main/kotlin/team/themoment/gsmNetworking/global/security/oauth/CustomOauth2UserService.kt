@@ -24,14 +24,14 @@ class CustomOauth2UserService(
         val delegateOauth2UserService = DefaultOAuth2UserService()
         val oauth2User = delegateOauth2UserService.loadUser(userRequest)
 
-        val email = oauth2User.attributes[Oauth2Properties.EMAIL].toString()
-        validateEmailDomain(email)
+        val email = validateEmailDomain(oauth2User.attributes[Oauth2Properties.EMAIL].toString())
         val providerId = oauth2User.name
-        val authority = getAuthenticationIsNullSave(email, providerId).authority
+        val authentication = getAuthenticationIsNullSave(email, providerId)
+        val authority = authentication.authority
         val userNameAttributeName = userRequest.clientRegistration
             .providerDetails.userInfoEndpoint.userNameAttributeName
         val attributes = mapOf(
-            "sub" to email,
+            "sub" to authentication.authenticationId,
             "provider_id" to providerId,
             "authority" to authority,
             "last_login_time" to LocalDateTime.now()
@@ -41,21 +41,22 @@ class CustomOauth2UserService(
         return UserInfo(authorities, attributes, userNameAttributeName)
     }
 
-    private fun validateEmailDomain(email: String) {
+    private fun validateEmailDomain(email: String): String {
         val regex = Regex("^[A-Za-z0-9._%+-]+@gsm\\.hs\\.kr$")
         if (!regex.matches(email)) {
             throw ExpectedException("요청한 이메일이 GSM 학생용 이메일이 아닙니다.", HttpStatus.BAD_REQUEST)
         }
+        return email
     }
 
     private fun getAuthenticationIsNullSave(email: String, providerId: String): Authentication =
-        authenticationRepository.findByProviderId(providerId) ?: saveAuthentication(email, providerId)
+        authenticationRepository.findByEmail(providerId) ?: saveAuthentication(email, providerId)
 
     private fun saveAuthentication(email: String, providerId: String): Authentication {
         val authentication = Authentication(
             email = email,
             providerId = providerId,
-            authority = Authority.ROLE_UNAUTHENTICATED
+            authority = Authority.UNAUTHENTICATED
         )
         return authenticationRepository.save(authentication)
     }

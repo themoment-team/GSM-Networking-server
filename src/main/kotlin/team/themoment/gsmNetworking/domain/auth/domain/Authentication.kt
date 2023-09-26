@@ -7,10 +7,15 @@ import javax.persistence.*
  */
 @Entity
 class Authentication(
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val authenticationId: Long = 0,
+
+    @Column(nullable = false)
     val email: String,
-    @Column(name = "provider_id", nullable = false)
+
+    @Column(nullable = false)
     val providerId: String,
+
     @Enumerated(EnumType.STRING)
     val authority: Authority
 )

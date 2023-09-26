@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.auth.service
 
+import org.springframework.data.repository.findByIdOrNull
 import team.themoment.gsmNetworking.domain.auth.domain.RefreshToken
 import team.themoment.gsmNetworking.domain.auth.repository.AuthenticationRepository
 import team.themoment.gsmNetworking.domain.auth.repository.RefreshTokenRepository
@@ -39,17 +40,17 @@ class ReissueTokenService(
         val parsedToken = tokenParser.parseRefreshToken(token)
         val refreshToken = refreshTokenRepository.findByToken(parsedToken)
             ?: throw ExpectedException("존재하지 않는 refresh token 입니다.", HttpStatus.NOT_FOUND)
-        val authentication = authenticationRepository.findByEmail(refreshToken.email)
+        val authentication = authenticationRepository.findByIdOrNull(refreshToken.authenticationId)
             ?: throw ExpectedException("refresh token subject인 email을 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
-        val tokenDto = tokenGenerator.generateToken(refreshToken.email, authentication.authority)
-        saveRefreshToken(tokenDto.refreshToken, authentication.email)
+        val tokenDto = tokenGenerator.generateToken(refreshToken.authenticationId, authentication.authority)
+        saveRefreshToken(tokenDto.refreshToken, authentication.authenticationId)
         return tokenDto
     }
 
-    private fun saveRefreshToken(token: String, email: String) {
+    private fun saveRefreshToken(token: String, authenticationId: Long) {
         val refreshToken = RefreshToken(
             token = token,
-            email = email,
+            authenticationId = authenticationId,
             expirationTime = jwtExpTimeProperties.refreshExp
         )
         refreshTokenRepository.save(refreshToken)
