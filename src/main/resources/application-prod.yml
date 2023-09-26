@@ -1,0 +1,49 @@
+server:
+  shutdown: graceful
+
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+
+  datasource:
+    driver-class-name: ${DB_CLASS_NAME}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    database-platform: ${DB_PLATFORM}
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO}
+
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: ${GOOGLE_REDIRECT_URI}
+            scope: ${GOOGLE_SCOPE}
+            success:
+              redirect-uri: ${GOOGLE_SUCCESS_REDIRECT_URI}
+
+jwt:
+  accessSecret: ${JWT_ACCESS_SECRET}
+  refreshSecret: ${JWT_REFRESH_SECRET}
+  time:
+    accessExp: ${JWT_ACCESS_EXPIRED}
+    refreshExp: ${JWT_REFRESH_EXPIRED}
