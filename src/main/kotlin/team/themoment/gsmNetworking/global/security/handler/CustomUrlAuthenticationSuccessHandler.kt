@@ -30,17 +30,17 @@ class CustomUrlAuthenticationSuccessHandler(
         response: HttpServletResponse,
         authentication: Authentication,
     ) {
-        val email = authentication.name
+        val authenticationId = authentication.name.toLong()
         val authority = authentication.authorities.iterator().next().authority
-        val token = tokenGenerator.generateToken(email, Authority.valueOf(authority.toString()))
-        saveRefreshToken(token.refreshToken, email)
+        val token = tokenGenerator.generateToken(authenticationId, Authority.valueOf(authority.toString()))
+        saveRefreshToken(token.refreshToken, authenticationId)
         sendTokenResponse(response, token)
     }
 
-    private fun saveRefreshToken(token: String, email: String) {
+    private fun saveRefreshToken(token: String, authenticationId: Long) {
         val refreshToken = RefreshToken(
             token = token,
-            email = email,
+            authenticationId = authenticationId,
             expirationTime = jwtExpTimeProperties.refreshExp
         )
         refreshTokenRepository.save(refreshToken)
