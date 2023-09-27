@@ -22,7 +22,7 @@ class CustomStompSubProtocolErrorHandler(
     ): Message<ByteArray>? {
         when (val cause = ex.cause) {
             is StompException -> {
-                stompErrorProcessor.sendError(cause)
+                stompErrorProcessor.sendErrors(cause)
             }
 
             is Exception -> {

@@ -20,11 +20,11 @@ class StompErrorProcessor(
     }
 
     /**
-     * 처리 가능한 [StompSender]에게 STOMP 에러 처리를 위임합니다.
+     * 처리 가능한 여러 [StompSender]에게 STOMP 에러 처리를 위임합니다.
      * @param ex [StompException]의 구현체
      * @see StompSender
      */
-    fun sendError(ex: StompException) {
+    fun sendErrors(ex: StompException) {
         val supportedSenders = senders.filter { it.supportsException(ex.javaClass) }
 
         if (supportedSenders.isEmpty()) {

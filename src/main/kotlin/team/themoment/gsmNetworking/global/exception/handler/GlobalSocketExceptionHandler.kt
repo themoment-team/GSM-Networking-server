@@ -20,7 +20,7 @@ class GlobalSocketExceptionHandler(
     @MessageExceptionHandler(StompException::class)
     fun handler(e: StompException) {
         log.warn("StompException Occur ", e)
-        stompErrorProcessor.sendError(e)
+        stompErrorProcessor.sendErrors(e)
     }
 
 
