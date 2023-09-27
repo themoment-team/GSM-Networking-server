@@ -32,7 +32,7 @@ class StompErrorProcessor(
         }
 
         supportedSenders.forEach { sender ->
-            sender.sendError(ex)
+            sender.sendErrorMessage(ex)
         }
     }
 }

@@ -21,7 +21,7 @@ interface StompSender {
      *
      * @param ex 전송할 에러 메시지
      */
-    fun sendError(ex: StompException) {
+    fun sendErrorMessage(ex: StompException) {
         val errorMessage = createErrorMessage(ex)
         sendMessage(errorMessage)
     }
