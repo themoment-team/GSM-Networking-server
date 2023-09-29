@@ -4,9 +4,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConstructorBinding
-@ConfigurationProperties("spring.security.oauth2.client.registration.google.success")
+@ConfigurationProperties("oauth2.login.success")
 class Oauth2Properties(
-    val redirectUri: String
+    val signUpRedirectUrl: String,
+    val defaultRedirectUrl: String
 ) {
 
     companion object {
