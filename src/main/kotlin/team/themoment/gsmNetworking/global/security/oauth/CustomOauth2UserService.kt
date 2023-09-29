@@ -50,7 +50,7 @@ class CustomOauth2UserService(
     }
 
     private fun getAuthenticationIsNullSave(email: String, providerId: String): Authentication =
-        authenticationRepository.findByEmail(providerId) ?: saveAuthentication(email, providerId)
+        authenticationRepository.findByEmail(email) ?: saveAuthentication(email, providerId)
 
     private fun saveAuthentication(email: String, providerId: String): Authentication {
         val authentication = Authentication(
