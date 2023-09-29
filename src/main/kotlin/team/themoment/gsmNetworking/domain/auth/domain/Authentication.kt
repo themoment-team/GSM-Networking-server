@@ -10,10 +10,10 @@ class Authentication(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val authenticationId: Long = 0,
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     val email: String,
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     val providerId: String,
 
     @Enumerated(EnumType.STRING)
