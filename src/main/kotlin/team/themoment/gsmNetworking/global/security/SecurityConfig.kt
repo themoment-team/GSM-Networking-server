@@ -1,6 +1,5 @@
 package team.themoment.gsmNetworking.global.security
 
-import team.themoment.gsmNetworking.global.security.filter.config.FilterConfig
 import team.themoment.gsmNetworking.global.security.oauth.CustomOauth2UserService
 import team.themoment.gsmNetworking.global.security.oauth.properties.Oauth2Properties
 import org.springframework.context.annotation.Bean
@@ -10,13 +9,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
+import team.themoment.gsmNetworking.domain.auth.domain.Authority
+import team.themoment.gsmNetworking.global.filter.ExceptionHandlerFilter
+import team.themoment.gsmNetworking.global.filter.TokenRequestFilter
+import team.themoment.gsmNetworking.global.filter.config.FilterConfig
+import team.themoment.gsmNetworking.global.security.handler.CustomAccessDeniedHandler
+import team.themoment.gsmNetworking.global.security.handler.CustomAuthenticationEntryPoint
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
     private val customOauth2UserService: CustomOauth2UserService,
     private val logoutSuccessHandler: LogoutSuccessHandler,
-    private val authenticationSuccessHandler: AuthenticationSuccessHandler
+    private val authenticationSuccessHandler: AuthenticationSuccessHandler,
+    private val tokenRequestFilter: TokenRequestFilter,
+    private val exceptionHandlerFilter: ExceptionHandlerFilter
 ) {
 
     @Bean
@@ -26,10 +33,29 @@ class SecurityConfig(
             .formLogin().disable()
             .httpBasic().disable()
             .csrf().disable()
-            .apply(FilterConfig())
+            .apply(FilterConfig(tokenRequestFilter, exceptionHandlerFilter))
         logout(http)
         oauth2Login(http)
+        authorizeHttpRequests(http)
+        exceptionHandling(http)
         return http.build()
+    }
+
+    private fun authorizeHttpRequests(http: HttpSecurity) {
+        http.authorizeHttpRequests()
+            // /mentor
+            .mvcMatchers("/api/v1/mentor/**").hasAnyRole(Authority.USER.name)
+            // /mentee
+            .mvcMatchers("/api/v1/mentee/**").hasAnyRole(Authority.USER.name, Authority.TEMP_USER.name)
+            // /file
+            .mvcMatchers("/api/v1/file").hasAnyRole(Authority.USER.name)
+            .anyRequest().permitAll()
+    }
+
+    private fun exceptionHandling(http: HttpSecurity) {
+        http.exceptionHandling()
+            .authenticationEntryPoint(CustomAuthenticationEntryPoint())
+            .accessDeniedHandler(CustomAccessDeniedHandler())
     }
 
     private fun oauth2Login(http: HttpSecurity) {
