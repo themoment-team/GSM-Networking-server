@@ -26,6 +26,7 @@ class UserRegistrationService(
     fun execute(dto: UserRegistrationDto): User {
         val authenticationId = authenticatedUserManager.getName()
         validateExistUserByPhoneNumber(dto.phoneNumber)
+        validateExistUserByEmail(dto.email)
         val user = User(
             authenticationId = authenticationId,
             name = dto.name,
@@ -42,6 +43,11 @@ class UserRegistrationService(
     private fun validateExistUserByPhoneNumber(phoneNumber: String) {
         if (userRepository.existsByPhoneNumber(phoneNumber))
             throw ExpectedException("이미 존재하는 핸드폰 번호를 가진 유저 입니다.", HttpStatus.BAD_REQUEST)
+    }
+
+    private fun validateExistUserByEmail(email: String) {
+        if (userRepository.existsByEmail(email))
+            throw ExpectedException("이미 존재하는 email을 가진 유저 입니다.", HttpStatus.BAD_REQUEST)
     }
 
 }
