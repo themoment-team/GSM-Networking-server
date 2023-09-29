@@ -65,4 +65,5 @@ jwt:
 oauth2:
   login:
     success:
-      redirect-uri: ${OAUTH2_SUCCESS_REDIRECT_URI}
+      sign-up-redirect-url: ${OAUTH2_SIGN_UP_REDIRECT_URI}
+      default-redirect-url: ${OAUTH2_DEFAULT_SUCCESS_REDIRECT_URI}
