@@ -12,6 +12,9 @@ class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val userId: Long = 0,
 
+    @Column(nullable = false, unique = true)
+    val authenticationId: Long,
+
     @Column(nullable = false)
     val name: String,
 
