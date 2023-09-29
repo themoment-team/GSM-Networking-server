@@ -1,6 +1,5 @@
 package team.themoment.gsmNetworking.domain.mentee.controller
 
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -14,8 +13,8 @@ class MenteeController(
 ) {
 
     @PostMapping
-    fun updateMentee(): ResponseEntity<Void> =
+    fun updateMentee(): ResponseEntity<Map<String, String>> =
         updateMenteeService.execute()
-            .run { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
+            .let { ResponseEntity.ok(mapOf("message" to "권한을 수정하였습니다. 토큰을 재발급 해주세요.")) }
 
 }
