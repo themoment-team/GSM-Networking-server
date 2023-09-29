@@ -1,6 +1,8 @@
-package team.themoment.gsmNetworking.global.security.filter
+package team.themoment.gsmNetworking.global.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.JwtException
 import team.themoment.gsmNetworking.common.exception.model.ExceptionResponse
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
@@ -11,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
-class Oauth2ExceptionHandlerFilter: OncePerRequestFilter() {
+class ExceptionHandlerFilter: OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -22,6 +24,8 @@ class Oauth2ExceptionHandlerFilter: OncePerRequestFilter() {
             filterChain.doFilter(request, response)
         }.onFailure { exception ->
             when(exception) {
+                is ExpiredJwtException -> exceptionToResponse("만료된 jwt 토큰 입니다.", HttpStatus.UNAUTHORIZED, response)
+                is JwtException -> exceptionToResponse("유효하지 않은 jwt 토큰 입니다.", HttpStatus.UNAUTHORIZED, response)
                 is ExpectedException -> exceptionToResponse(exception.message, exception.status, response)
             }
         }
