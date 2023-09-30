@@ -6,9 +6,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Component
 import team.themoment.gsmNetworking.common.exception.ExpectedException
-import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.global.security.jwt.properties.JwtProperties
-import team.themoment.gsmNetworking.global.security.principal.AuthDetails
+import team.themoment.gsmNetworking.global.security.principal.AuthenticationDetailsService
 import java.security.Key
 import javax.servlet.http.HttpServletRequest
 
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpServletRequest
  */
 @Component
 class TokenParser(
+    private val authenticationDetailsService: AuthenticationDetailsService,
     private val jwtProperties: JwtProperties
 ) {
 
@@ -52,12 +52,18 @@ class TokenParser(
      * @return authDetails로 생성한 usernamePasswordAuthenticationToken 객체를 반환 합니다.
      */
     fun authentication(accessToken: String): UsernamePasswordAuthenticationToken {
-        val tokenBody = getTokenBody(accessToken, jwtProperties.accessSecret)
-        val authenticationId = tokenBody.subject
-        val authority = Authority.valueOf(tokenBody.get(JwtProperties.AUTHORITY, String::class.java))
-        val authDetails = AuthDetails(authenticationId.toLong(), authority)
-        return UsernamePasswordAuthenticationToken(authDetails, "", authDetails.authorities)
+        val authenticationDetails = authenticationDetailsService.loadUserByUsername(getAccessTokenSubject(accessToken))
+        return UsernamePasswordAuthenticationToken(authenticationDetails, "", authenticationDetails.authorities)
     }
+
+    /**
+     * access 토큰을 파싱하여 subject를 얻는 메서드 입니다.
+     *
+     * @param accessToken 파싱할 토큰
+     * @return access 토큰의 subject
+     */
+    private fun getAccessTokenSubject(accessToken: String): String =
+        getTokenBody(accessToken, jwtProperties.accessSecret).subject
 
     /**
      * 토큰을 파싱하여 claims를 얻는 메서드 입니다.

@@ -42,7 +42,7 @@ class ReissueTokenService(
             ?: throw ExpectedException("존재하지 않는 refresh token 입니다.", HttpStatus.NOT_FOUND)
         val authentication = authenticationRepository.findByIdOrNull(refreshToken.authenticationId)
             ?: throw ExpectedException("refresh token subject인 email을 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
-        val tokenDto = tokenGenerator.generateToken(refreshToken.authenticationId, authentication.authority)
+        val tokenDto = tokenGenerator.generateToken(refreshToken.authenticationId)
         saveRefreshToken(tokenDto.refreshToken, authentication.authenticationId)
         return tokenDto
     }
