@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.mentor.controller
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -15,8 +16,8 @@ class MentorController(
 ) {
 
     @PostMapping
-    fun mentorRegistration(@RequestBody dto: MentorRegistrationDto): ResponseEntity<Map<String, String>> =
+    fun mentorRegistration(@RequestBody dto: MentorRegistrationDto): ResponseEntity<Void> =
         mentorRegistrationService.execute(dto)
-            .let { ResponseEntity.ok(mapOf("message" to "권한을 수정하였습니다. 토큰을 재발급 해주세요.")) }
+            .let { ResponseEntity.status(HttpStatus.CREATED).build() }
 
 }
