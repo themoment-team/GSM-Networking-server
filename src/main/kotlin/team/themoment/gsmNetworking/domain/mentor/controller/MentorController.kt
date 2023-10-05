@@ -16,7 +16,7 @@ class MentorController(
 ) {
 
     @PostMapping
-    fun mentorRegistration(@RequestBody dto: MentorRegistrationDto): ResponseEntity<Void> =
+    fun mentorRegistration(@RequestBody dto: MentorRegistrationDto): ResponseEntity<Unit> =
         mentorRegistrationService.execute(dto)
             .let { ResponseEntity.status(HttpStatus.CREATED).build() }
 

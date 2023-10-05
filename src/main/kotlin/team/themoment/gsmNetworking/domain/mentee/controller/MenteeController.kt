@@ -14,7 +14,7 @@ class MenteeController(
 ) {
 
     @PostMapping
-    fun updateMentee(): ResponseEntity<Void> =
+    fun updateMentee(): ResponseEntity<Unit> =
         updateMenteeService.execute()
             .let { ResponseEntity.status(HttpStatus.NO_CONTENT).build() }
 
