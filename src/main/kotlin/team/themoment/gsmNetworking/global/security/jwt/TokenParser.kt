@@ -24,12 +24,14 @@ class TokenParser(
      * access 토큰의 prefix를 파싱하는 메서드 입니다.
      *
      * @param request 요청한 requestServlet
-     * @return token prefix를 제외한 access token
+     * @return 지정한 토큰 헤더로 보냈다면 token prefix를 제외한 access token을 반환하고, 지정한 토큰 헤더로 보내지 않을 경우 null을 반환합니다.
      */
-    fun parseAccessToken(request: HttpServletRequest): String? =
-        request.getHeader(JwtProperties.HEADER)
-            .let { it ?: return null }
-            .let { if (it.startsWith(JwtProperties.TOKEN_PREFIX)) it.replace(JwtProperties.TOKEN_PREFIX, "") else null }
+    fun parseAccessTokenOrNull(request: HttpServletRequest): String? {
+        val accessToken = request.getHeader(JwtProperties.HEADER) ?: return null
+        return if (accessToken.startsWith(JwtProperties.TOKEN_PREFIX)) {
+                    accessToken.replace(JwtProperties.TOKEN_PREFIX, "")
+                } else null
+    }
 
     /**
      * 재발급 토큰의 prefix를 파싱하는 메서드 입니다.

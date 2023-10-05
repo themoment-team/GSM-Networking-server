@@ -18,7 +18,7 @@ class TokenRequestFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val accessToken = tokenParser.parseAccessToken(request)
+        val accessToken = tokenParser.parseAccessTokenOrNull(request)
 
         if (!accessToken.isNullOrBlank()) {
             val authentication = tokenParser.authentication(accessToken)
