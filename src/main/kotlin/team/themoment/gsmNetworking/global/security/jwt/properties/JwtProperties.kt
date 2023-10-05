@@ -21,7 +21,6 @@ class JwtProperties(
         const val REFRESH = "refresh"
         const val HEADER = "Authorization"
         const val TOKEN_PREFIX = "Bearer "
-        const val AUTHORITY = "authority"
         const val TOKEN_TYPE = "tokenType"
     }
 
