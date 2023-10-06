@@ -1,4 +1,5 @@
 server:
+  port: 8080
   shutdown: graceful
 
   servlet:
@@ -38,12 +39,31 @@ spring:
             client-secret: ${GOOGLE_CLIENT_SECRET}
             redirect-uri: ${GOOGLE_REDIRECT_URI}
             scope: ${GOOGLE_SCOPE}
-            success:
-              redirect-uri: ${GOOGLE_SUCCESS_REDIRECT_URI}
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+        bucket-name: ${AWS_BUCKET_NAME}
+      region:
+        static: ${AWS_REGION}
+      stack:
+        auto: false
+
+encrypt:
+  secret-key: ${ENCRYPT_SECRET_KEY}
 
 jwt:
-  accessSecret: ${JWT_ACCESS_SECRET}
-  refreshSecret: ${JWT_REFRESH_SECRET}
+  access-secret: ${JWT_ACCESS_SECRET}
+  refresh-secret: ${JWT_REFRESH_SECRET}
   time:
-    accessExp: ${JWT_ACCESS_EXPIRED}
-    refreshExp: ${JWT_REFRESH_EXPIRED}
+    access-exp: ${JWT_ACCESS_EXPIRED}
+    refresh-exp: ${JWT_REFRESH_EXPIRED}
+
+oauth2:
+  login:
+    success:
+      sign-up-redirect-url: ${OAUTH2_SIGN_UP_REDIRECT_URI}
+      default-redirect-url: ${OAUTH2_DEFAULT_SUCCESS_REDIRECT_URI}
