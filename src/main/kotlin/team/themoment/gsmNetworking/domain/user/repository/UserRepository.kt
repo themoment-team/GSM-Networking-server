@@ -9,5 +9,6 @@ import org.springframework.data.repository.CrudRepository
 interface UserRepository: CrudRepository<User, Long> {
 
     fun existsByPhoneNumber(phoneNumber: String): Boolean
+    fun existsByEmail(email: String): Boolean
 
 }
