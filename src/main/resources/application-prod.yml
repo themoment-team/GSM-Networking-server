@@ -38,8 +38,6 @@ spring:
             client-secret: ${GOOGLE_CLIENT_SECRET}
             redirect-uri: ${GOOGLE_REDIRECT_URI}
             scope: ${GOOGLE_SCOPE}
-            success:
-              redirect-uri: ${GOOGLE_SUCCESS_REDIRECT_URI}
 
   cloud:
     aws:
@@ -66,4 +64,5 @@ jwt:
 oauth2:
   login:
     success:
-      redirect-uri: ${OAUTH2_SUCCESS_REDIRECT_URI}
+      sign-up-redirect-url: ${OAUTH2_SIGN_UP_REDIRECT_URI}
+      default-redirect-url: ${OAUTH2_DEFAULT_SUCCESS_REDIRECT_URI}
