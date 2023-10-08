@@ -38,8 +38,6 @@ spring:
             client-secret: ${GOOGLE_CLIENT_SECRET}
             redirect-uri: http://localhost:8080/login/oauth2/code/google
             scope: profile,email
-            success:
-              redirect-uri: http://localhost:8080
 
   cloud:
     aws:
@@ -66,3 +64,9 @@ jwt:
   time:
     access-exp: 10800
     refresh-exp: 2592000
+
+oauth2:
+  login:
+    success:
+      sign-up-redirect-url: http://localhost:8080/api/v1/signup
+      default-redirect-url: http://localhost:8080/
