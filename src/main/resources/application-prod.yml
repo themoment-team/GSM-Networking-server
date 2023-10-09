@@ -7,6 +7,12 @@ server:
       enabled: true
       force: true
 
+    session:
+      cookie:
+        domain: ${GSM_NETWORKING_DOMAIN}
+        secure: ${COOKIE_SECURE}
+        same-site: ${COOKIE_SAME_SITE}
+
 spring:
 
   datasource:
@@ -69,4 +75,3 @@ oauth2:
 
 gsm-networking:
   domain: ${GSM_NETWORKING_DOMAIN}
-  

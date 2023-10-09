@@ -15,7 +15,7 @@ class CookieUtil {
 
     companion object {
 
-        @Value("gsm-networking.domain")
+        @Value("server.servlet.session.cookie.domain")
         const val gsmNetworkingDomain: String = ""
 
         /**
