@@ -16,8 +16,9 @@ class MentorController(
 ) {
 
     @PostMapping
-    fun saveMentorInfo(@RequestBody dto: MentorRegistrationDto): ResponseEntity<Void> =
+    fun saveMentorInfo(@RequestBody dto: MentorRegistrationDto): ResponseEntity<Void> {
         mentorRegistrationService.execute(dto)
-            .run { ResponseEntity.status(HttpStatus.CREATED).build() }
+        return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
 
 }
