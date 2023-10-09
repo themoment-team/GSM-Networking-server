@@ -1,5 +1,4 @@
 server:
-  port: 8080
   shutdown: graceful
 
   servlet:
@@ -7,6 +6,10 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+  cookie:
+    domain: ${GSM_NETWORKING_DOMAIN}
+    secure: ${COOKIE_SECURE}
 
 spring:
 

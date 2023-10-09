@@ -3,7 +3,9 @@ package team.themoment.gsmNetworking.global.filter
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import team.themoment.gsmNetworking.common.cookie.CookieUtil
 import team.themoment.gsmNetworking.global.security.jwt.TokenParser
+import team.themoment.gsmNetworking.global.security.jwt.properties.JwtProperties
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -18,9 +20,9 @@ class TokenRequestFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val accessToken = tokenParser.parseAccessTokenOrNull(request)
+        val accessToken = CookieUtil.getCookieValueOrNull(cookies = request.cookies, name = JwtProperties.ACCESS)
 
-        if (!accessToken.isNullOrBlank()) {
+        if (!accessToken.isNullOrEmpty()) {
             val authentication = tokenParser.authentication(accessToken)
             SecurityContextHolder.clearContext()
             SecurityContextHolder.getContext().authentication = authentication

@@ -15,6 +15,7 @@ import team.themoment.gsmNetworking.global.filter.TokenRequestFilter
 import team.themoment.gsmNetworking.global.filter.config.FilterConfig
 import team.themoment.gsmNetworking.global.security.handler.CustomAccessDeniedHandler
 import team.themoment.gsmNetworking.global.security.handler.CustomAuthenticationEntryPoint
+import team.themoment.gsmNetworking.global.security.jwt.properties.JwtProperties
 
 @Configuration
 @EnableWebSecurity
@@ -71,6 +72,7 @@ class SecurityConfig(
         http.logout()
             .logoutUrl(Oauth2Properties.LOGOUT_URI)
             .logoutSuccessHandler(logoutSuccessHandler)
+            .deleteCookies(JwtProperties.ACCESS, JwtProperties.REFRESH)
     }
 
 }
