@@ -1,7 +1,6 @@
 package team.themoment.gsmNetworking.common.cookie
 
 import org.springframework.beans.factory.annotation.Value
-import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.global.security.jwt.dto.TokenDto
 import team.themoment.gsmNetworking.global.security.jwt.properties.JwtProperties
 import javax.servlet.http.Cookie
@@ -19,7 +18,7 @@ class CookieUtil {
         const val gsmNetworkingDomain: String = ""
 
         /**
-         * 토큰을 쿠키로 만들어주는 메서드 입니다.
+         * 토큰을 쿠키로 만들어주어 쿠키를 담는 메서드 입니다.
          */
         fun addTokenCookie(tokenDto: TokenDto, response: HttpServletResponse) {
             val accessTokenCookie = addCookie(
@@ -38,8 +37,7 @@ class CookieUtil {
 
         /**
          * 쿠키의 name으로 쿠키를 반환해주는 메서드 입니다.
-         * @throws ExpectedException 이 터지는 조건은 아래와 같다.
-         *      1.
+         *
          * @return name으로 찾은 쿠키
          */
         fun getCookieValueOrNull(cookies: Array<Cookie>, name: String): String? {
