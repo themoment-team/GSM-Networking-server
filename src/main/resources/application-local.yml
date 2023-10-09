@@ -75,6 +75,3 @@ oauth2:
     success:
       sign-up-redirect-url: http://localhost:8080/signup
       default-redirect-url: http://localhost:8080/
-
-gsm-networking:
-  domain: http://localhost:8080

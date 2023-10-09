@@ -72,6 +72,3 @@ oauth2:
     success:
       sign-up-redirect-url: ${OAUTH2_SIGN_UP_REDIRECT_URI}
       default-redirect-url: ${OAUTH2_DEFAULT_SUCCESS_REDIRECT_URI}
-
-gsm-networking:
-  domain: ${GSM_NETWORKING_DOMAIN}
