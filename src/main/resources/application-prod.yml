@@ -7,11 +7,9 @@ server:
       enabled: true
       force: true
 
-    session:
-      cookie:
-        domain: ${GSM_NETWORKING_DOMAIN}
-        secure: ${COOKIE_SECURE}
-        same-site: ${COOKIE_SAME_SITE}
+  cookie:
+    domain: ${GSM_NETWORKING_DOMAIN}
+    secure: ${COOKIE_SECURE}
 
 spring:
 

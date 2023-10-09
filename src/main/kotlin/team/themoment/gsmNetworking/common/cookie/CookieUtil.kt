@@ -14,8 +14,11 @@ class CookieUtil {
 
     companion object {
 
-        @Value("server.servlet.session.cookie.domain")
+        @Value("server.cookie.domain")
         const val gsmNetworkingDomain: String = ""
+
+        @Value("server.cookie.secure")
+        const val secure: Boolean = false
 
         /**
          * 토큰을 쿠키로 만들어주어 쿠키를 담는 메서드 입니다.
@@ -61,6 +64,7 @@ class CookieUtil {
             cookie.domain = gsmNetworkingDomain
             cookie.path = "/"
             cookie.isHttpOnly = true
+            cookie.secure = secure
             return cookie
         }
 

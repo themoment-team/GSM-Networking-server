@@ -8,10 +8,9 @@ server:
       enabled: true
       force: true
 
-    session:
-      cookie:
-        domain: localhost
-        secure: false
+  cookie:
+    domain: localhost
+    secure: false
 
 spring:
 
