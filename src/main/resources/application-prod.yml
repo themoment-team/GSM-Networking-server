@@ -69,3 +69,4 @@ oauth2:
 
 gsm-networking:
   domain: ${GSM_NETWORKING_DOMAIN}
+  
