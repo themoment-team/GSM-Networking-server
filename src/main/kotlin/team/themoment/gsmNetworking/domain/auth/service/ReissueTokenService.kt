@@ -28,6 +28,7 @@ class ReissueTokenService(
      *      1. RefreshToken Entity에 저장되지 않은 RefreshToken일 경우
      *      2. RefreshToken의 Subject가 저장되지 않은 경우
      *      3. 유효하지 않은 Token Prefix로 요청 한 경우
+     * @return 재발급된 토큰을 담고 있는 dto
      */
     @Transactional(rollbackFor = [Exception::class])
     fun execute(token: String?): TokenDto {
