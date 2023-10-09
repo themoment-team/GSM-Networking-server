@@ -9,7 +9,6 @@ import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.global.security.jwt.properties.JwtProperties
 import team.themoment.gsmNetworking.global.security.principal.AuthenticationDetailsService
 import java.security.Key
-import javax.servlet.http.HttpServletRequest
 
 /**
  * 토큰을 파싱하는 클래스 입니다.
@@ -19,19 +18,6 @@ class TokenParser(
     private val authenticationDetailsService: AuthenticationDetailsService,
     private val jwtProperties: JwtProperties
 ) {
-
-    /**
-     * access 토큰의 prefix를 파싱하는 메서드 입니다.
-     *
-     * @param request 요청한 requestServlet
-     * @return 지정한 토큰 헤더로 보냈다면 token prefix를 제외한 access token을 반환하고, 지정한 토큰 헤더로 보내지 않을 경우 null을 반환합니다.
-     */
-    fun parseAccessTokenOrNull(request: HttpServletRequest): String? {
-        val accessToken = request.getHeader(JwtProperties.HEADER) ?: return null
-        return if (accessToken.startsWith(JwtProperties.TOKEN_PREFIX)) {
-                    accessToken.replace(JwtProperties.TOKEN_PREFIX, "")
-                } else null
-    }
 
     /**
      * 재발급 토큰의 prefix를 파싱하는 메서드 입니다.
