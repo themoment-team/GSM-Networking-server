@@ -36,13 +36,11 @@ class CustomLogoutSuccessHandler(
                 ?: throw ExpectedException("존재하지 않는 refresh token 입니다.", HttpStatus.NOT_FOUND)
             refreshTokenRepository.delete(refreshToken)
         } else sendErrorResponse(response)
-        response.sendRedirect(oauth2Properties.redirectUri)
+        response.sendRedirect(oauth2Properties.defaultRedirectUrl)
     }
 
     private fun sendErrorResponse(response: HttpServletResponse) {
         response.status = HttpServletResponse.SC_BAD_REQUEST
-        response.characterEncoding = "utf-8"
-        response.status = HttpStatus.FORBIDDEN.value()
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         val map = mapOf("message" to "이미 로그아웃 된 사용자 입니다.")
         response.writer.write(ObjectMapper().writeValueAsString(map))
