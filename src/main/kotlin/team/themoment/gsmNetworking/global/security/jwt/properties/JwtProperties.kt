@@ -17,9 +17,8 @@ class JwtProperties(
     val refreshSecret: Key = Keys.hmacShaKeyFor(refreshSecret.toByteArray(StandardCharsets.UTF_8))
 
     companion object {
-        const val ACCESS = "access"
-        const val REFRESH = "refresh"
-        const val HEADER = "Authorization"
+        const val ACCESS = "accessToken"
+        const val REFRESH = "refreshToken"
         const val TOKEN_PREFIX = "Bearer "
         const val TOKEN_TYPE = "tokenType"
     }
