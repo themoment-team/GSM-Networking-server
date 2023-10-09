@@ -3,10 +3,9 @@ package team.themoment.gsmNetworking.global.security.jwt
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.stereotype.Component
-import team.themoment.gsmNetworking.global.security.jwt.dto.TokenResponse
+import team.themoment.gsmNetworking.global.security.jwt.dto.TokenDto
 import team.themoment.gsmNetworking.global.security.jwt.properties.JwtExpTimeProperties
 import team.themoment.gsmNetworking.global.security.jwt.properties.JwtProperties
-import java.time.LocalDateTime
 import java.util.*
 
 @Component
@@ -15,14 +14,26 @@ class TokenGenerator(
     private val jwtExpTimeProperties: JwtExpTimeProperties
 ) {
 
-    fun generateToken(authenticationId: Long): TokenResponse =
-        TokenResponse(
+    /**
+     * 토큰을 생성하여 dto로 감싸 반환하는 메서드 입니다.
+     *
+     * @param authenticationId 사용자를 식별할 id
+     * @return 생성된 토큰을 담고 있는 dto
+     */
+    fun generateToken(authenticationId: Long): TokenDto =
+        TokenDto(
             accessToken = generateAccessToken(authenticationId),
             refreshToken = generateRefreshToken(authenticationId),
-            accessTokenExp = LocalDateTime.now().plusSeconds(jwtExpTimeProperties.accessExp.toLong()).withNano(0),
-            refreshTokenExp = LocalDateTime.now().plusSeconds(jwtExpTimeProperties.refreshExp.toLong()).withNano(0),
+            accessTokenExp = jwtExpTimeProperties.accessExp,
+            refreshTokenExp = jwtExpTimeProperties.refreshExp
         )
 
+    /**
+     * authenticationId로 accessToken을 생성합니다.
+     *
+     * @param authenticationId 사용자를 식별할 id
+     * @return 생성된 accessToken
+     */
     private fun generateAccessToken(authenticationId: Long): String =
         Jwts.builder()
             .signWith(jwtProperties.accessSecret, SignatureAlgorithm.HS256)
@@ -32,6 +43,12 @@ class TokenGenerator(
             .setExpiration(Date(System.currentTimeMillis() + jwtExpTimeProperties.accessExp * 1000))
             .compact()
 
+    /**
+     * authenticationId로 refreshToken을 생성합니다.
+     *
+     * @param authenticationId 사용자를 식별할 id
+     * @return 생성된 refreshToken
+     */
     private fun generateRefreshToken(authenticationId: Long): String =
         Jwts.builder()
             .signWith(jwtProperties.refreshSecret, SignatureAlgorithm.HS256)
