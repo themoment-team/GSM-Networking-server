@@ -14,7 +14,7 @@ import java.util.*
         unique = true
     )
 )
-class ChatRoom(
+class Room(
     @Id
     val id: UUID,
     val name: String,

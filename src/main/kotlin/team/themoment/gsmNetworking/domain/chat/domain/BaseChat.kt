@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.index.CompoundIndexes
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.DocumentReference
 import org.springframework.data.mongodb.core.mapping.Field
-import team.themoment.gsmNetworking.domain.room.domain.ChatRoom
+import team.themoment.gsmNetworking.domain.room.domain.Room
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
 
@@ -25,7 +25,7 @@ abstract class BaseChat(
     open val id: ObjectId,
     @Field(name = "roomId")
     @DocumentReference(lazy = true)
-    open val room: ChatRoom,
+    open val room: Room,
     open val content: BaseContent,
     open val type: ChatType
 ) {
