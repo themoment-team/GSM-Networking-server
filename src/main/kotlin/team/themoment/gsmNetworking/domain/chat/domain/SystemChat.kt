@@ -11,5 +11,5 @@ class SystemChat(
     id: ObjectId = ObjectId.get(),
     room: Room,
     content: TextContent
-): BaseChat(id, room, content, ChatType.SYSTEM) {
+) : BaseChat(id, room, content, ChatType.SYSTEM) {
 }
