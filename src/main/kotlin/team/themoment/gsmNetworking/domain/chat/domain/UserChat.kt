@@ -10,6 +10,7 @@ import team.themoment.gsmNetworking.domain.room.domain.ChatRoom
 class UserChat(
     id: ObjectId,
     room: ChatRoom,
+    val senderId: Long,
     content: String,
 ) : BaseChat(id, room, content) {
 }
