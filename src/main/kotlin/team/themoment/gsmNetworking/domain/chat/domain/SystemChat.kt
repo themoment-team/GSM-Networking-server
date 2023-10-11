@@ -8,7 +8,7 @@ import team.themoment.gsmNetworking.domain.room.domain.ChatRoom
 @Document(collection = "chat")
 @TypeAlias("system")
 class SystemChat(
-    id: ObjectId,
+    id: ObjectId = ObjectId.get(),
     room: ChatRoom,
     content: String,
 ) : BaseChat(id, room, content, ChatType.SYSTEM) {

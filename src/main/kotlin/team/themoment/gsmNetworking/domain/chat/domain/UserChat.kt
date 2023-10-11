@@ -8,7 +8,7 @@ import team.themoment.gsmNetworking.domain.room.domain.ChatRoom
 @Document(collection = "chat")
 @TypeAlias("user")
 class UserChat(
-    id: ObjectId,
+    id: ObjectId = ObjectId.get(),
     room: ChatRoom,
     val senderId: Long,
     content: String
