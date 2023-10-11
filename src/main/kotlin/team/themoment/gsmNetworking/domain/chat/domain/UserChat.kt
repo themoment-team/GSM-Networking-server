@@ -11,6 +11,6 @@ class UserChat(
     id: ObjectId = ObjectId.get(),
     room: ChatRoom,
     val senderId: Long,
-    content: String
+    content: TextContent
 ) : BaseChat(id, room, content, ChatType.USER) {
 }

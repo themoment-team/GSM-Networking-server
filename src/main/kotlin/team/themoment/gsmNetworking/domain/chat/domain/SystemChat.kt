@@ -10,6 +10,6 @@ import team.themoment.gsmNetworking.domain.room.domain.ChatRoom
 class SystemChat(
     id: ObjectId = ObjectId.get(),
     room: ChatRoom,
-    content: String,
+    content: TextContent
 ) : BaseChat(id, room, content, ChatType.SYSTEM) {
 }

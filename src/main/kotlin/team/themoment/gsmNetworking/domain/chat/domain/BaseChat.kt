@@ -26,7 +26,7 @@ abstract class BaseChat(
     @Field(name = "roomId")
     @DocumentReference(lazy = true)
     open val room: ChatRoom,
-    open val content: Any,
+    open val content: BaseContent,
     open val type: ChatType
 ) {
 }
