@@ -20,6 +20,12 @@ spring:
     username: root
     password: ${DB_LOCAL_PASSWORD}
 
+  data:
+    mongodb:
+      auto-index-creation: true
+      uri: mongodb://127.0.0.1:27017
+      database: gsm_networking
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
@@ -74,3 +80,14 @@ oauth2:
     success:
       sign-up-redirect-url: http://localhost:8080/signup
       default-redirect-url: http://localhost:8080/
+
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              index: DEBUG
+              MongoTemplate: DEBUG

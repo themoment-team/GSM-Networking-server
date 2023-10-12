@@ -19,6 +19,13 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+  data:
+    mongodb:
+      auto-index-creation: true
+      uri: ${MONGO_URL}
+      database: ${MONGO_DATABASE}
+      password: ${MONGO_PASSWORD}
+
   jpa:
     database-platform: ${DB_PLATFORM}
     hibernate:
