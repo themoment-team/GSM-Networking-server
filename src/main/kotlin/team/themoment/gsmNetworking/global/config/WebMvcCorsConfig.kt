@@ -12,7 +12,7 @@ class WebMvcCorsConfig: WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOrigins(
                 "http://localhost:3000", "https://localhost:3000",
-                "https://gsm.moip.shop", "https://server.gsm.moip.shop"
+                "https://gsm-netwokring.com", "https://server.gsm-netwokring.com"
             )
             .allowedMethods(*allowedHttpMethod())
             .allowCredentials(true)

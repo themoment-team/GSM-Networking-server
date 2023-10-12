@@ -8,4 +8,4 @@ class UserInfo(
     authorities: MutableCollection<out GrantedAuthority>,
     attributes: Map<String, Any>,
     nameAttributeKey: String
-): DefaultOAuth2User(authorities, attributes, nameAttributeKey), Serializable
+) : DefaultOAuth2User(authorities, attributes, nameAttributeKey), Serializable

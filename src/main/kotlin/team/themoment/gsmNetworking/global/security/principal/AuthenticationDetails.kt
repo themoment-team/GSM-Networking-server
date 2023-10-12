@@ -7,7 +7,7 @@ import team.themoment.gsmNetworking.domain.auth.domain.Authentication
 
 class AuthenticationDetails(
     private val authentication: Authentication
-): UserDetails {
+) : UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
         mutableListOf(SimpleGrantedAuthority(authentication.authority.role))

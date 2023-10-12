@@ -22,7 +22,8 @@ class ImageUploadService(
     fun execute(multipartFile: MultipartFile): String =
         try {
             val originFileName = multipartFile.originalFilename
-            val fileExtension = StringUtils.getFilenameExtension(originFileName) ?: throw ExpectedException("파일 확장자가 존재 하지 않는 파일입니다.", HttpStatus.BAD_REQUEST)
+            val fileExtension = StringUtils.getFilenameExtension(originFileName)
+                ?: throw ExpectedException("파일 확장자가 존재 하지 않는 파일입니다.", HttpStatus.BAD_REQUEST)
             val fileName = createFileName(fileExtension)
             val s3Resource = s3Template.upload(bucketName, fileName, multipartFile.inputStream, ObjectMetadata.builder().contentType(validateFileExtension(fileExtension)).build())
             s3Resource.url.toString()

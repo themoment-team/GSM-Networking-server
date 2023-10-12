@@ -12,7 +12,7 @@ import team.themoment.gsmNetworking.domain.auth.repository.AuthenticationReposit
 @Service
 class AuthenticationDetailsService(
     private val authenticationRepository: AuthenticationRepository
-): UserDetailsService {
+) : UserDetailsService {
 
     @Transactional(readOnly = true)
     override fun loadUserByUsername(username: String): UserDetails {

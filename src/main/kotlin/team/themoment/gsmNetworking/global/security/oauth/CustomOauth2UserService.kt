@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 @Service
 class CustomOauth2UserService(
     private val authenticationRepository: AuthenticationRepository
-): OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+) : OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val delegateOauth2UserService = DefaultOAuth2UserService()

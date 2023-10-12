@@ -21,7 +21,7 @@ class CustomUrlAuthenticationSuccessHandler(
     private val tokenGenerator: TokenGenerator,
     private val jwtExpTimeProperties: JwtExpTimeProperties,
     private val oauth2Properties: Oauth2Properties
-): AuthenticationSuccessHandler {
+) : AuthenticationSuccessHandler {
 
     /**
      * 로그인 성공후 실행되는 핸들러 메서드 입니다.

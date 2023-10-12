@@ -14,7 +14,7 @@ import team.themoment.gsmNetworking.global.filter.TokenRequestFilter
 class FilterConfig(
     private val tokenRequestFilter: TokenRequestFilter,
     private val exceptionHandlerFilter: ExceptionHandlerFilter
-): SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
+) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
     override fun configure(builder: HttpSecurity) {
         builder.addFilterBefore(tokenRequestFilter, LogoutFilter::class.java)

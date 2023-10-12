@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse
 class CustomLogoutSuccessHandler(
     private val oauth2Properties: Oauth2Properties,
     private val refreshTokenRepository: RefreshTokenRepository,
-): LogoutSuccessHandler {
+) : LogoutSuccessHandler {
 
     /**
      * authentication 객체가 있다면 redis에 저장되어있던 재발급 토큰을 삭제 시킵니다.
@@ -29,7 +29,7 @@ class CustomLogoutSuccessHandler(
      * @param response 응답할 servletResponse
      * @param authentication 생성된 인증 객체
      * @throws ExpectedException 이 터지는 조건은 아래와 같다.
-     *      1. RefreshToken Entity에 저장되지 않은 RefreshToken일 경우
+     *    1. RefreshToken Entity에 저장되지 않은 RefreshToken일 경우
      */
     override fun onLogoutSuccess(
         request: HttpServletRequest,
