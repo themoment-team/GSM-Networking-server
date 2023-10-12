@@ -15,10 +15,10 @@ class CookieUtil {
     companion object {
 
         @Value("server.cookie.domain")
-        const val gsmNetworkingDomain: String = ""
+        const val GSM_NETWORKING_DOMAIN: String = ""
 
         @Value("server.cookie.secure")
-        const val secure: Boolean = false
+        const val SECURE: Boolean = false
 
         /**
          * 토큰을 쿠키로 만들어주어 쿠키를 담는 메서드 입니다.
@@ -61,10 +61,10 @@ class CookieUtil {
         private fun addCookie(name: String, value: String, maxAge: Int): Cookie {
             val cookie = Cookie(name, value)
             cookie.maxAge = maxAge
-            cookie.domain = gsmNetworkingDomain
+            cookie.domain = GSM_NETWORKING_DOMAIN
             cookie.path = "/"
             cookie.isHttpOnly = true
-            cookie.secure = secure
+            cookie.secure = SECURE
             return cookie
         }
 
