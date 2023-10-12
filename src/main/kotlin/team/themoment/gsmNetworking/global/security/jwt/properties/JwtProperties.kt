@@ -19,7 +19,6 @@ class JwtProperties(
     companion object {
         const val ACCESS = "accessToken"
         const val REFRESH = "refreshToken"
-        const val TOKEN_PREFIX = "Bearer "
         const val TOKEN_TYPE = "tokenType"
     }
 
