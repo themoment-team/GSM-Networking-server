@@ -9,4 +9,4 @@ import team.themoment.gsmNetworking.common.exception.model.ErrorCode
 abstract class StompException(
     val code: ErrorCode = ErrorCode.DEFAULT,
     override val message: String
-): RuntimeException(message)
+) : RuntimeException(message)

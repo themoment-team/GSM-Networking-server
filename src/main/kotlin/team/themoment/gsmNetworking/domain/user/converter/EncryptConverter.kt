@@ -9,7 +9,7 @@ import javax.persistence.Converter
 @Component
 class EncryptConverter(
     private val encryptManager: EncryptManager
-): AttributeConverter<String, String> {
+) : AttributeConverter<String, String> {
 
     override fun convertToDatabaseColumn(attribute: String?): String? {
         if (attribute == null) return null

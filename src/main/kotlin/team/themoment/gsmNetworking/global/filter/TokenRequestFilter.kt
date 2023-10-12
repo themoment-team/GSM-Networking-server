@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class TokenRequestFilter(
     private val tokenParser: TokenParser
-): OncePerRequestFilter() {
+) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,

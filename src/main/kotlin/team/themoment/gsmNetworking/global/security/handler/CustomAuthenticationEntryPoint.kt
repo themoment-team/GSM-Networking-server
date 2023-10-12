@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
-class CustomAuthenticationEntryPoint: AuthenticationEntryPoint {
+class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
 
     override fun commence(
         request: HttpServletRequest?,

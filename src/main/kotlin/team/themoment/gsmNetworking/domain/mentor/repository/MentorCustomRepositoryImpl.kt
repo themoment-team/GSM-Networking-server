@@ -12,7 +12,7 @@ import team.themoment.gsmNetworking.domain.user.domain.QUser.user
  */
 class MentorCustomRepositoryImpl(
     private val queryFactory: JPAQueryFactory
-): MentorCustomRepository {
+) : MentorCustomRepository {
 
     /**
      * 멘토와 커리어를 조인하여 dto로 감싸 리턴 해주는 메서드 입니다.

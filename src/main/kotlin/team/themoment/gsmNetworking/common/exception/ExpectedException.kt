@@ -8,4 +8,4 @@ import org.springframework.http.HttpStatus
 class ExpectedException(
     override val message: String,
     val status: HttpStatus,
-): RuntimeException(message)
+) : RuntimeException(message)

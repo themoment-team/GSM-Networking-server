@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
-class ExceptionHandlerFilter: OncePerRequestFilter() {
+class ExceptionHandlerFilter : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -23,7 +23,7 @@ class ExceptionHandlerFilter: OncePerRequestFilter() {
         runCatching {
             filterChain.doFilter(request, response)
         }.onFailure { exception ->
-            when(exception) {
+            when (exception) {
                 is ExpiredJwtException -> exceptionToResponse("만료된 jwt 토큰 입니다.", HttpStatus.UNAUTHORIZED, response)
                 is JwtException -> exceptionToResponse("유효하지 않은 jwt 토큰 입니다.", HttpStatus.UNAUTHORIZED, response)
                 is ExpectedException -> exceptionToResponse(exception.message, exception.status, response)

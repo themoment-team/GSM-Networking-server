@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec
 @Component
 class AESEncryptManagerImpl(
     private val encryptProperties: EncryptProperties,
-): EncryptManager {
+) : EncryptManager {
 
     override fun encrypt(encryptString: String): String {
         val encryptedString = getCipherPkcs5(Cipher.ENCRYPT_MODE)
