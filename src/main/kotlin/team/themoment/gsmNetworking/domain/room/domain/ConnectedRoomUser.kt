@@ -9,7 +9,6 @@ class ConnectedRoomUser(
     @Id
     val roomId: Long,
 
-    @Indexed
     val connectedUserIds: Set<Long>
 ) {
 }
