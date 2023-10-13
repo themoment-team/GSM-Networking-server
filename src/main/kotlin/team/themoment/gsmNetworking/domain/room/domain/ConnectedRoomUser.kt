@@ -10,6 +10,6 @@ class ConnectedRoomUser(
     val roomId: Long,
 
     @Indexed
-    val connectedUserId: Set<Long>
+    val connectedUserIds: Set<Long>
 ) {
 }
