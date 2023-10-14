@@ -3,6 +3,9 @@ package team.themoment.gsmNetworking.domain.room.domain
 import java.time.LocalDateTime
 import javax.persistence.*
 
+/**
+ * 채팅 방에서의 사용자 정보를 저장하는 엔티티 입니다.
+ */
 @Entity(name = "room_user")
 class RoomUser(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

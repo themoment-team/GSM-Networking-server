@@ -5,6 +5,9 @@ import team.themoment.gsmNetworking.domain.chat.enums.ChatType
 import team.themoment.gsmNetworking.domain.room.domain.Room
 import javax.persistence.Entity
 
+/**
+ * 사용자 채팅을 저장하는 Entity 클래스입니다.
+ */
 @Entity
 @TypeAlias(ChatType.Alias.SYSTEM)
 class SystemChat(

@@ -8,6 +8,9 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 
+/**
+ * 채팅을 저장하는 Entity의 추상클래스입니다.
+ */
 @Entity(name = "chat")
 @EntityListeners(AuditingEntityListener::class)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
