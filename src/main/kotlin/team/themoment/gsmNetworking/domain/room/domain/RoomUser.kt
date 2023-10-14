@@ -13,7 +13,7 @@ class RoomUser(
     @JoinColumn(name = "room_id", referencedColumnName = "room_id")
     val room: Room,
 
-    @Column(name = "room_name", unique = true)
+    @Column(name = "room_name")
     val roomName: String,
 
     @Column(name = "user_id", unique = true)
