@@ -12,5 +12,11 @@ class UserChat(
     room: Room,
     senderId: Long,
     content: String
-) : BaseChat(id, room, content, senderId, ChatType.USER) {
+) : BaseChat(
+    id = id,
+    room = room,
+    content = content,
+    senderId = senderId,
+    type = ChatType.USER
+) {
 }

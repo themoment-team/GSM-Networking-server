@@ -11,5 +11,11 @@ class SystemChat(
     id: Long,
     room: Room,
     content: String,
-) : BaseChat(id, room, content, Long.MAX_VALUE, ChatType.SYSTEM) {
+) : BaseChat(
+    id = id,
+    room = room,
+    content = content,
+    senderId = Long.MAX_VALUE,
+    type = ChatType.SYSTEM
+) {
 }
