@@ -11,7 +11,10 @@ import javax.persistence.*
 /**
  * 채팅을 저장하는 Entity의 추상클래스입니다.
  */
-@Entity(name = "chat")
+@Entity
+@Table(name = "chat", indexes = [
+    Index(name = "chat_idx_1", columnList = "room_id, create_at DESC, chat_id DESC"),
+])
 @EntityListeners(AuditingEntityListener::class)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type_num", discriminatorType = DiscriminatorType.INTEGER)
@@ -21,6 +24,7 @@ abstract class BaseChat(
     val id: Long = 0,
 
     @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", referencedColumnName = "room_id")
     open val room: Room,
 
     @Column(name = "content", nullable = false)

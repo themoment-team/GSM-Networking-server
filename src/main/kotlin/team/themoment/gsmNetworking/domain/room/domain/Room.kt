@@ -5,7 +5,8 @@ import javax.persistence.*
 /**
  * 채팅방 정보를 저장하는 Entity 클래스입니다.
  */
-@Entity(name = "room")
+@Entity
+@Table(name = "room")
 class Room(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id")
