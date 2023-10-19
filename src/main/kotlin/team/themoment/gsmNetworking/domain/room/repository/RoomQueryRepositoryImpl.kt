@@ -105,6 +105,6 @@ class RoomQueryRepositoryImpl(
             .select(roomUser.count())
             .from(roomUser)
             .where(roomUser.userId.eq(userId))
-            .fetchFirst() // fetchFirst or fetchOne - 집계함수를 사용하기 때문에 무조건 1 개의 row를 반환한다는 점에선 fetchOne이 맞는거 같은데, 잘 모르겠음 이 경우 nullable 처리를 어떻게 해야 하나? 잘 모르겠음
+            .fetchFirst()
     }
 }
