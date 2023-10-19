@@ -23,7 +23,7 @@ abstract class BaseChat(
     @Column(name = "chat_id")
     val id: Long = 0,
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", referencedColumnName = "room_id")
     open val room: Room,
 
