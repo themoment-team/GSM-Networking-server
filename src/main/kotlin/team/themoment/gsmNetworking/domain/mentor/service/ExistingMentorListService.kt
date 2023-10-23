@@ -6,7 +6,7 @@ import team.themoment.gsmNetworking.domain.mentor.dto.ExistingMentorDto
 import team.themoment.gsmNetworking.domain.mentor.dto.ExistingMentorListDto
 
 @Service
-class QueryExistingMentorListService (
+class ExistingMentorListService (
     private val firestore: Firestore
 ) {
     fun execute(userName: String): ExistingMentorListDto {

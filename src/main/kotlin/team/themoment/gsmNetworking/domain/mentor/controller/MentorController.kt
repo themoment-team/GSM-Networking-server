@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.domain.mentor.dto.ExistingMentorListDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorRegistrationDto
 import team.themoment.gsmNetworking.domain.mentor.service.MentorRegistrationService
-import team.themoment.gsmNetworking.domain.mentor.service.QueryExistingMentorListService
+import team.themoment.gsmNetworking.domain.mentor.service.ExistingMentorListService
 import team.themoment.gsmNetworking.domain.mentor.service.QueryMentorListService
 
 @RestController
@@ -21,7 +20,7 @@ import team.themoment.gsmNetworking.domain.mentor.service.QueryMentorListService
 class MentorController(
     private val mentorRegistrationService: MentorRegistrationService,
     private val queryMentorListService: QueryMentorListService,
-    private val queryExistingMentorListService: QueryExistingMentorListService
+    private val existingMentorListService: ExistingMentorListService
 ) {
 
     @PostMapping
@@ -37,8 +36,8 @@ class MentorController(
     }
 
     @GetMapping("/existing/{userName}")
-    fun queryExistingMentorList(@PathVariable("userName") userName: String): ResponseEntity<ExistingMentorListDto> {
-        val existingMentorList = queryExistingMentorListService.execute(userName)
+    fun existingMentorList(@PathVariable("userName") userName: String): ResponseEntity<ExistingMentorListDto> {
+        val existingMentorList = existingMentorListService.execute(userName)
         return ResponseEntity.ok(existingMentorList)
     }
 
