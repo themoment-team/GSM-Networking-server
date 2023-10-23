@@ -21,7 +21,7 @@ class ExistingMentorListService (
             val generation = document.getLong("generation")
             val name = document.getString("name")
             val position = document.getString("position")
-            ExistingMentorDto(sns, companyName, companyUrl, email, generation, name, position)
+            ExistingMentorDto(name, generation, email, position, companyName, companyUrl, sns)
         }
 
         return ExistingMentorListDto(existingMentors.toMutableList())
