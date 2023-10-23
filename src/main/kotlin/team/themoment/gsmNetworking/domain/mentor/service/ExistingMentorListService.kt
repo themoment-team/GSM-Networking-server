@@ -13,7 +13,7 @@ class ExistingMentorListService (
         val mentors = firestore.collection("workers")
         val querySnapshot = mentors.whereEqualTo("name", userName).get().get()
         val existingMentors = querySnapshot.documents.map { document ->
-            val SNS = document.getString("SNS")
+            val sns = document.getString("SNS")
             val company = document.get("company") as Map<*, *>
             val companyName = company["name"] as String
             val companyUrl = company["URL"] as String
@@ -21,7 +21,7 @@ class ExistingMentorListService (
             val generation = document.getLong("generation")
             val name = document.getString("name")
             val position = document.getString("position")
-            ExistingMentorDto(SNS, companyName, companyUrl, email, generation, name, position)
+            ExistingMentorDto(sns, companyName, companyUrl, email, generation, name, position)
         }
 
         return ExistingMentorListDto(existingMentors.toMutableList())
