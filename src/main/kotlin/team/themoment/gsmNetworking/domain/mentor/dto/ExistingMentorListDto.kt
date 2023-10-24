@@ -1,7 +1,7 @@
 package team.themoment.gsmNetworking.domain.mentor.dto
 
 data class ExistingMentorListDto (
-    val existingMentors: MutableList<ExistingMentorDto>
+    val existingMentors: List<ExistingMentorDto>
 )
 
 data class ExistingMentorDto(

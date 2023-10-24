@@ -10,6 +10,6 @@ class ExistingMentorListService (
 ) {
     fun execute(userName: String): ExistingMentorListDto {
         val existingMentors = firebaseRepository.findByUserName(userName)
-        return ExistingMentorListDto(existingMentors.toMutableList())
+        return ExistingMentorListDto(existingMentors.toList())
     }
 }
