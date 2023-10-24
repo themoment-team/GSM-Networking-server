@@ -13,10 +13,8 @@ class FirebaseManagerImpl(
     override fun findByUserName(userName: String): List<ExistingMentorDto> {
         val mentors = firestore.collection("workers")
         val querySnapshot = mentors.whereEqualTo("name", userName).get().get()
-        val existingMentors = querySnapshot.documents.map { document ->
-            val mentorData = document.toObject(ExistingMentorDto::class.java)
-            mentorData
+        return querySnapshot.documents.map { document ->
+            document.toObject(ExistingMentorDto::class.java)
         }
-        return existingMentors
     }
 }
