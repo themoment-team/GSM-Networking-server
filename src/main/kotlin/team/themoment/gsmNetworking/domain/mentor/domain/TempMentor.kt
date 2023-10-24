@@ -7,7 +7,7 @@ import javax.persistence.*
 class TempMentor(
     @Id
     @Column(name = "real_id")
-    val realId: Int,
+    val id: Int,
 
     @Column(nullable = false, name = "id", unique = true)
     val firebaseId: String,
