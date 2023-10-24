@@ -16,7 +16,7 @@ class FirebaseConfig (
 
     @Bean
     fun firestore(): Firestore {
-        val serviceAccount = FileInputStream(keyFileName)
+        val serviceAccount = javaClass.classLoader.getResourceAsStream(keyFileName)
         val options = FirestoreOptions.newBuilder()
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))
             .setProjectId("gsm-networking")
