@@ -75,5 +75,5 @@ oauth2:
       sign-up-redirect-url: http://localhost:8080/signup
       default-redirect-url: http://localhost:8080/
 
-firebase-info:
+firebase:
   key-file-name: ${KEY_FILE_NAME}

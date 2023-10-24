@@ -70,3 +70,6 @@ oauth2:
     success:
       sign-up-redirect-url: ${OAUTH2_SIGN_UP_REDIRECT_URI}
       default-redirect-url: ${OAUTH2_DEFAULT_SUCCESS_REDIRECT_URI}
+
+firebase:
+  key-file-name: ${KEY_FILE_NAME}
