@@ -9,8 +9,8 @@ class TempMentor(
     @Column(name = "real_id")
     val realId: Int,
 
-    @Column(nullable = false, name = "id")
-    val id: String,
+    @Column(nullable = false, name = "id", unique = true)
+    val firebaseId: String,
 
     @Column(nullable = false, name = "name")
     val name: String,
