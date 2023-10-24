@@ -15,14 +15,7 @@ class FirebaseManagerImpl(
         val querySnapshot = mentors.whereEqualTo("name", userName).get().get()
         val existingMentors = querySnapshot.documents.map { document ->
             val mentorData = document.toObject(ExistingMentorDto::class.java)
-            ExistingMentorDto(
-                mentorData.name,
-                mentorData.email,
-                mentorData.generation,
-                mentorData.position,
-                mentorData.company,
-                mentorData.SNS
-            )
+            mentorData
         }
         return existingMentors
     }
