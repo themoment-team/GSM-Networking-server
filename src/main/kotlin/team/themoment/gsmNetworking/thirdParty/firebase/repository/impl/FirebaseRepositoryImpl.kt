@@ -1,9 +1,11 @@
 package team.themoment.gsmNetworking.thirdParty.firebase.repository.impl
 
 import com.google.cloud.firestore.Firestore
+import org.springframework.stereotype.Repository
 import team.themoment.gsmNetworking.domain.mentor.dto.ExistingMentorDto
 import team.themoment.gsmNetworking.thirdParty.firebase.repository.FirebaseRepository
 
+@Repository
 class FirebaseRepositoryImpl(
     private val firestore: Firestore
 ): FirebaseRepository {
