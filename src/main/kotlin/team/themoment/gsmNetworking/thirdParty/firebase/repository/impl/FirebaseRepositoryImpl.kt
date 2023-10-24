@@ -3,6 +3,7 @@ package team.themoment.gsmNetworking.thirdParty.firebase.repository.impl
 import com.google.cloud.firestore.Firestore
 import org.springframework.stereotype.Repository
 import team.themoment.gsmNetworking.domain.mentor.dto.ExistingMentorDto
+import team.themoment.gsmNetworking.domain.mentor.dto.ExistingMentorListDto
 import team.themoment.gsmNetworking.thirdParty.firebase.repository.FirebaseRepository
 
 @Repository
@@ -14,15 +15,15 @@ class FirebaseRepositoryImpl(
         val mentors = firestore.collection("workers")
         val querySnapshot = mentors.whereEqualTo("name", userName).get().get()
         val existingMentors = querySnapshot.documents.map { document ->
-            val sns = document.getString("SNS")
-            val company = document.get("company") as Map<*, *>
-            val companyName = company["name"] as String
-            val companyUrl = company["URL"] as String
-            val email = document.getString("email")
-            val generation = document.getLong("generation")
-            val name = document.getString("name")
-            val position = document.getString("position")
-            ExistingMentorDto(name, generation, email, position, companyName, companyUrl, sns)
+            val mentorData = document.toObject(ExistingMentorDto::class.java)
+            ExistingMentorDto(
+                mentorData.name,
+                mentorData.generation,
+                mentorData.email,
+                mentorData.position,
+                mentorData.company,
+                mentorData.SNS
+            )
         }
         return existingMentors
     }
