@@ -6,8 +6,8 @@ data class ExistingMentorListDto (
 
 data class ExistingMentorDto(
     val name: String? = "",
-    val generation: Long? = 0,
     val email: String? = "",
+    val generation: Long? = 0,
     val position: String? = "",
     val company: MentorCompanyDto? = MentorCompanyDto(),
     val SNS: String? = ""
