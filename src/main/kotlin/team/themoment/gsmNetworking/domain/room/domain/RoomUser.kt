@@ -1,6 +1,8 @@
 package team.themoment.gsmNetworking.domain.room.domain
 
-import java.time.LocalDateTime
+import team.themoment.gsmNetworking.common.util.UUIDUtils
+import java.time.Instant
+import java.util.UUID
 import javax.persistence.*
 
 /**
@@ -11,7 +13,11 @@ import javax.persistence.*
     name = "room_user", indexes = [
         Index(
             name = "room_user_idx_1",
-            columnList = "user_id, room_id, last_viewed_time DESC"
+            columnList = "user_id, recent_chat_id DESC"
+        ),
+        Index(
+            name = "room_user_idx_2",
+            columnList = "room_id, user_id"
         )
     ]
 )
@@ -30,9 +36,14 @@ class RoomUser(
     @Column(name = "user_id", nullable = false)
     val userId: Long,
 
-    @Column(name = "last_viewed_time", nullable = false)
-    val lastViewedTime: LocalDateTime
+    @Column(name = "last_viewed_chat_id", nullable = false, columnDefinition = "BINARY(16)")
+    val lastViewedChatId: UUID,
+
+    @Column(name = "recent_chat_id", nullable = false, columnDefinition = "BINARY(16)")
+    val recentChatId: UUID
 
     //TODO 나중에 그룹채팅 기능 추가되면 방 권한도 추가
 ) {
+    val recentChatTime: Instant
+        get() = UUIDUtils.getInstant(recentChatId)
 }
