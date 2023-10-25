@@ -1,16 +1,14 @@
 package team.themoment.gsmNetworking.domain.room.repository
 
 import com.querydsl.core.types.Projections
-import com.querydsl.jpa.JPAExpressions
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.Pageable
-import team.themoment.gsmNetworking.domain.chat.domain.QBaseChat
+import team.themoment.gsmNetworking.common.util.UUIDUtils
 import team.themoment.gsmNetworking.domain.chat.domain.QBaseChat.*
 import team.themoment.gsmNetworking.domain.room.domain.QRoomUser.roomUser
 import team.themoment.gsmNetworking.domain.room.domain.RoomUser
 import team.themoment.gsmNetworking.domain.room.dto.domain.RoomUserDto
+import java.time.Instant
 
 /**
  * Room 쿼리 관련 레포지토리 [RoomQueryRepository]의 구현 클래스입니다.
@@ -37,74 +35,96 @@ class RoomQueryRepositoryImpl(
                 roomUser.userId.eq(userId),
                 roomUser.room.id.eq(roomId)
             )
-            .orderBy(roomUser.lastViewedTime.desc())
+            .orderBy(roomUser.lastViewedChatId.desc())
             .fetchFirst()
     }
 
     /**
-     * 사용자의 최근 업데이트된 방 목록을 페이지네이션하여 조회합니다.
+     * 특정 사용자의 특정 시간 이전에 채팅이 발생한 방 목록 일부를 조회합니다.
      *
-     * @param userId 방 목록을 조회할 사용자의 고유 식별자
-     * @param pageable 페이지 정보 (페이지 번호, 페이지 크기 등)
-     * @return 방 목록과 페이지에 대한 정보
+     * @param userId 사용자의 고유 식별자
+     * @param time 필터링에 사용될 시간입니다.
+     * @param size 반환할 결과의 개수입니다.
+     * @return [RoomUserDto] 객체의 리스트입니다.
      */
-    override fun findRoomsRecentUpdated(userId: Long, pageable: Pageable): Page<RoomUserDto> {
-        val rooms = findRoomsByUserId(userId, pageable)
-        val total = findCountUserRooms(userId)
-
-        return PageImpl(rooms, pageable, total)
-    }
+    override fun findRoomsByTime(userId: Long, time: Instant, size: Int): List<RoomUserDto> =
+        findRooms(userId, time, size)
 
     /**
-     * 특정 사용자의 최근 채팅을 기준으로 방 목록을 페이지네이션하여 조회합니다.
+     * 특정 사용자의 최근에 채팅이 발생한 방 목록 일부를 조회합니다.
      *
-     * @param userId 방 목록을 조회할 사용자의 고유 식별자
-     * @param pageable 페이지 정보 (페이지 번호, 페이지 크기 등)
-     * @return 방 목록
+     * @param userId 사용자의 고유 식별자입니다.
+     * @param size 반환할 결과의 개수입니다.
+     * @return 최근 방을 나타내는 [RoomUserDto] 객체의 리스트입니다.
      */
-    private fun findRoomsByUserId(userId: Long, pageable: Pageable): List<RoomUserDto> {
-        val subBaseChat = QBaseChat("subBaseChat")
-        val getResentChatIdSubQuery = JPAExpressions
-            .select(subBaseChat.id)
-            .from(subBaseChat)
-            .where(subBaseChat.room.id.eq(roomUser.room.id))
-            .orderBy(subBaseChat.createAt.desc(), subBaseChat.id.desc())
-            .limit(1)
+    override fun findRecentRooms(userId: Long, size: Int): List<RoomUserDto> =
+        findRooms(userId, null, size)
 
+
+    /**
+     * 특정 사용자의 특정 시간 이전에 채팅이 발생한 방 목록 일부를 조회합니다.
+     *
+     * @param userId 사용자의 고유 식별자
+     * @param time 시간 (null이면 최근 방 목록 조회)
+     * @param size 가져올 방 목록 개수
+     * @return 최근 채팅 정보를 포함한 방 목록
+     */
+    private fun findRooms(userId: Long, time: Instant?, size: Int): List<RoomUserDto> {
         return queryFactory
             .select(
                 Projections.constructor(
                     RoomUserDto::class.java,
+                    roomUser.id,
                     roomUser.userId,
                     roomUser.room.id,
                     roomUser.roomName,
-                    roomUser.lastViewedTime
+                    roomUser.lastViewedChatId,
+                    Projections.constructor(
+                        RoomUserDto.MaxChatInfo::class.java,
+                        baseChat.id,
+                        baseChat.content,
+                        baseChat.senderId,
+                        baseChat.type
+                    )
                 )
             )
             .from(roomUser)
             .innerJoin(baseChat)
             .on(
                 roomUser.userId.eq(userId),
-                baseChat.room.id.eq(getResentChatIdSubQuery),
-                baseChat.room.id.eq(roomUser.room.id)
+                baseChat.id.eq(roomUser.recentChatId),
             )
-            .orderBy(baseChat.createAt.desc(), baseChat.id.desc())
-            .offset(pageable.offset)
-            .limit(pageable.pageSize.toLong())
+            .where(
+                recentChatIdLtInstant(time)
+            )
+            .orderBy(roomUser.userId.asc(), roomUser.recentChatId.desc())
+            .limit(size.toLong())
             .fetch()
     }
 
+
     /**
-     * 특정 사용자의 방 개수를 조회합니다.
+     * 특정 사용자의 모든 방 개수를 조회합니다.
      *
-     * @param userId 방 개수를 조회할 사용자의 고유 식별자
-     * @return 해당 사용자의 방 개수
+     * @param userId 사용자의 고유 식별자
+     * @return 해당 사용자의 모든 방 개수
      */
-    private fun findCountUserRooms(userId: Long): Long {
+    fun findCountUserRooms(userId: Long): Long {
         return queryFactory
-            .select(roomUser.count())
+            .select(roomUser.id.count())
             .from(roomUser)
             .where(roomUser.userId.eq(userId))
             .fetchFirst()
     }
+
+    /**
+     * "특정 시간 이전에 채팅이 발생한 RoomUser" 조건을 제공합니다.
+     *
+     * @param time 특정 시간
+     * @return BooleanExpression 조건식. 파라미터가 null이면 null을 반환
+     */
+    private fun recentChatIdLtInstant(time: Instant?): BooleanExpression? {
+        return time?.let { roomUser.recentChatId.lt(UUIDUtils.generateSmallestUUIDv7(time.plusMillis(1))) }
+    }
+
 }
