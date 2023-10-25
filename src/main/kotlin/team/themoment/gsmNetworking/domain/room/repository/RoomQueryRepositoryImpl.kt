@@ -115,7 +115,7 @@ class RoomQueryRepositoryImpl(
             .select(roomUser.id.count())
             .from(roomUser)
             .where(roomUser.userId.eq(userId))
-            .fetchFirst()
+            .fetchOne()!!
     }
 
     /**
