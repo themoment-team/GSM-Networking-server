@@ -14,7 +14,7 @@ class TempMentorController (
 ) {
 
     @GetMapping
-    fun existingMentorList(): ResponseEntity<TempMentorListDto> {
+    fun queryTempMentorList(): ResponseEntity<TempMentorListDto> {
         val tempMentorList = queryTempMentorListService.execute()
         return ResponseEntity.ok(tempMentorList)
     }
