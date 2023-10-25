@@ -95,6 +95,7 @@ class RoomQueryRepositoryImpl(
                 baseChat.id.eq(roomUser.recentChatId),
             )
             .where(
+                // 이 부분까지 on 절에 있는게 맞다고 생각하는데, on절에는 null이 들어갈 수 없어서 where 절로 옮김
                 recentChatIdLtInstant(time)
             )
             .orderBy(roomUser.userId.asc(), roomUser.recentChatId.desc())
