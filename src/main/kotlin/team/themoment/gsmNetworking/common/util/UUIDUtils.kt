@@ -48,7 +48,7 @@ class UUIDUtils {
         }
 
         /**
-         * 주어진 UUID에서 시잔 정보를 반환합니다.
+         * 주어진 UUID에서 시간 정보를 반환합니다.
          *
          * @param uuid epoch 밀리초를 추출할 UUID
          * @return UUID에서 추출된 시간 정보, LocalDateTime 타입
@@ -71,7 +71,7 @@ class UUIDUtils {
         }
 
         /**
-         * 주어진 UUID에서 시잔 정보를 반환합니다.
+         * 주어진 UUID에서 시간 정보를 반환합니다.
          *
          * @param uuid epoch 밀리초를 추출할 UUID
          * @return UUID에서 추출된 시간 정보, Instant 타입
