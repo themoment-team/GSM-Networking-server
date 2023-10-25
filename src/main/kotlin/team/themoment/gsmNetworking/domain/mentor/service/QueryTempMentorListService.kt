@@ -1,15 +1,27 @@
 package team.themoment.gsmNetworking.domain.mentor.service
 
 import org.springframework.stereotype.Service
-import team.themoment.gsmNetworking.domain.mentor.dto.ExistingMentorListDto
-import team.themoment.gsmNetworking.thirdParty.firebase.repository.FirebaseManager
+import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
+import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorListDto
+import team.themoment.gsmNetworking.domain.mentor.repository.TempMentorRepository
 
 @Service
 class QueryTempMentorListService (
-    private val firebaseManager: FirebaseManager
+    private val tempMentorRepository: TempMentorRepository
 ) {
-    fun execute(userName: String): ExistingMentorListDto {
-        val existingMentors = firebaseManager.findByUserName(userName)
-        return ExistingMentorListDto(existingMentors.toList())
+    fun execute(): TempMentorListDto {
+        val tempMentors = tempMentorRepository.findAll().map { tempMentor ->
+            TempMentorInfoDto(
+                tempMentor.id,
+                tempMentor.name,
+                tempMentor.email,
+                tempMentor.generation,
+                tempMentor.position,
+                TempMentorInfoDto.CompanyInfoDto(
+                    tempMentor.companyName,
+                    tempMentor.companyUrl),
+                tempMentor.sns)
+        };
+        return TempMentorListDto(tempMentors)
     }
 }

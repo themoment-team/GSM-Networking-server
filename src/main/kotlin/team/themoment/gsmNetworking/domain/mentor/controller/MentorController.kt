@@ -18,7 +18,6 @@ import team.themoment.gsmNetworking.domain.mentor.service.QueryMentorListService
 class MentorController(
     private val mentorRegistrationService: MentorRegistrationService,
     private val queryMentorListService: QueryMentorListService,
-    private val queryTempMentorListService: QueryTempMentorListService
 ) {
 
     @PostMapping
