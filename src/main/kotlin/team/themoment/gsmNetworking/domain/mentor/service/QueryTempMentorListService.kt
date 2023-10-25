@@ -5,7 +5,7 @@ import team.themoment.gsmNetworking.domain.mentor.dto.ExistingMentorListDto
 import team.themoment.gsmNetworking.thirdParty.firebase.repository.FirebaseManager
 
 @Service
-class ExistingMentorListService (
+class QueryTempMentorListService (
     private val firebaseManager: FirebaseManager
 ) {
     fun execute(userName: String): ExistingMentorListDto {
