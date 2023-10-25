@@ -19,7 +19,7 @@ class UUIDUtils {
          */
         private fun generateSmallestUUIDv7(epochMilli: Long): UUID {
             // 지정된 위치에 '-'를 삽입하여 포맷된 UUID 문자열을 생성합니다.
-            // 결과적으로 형식은 "xxxxxxxx-7000-0000-000000000000"와 같습니다.
+            // 결과적으로 형식은 "xxxxxxxx-xxxx-7000-0000-000000000000"와 같습니다.
             val hex = String.format("%012x-7000-0000-000000000000", epochMilli)
                 .replaceRange(8, 8, "-")
             return UUID.fromString(hex)
