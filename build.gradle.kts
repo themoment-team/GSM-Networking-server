@@ -51,6 +51,7 @@ dependencies {
 	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 
 	/* DB */
+	implementation ("com.fasterxml.uuid:java-uuid-generator:4.1.1")
 	implementation("mysql:mysql-connector-java:8.0.32")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 

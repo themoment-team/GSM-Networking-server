@@ -1,8 +1,10 @@
 package team.themoment.gsmNetworking.domain.chat.domain
 
+import com.fasterxml.uuid.Generators
 import org.springframework.data.annotation.TypeAlias
 import team.themoment.gsmNetworking.domain.chat.enums.ChatType
 import team.themoment.gsmNetworking.domain.room.domain.Room
+import java.util.UUID
 import javax.persistence.Entity
 
 /**
@@ -11,7 +13,7 @@ import javax.persistence.Entity
 @Entity
 @TypeAlias(ChatType.Alias.SYSTEM)
 class SystemChat(
-    id: Long,
+    id: UUID = Generators.timeBasedEpochGenerator().generate(),
     room: Room,
     content: String,
 ) : BaseChat(
