@@ -8,7 +8,7 @@ import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorListDto
 import team.themoment.gsmNetworking.domain.mentor.service.QueryTempMentorListService
 
 @RestController
-@RequestMapping("/api/v1/tempMentor")
+@RequestMapping("/api/v1/temp-mentor")
 class TempMentorController (
     private val queryTempMentorListService: QueryTempMentorListService
 ) {

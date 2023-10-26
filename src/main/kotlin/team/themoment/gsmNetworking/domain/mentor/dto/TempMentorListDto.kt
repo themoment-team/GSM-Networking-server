@@ -14,7 +14,7 @@ data class TempMentorInfoDto(
     val position: String,
     val company: CompanyInfoDto,
     @field:JsonProperty("SNS")
-    val sns: String?
+    val snsUrl: String?
 ){
 
     data class CompanyInfoDto(
