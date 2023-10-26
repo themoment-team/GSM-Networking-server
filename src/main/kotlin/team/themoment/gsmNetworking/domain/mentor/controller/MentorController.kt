@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorRegistrationDto
 import team.themoment.gsmNetworking.domain.mentor.service.MentorRegistrationService
-import team.themoment.gsmNetworking.domain.mentor.service.QueryTempMentorListService
 import team.themoment.gsmNetworking.domain.mentor.service.QueryMentorListService
 
 @RestController
