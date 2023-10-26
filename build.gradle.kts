@@ -76,9 +76,6 @@ dependencies {
 
 	/* websocket */
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
-
-	/* firebase */
-	implementation ("com.google.firebase:firebase-admin:9.2.0")
 }
 
 tasks.withType<KotlinCompile> {
