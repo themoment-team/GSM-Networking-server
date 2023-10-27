@@ -20,12 +20,14 @@ class TokenRequestFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val accessToken = CookieUtil.getCookieValueOrNull(cookies = request.cookies, name = JwtProperties.ACCESS)
+        if (request.cookies != null){
+            val accessToken = CookieUtil.getCookieValueOrNull(cookies = request.cookies, name = JwtProperties.ACCESS)
 
-        if (!accessToken.isNullOrEmpty()) {
-            val authentication = tokenParser.authentication(accessToken)
-            SecurityContextHolder.clearContext()
-            SecurityContextHolder.getContext().authentication = authentication
+            if (!accessToken.isNullOrEmpty()) {
+                val authentication = tokenParser.authentication(accessToken)
+                SecurityContextHolder.clearContext()
+                SecurityContextHolder.getContext().authentication = authentication
+            }
         }
 
         filterChain.doFilter(request, response)
