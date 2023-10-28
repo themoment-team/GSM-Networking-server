@@ -20,6 +20,7 @@ class FilterConfig(
         builder.addFilterBefore(tokenRequestFilter, LogoutFilter::class.java)
         builder.addFilterBefore(tokenRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
         builder.addFilterBefore(exceptionHandlerFilter, OAuth2LoginAuthenticationFilter::class.java)
+        builder.addFilterBefore(exceptionHandlerFilter, TokenRequestFilter::class.java)
     }
 
 }
