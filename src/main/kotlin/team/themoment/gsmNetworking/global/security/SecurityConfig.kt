@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
 import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.global.filter.ExceptionHandlerFilter
+import team.themoment.gsmNetworking.global.filter.LoggingFilter
 import team.themoment.gsmNetworking.global.filter.TokenRequestFilter
 import team.themoment.gsmNetworking.global.filter.config.FilterConfig
 import team.themoment.gsmNetworking.global.security.handler.CustomAccessDeniedHandler
@@ -24,7 +25,8 @@ class SecurityConfig(
     private val logoutSuccessHandler: LogoutSuccessHandler,
     private val authenticationSuccessHandler: AuthenticationSuccessHandler,
     private val tokenRequestFilter: TokenRequestFilter,
-    private val exceptionHandlerFilter: ExceptionHandlerFilter
+    private val exceptionHandlerFilter: ExceptionHandlerFilter,
+    private val loggingFilter: LoggingFilter,
 ) {
 
     @Bean
@@ -34,7 +36,7 @@ class SecurityConfig(
             .formLogin().disable()
             .httpBasic().disable()
             .csrf().disable()
-            .apply(FilterConfig(tokenRequestFilter, exceptionHandlerFilter))
+            .apply(FilterConfig(tokenRequestFilter, exceptionHandlerFilter, loggingFilter))
         logout(http)
         oauth2Login(http)
         authorizeHttpRequests(http)
