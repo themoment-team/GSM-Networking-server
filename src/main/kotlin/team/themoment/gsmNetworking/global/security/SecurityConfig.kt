@@ -4,11 +4,15 @@ import team.themoment.gsmNetworking.global.security.oauth.CustomOauth2UserServic
 import team.themoment.gsmNetworking.global.security.oauth.properties.Oauth2Properties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.global.filter.ExceptionHandlerFilter
 import team.themoment.gsmNetworking.global.filter.LoggingFilter
@@ -36,7 +40,9 @@ class SecurityConfig(
             .formLogin().disable()
             .httpBasic().disable()
             .csrf().disable()
-            .apply(FilterConfig(tokenRequestFilter, exceptionHandlerFilter, loggingFilter))
+            .cors().configurationSource(corsConfigurationSource())
+            .and()
+            .apply(FilterConfig(tokenRequestFilter, exceptionHandlerFilter))
         logout(http)
         oauth2Login(http)
         authorizeHttpRequests(http)
@@ -47,11 +53,29 @@ class SecurityConfig(
     private fun authorizeHttpRequests(http: HttpSecurity) {
         http.authorizeHttpRequests()
             // /mentor
-            .mvcMatchers("/api/v1/mentor/**").hasAnyRole(Authority.USER.name)
+            .mvcMatchers("/api/v1/mentor/*").hasAnyRole(
+                Authority.USER.name,
+            )
+            .mvcMatchers(HttpMethod.GET, "/api/v1/mentor").hasAnyRole(
+                Authority.TEMP_USER.name,
+                Authority.USER.name,
+                Authority.ADMIN.name
+            )
+            .mvcMatchers(HttpMethod.POST, "/api/v1/mentor").hasAnyRole(
+                Authority.TEMP_USER.name
+            )
             // /mentee
-            .mvcMatchers("/api/v1/mentee/**").hasAnyRole(Authority.USER.name, Authority.TEMP_USER.name)
+            .mvcMatchers("/api/v1/mentee/*").hasAnyRole(
+                Authority.USER.name,
+                Authority.TEMP_USER.name
+            )
+            .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(
+                Authority.UNAUTHENTICATED.name
+            )
             // /file
-            .mvcMatchers("/api/v1/file").hasAnyRole(Authority.USER.name)
+            .mvcMatchers("/api/v1/file").hasAnyRole(
+                Authority.USER.name
+            )
             .anyRequest().permitAll()
     }
 
@@ -77,4 +101,17 @@ class SecurityConfig(
             .deleteCookies(JwtProperties.ACCESS, JwtProperties.REFRESH)
     }
 
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        val source = UrlBasedCorsConfigurationSource()
+        configuration.allowedOriginPatterns = listOf("*")
+        configuration.setAllowedMethods(
+            mutableListOf("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS")
+        )
+        configuration.allowedHeaders = mutableListOf("*")
+        configuration.allowCredentials = true
+        source.registerCorsConfiguration("/**", configuration)
+        return source
+    }
 }
