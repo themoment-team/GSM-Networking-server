@@ -4,7 +4,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import team.themoment.gsmNetworking.common.cookie.CookieUtil
+import team.themoment.gsmNetworking.common.cookie.CookieManager
 import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.domain.auth.domain.RefreshToken
 import team.themoment.gsmNetworking.domain.auth.repository.RefreshTokenRepository
@@ -20,7 +20,8 @@ class CustomUrlAuthenticationSuccessHandler(
     private val refreshTokenRepository: RefreshTokenRepository,
     private val tokenGenerator: TokenGenerator,
     private val jwtExpTimeProperties: JwtExpTimeProperties,
-    private val oauth2Properties: Oauth2Properties
+    private val oauth2Properties: Oauth2Properties,
+    private val cookieManager: CookieManager
 ) : AuthenticationSuccessHandler {
 
     /**
@@ -39,7 +40,7 @@ class CustomUrlAuthenticationSuccessHandler(
         val authenticationId = authentication.name.toLong()
         val authority = Authority.valueOf(authentication.authorities.first().authority)
         val tokenDto = generateTokenAndSave(authenticationId)
-        CookieUtil.addTokenCookie(tokenDto, response)
+        cookieManager.addTokenCookie(tokenDto, response)
         sendRedirectToAuthority(response, authority)
     }
 

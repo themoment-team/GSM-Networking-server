@@ -58,9 +58,12 @@ class SecurityConfig(
                 Authority.TEMP_USER.name
             )
             // /mentee
-            .mvcMatchers("/api/v1/mentee/**").hasAnyRole(
+            .mvcMatchers("/api/v1/mentee/*").hasAnyRole(
                 Authority.USER.name,
                 Authority.TEMP_USER.name
+            )
+            .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(
+                Authority.UNAUTHENTICATED.name
             )
             // /file
             .mvcMatchers("/api/v1/file").hasAnyRole(

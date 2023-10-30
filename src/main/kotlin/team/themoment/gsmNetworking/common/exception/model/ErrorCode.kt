@@ -6,7 +6,10 @@ package team.themoment.gsmNetworking.common.exception.model
  */
 enum class ErrorCode {
 
-    DEFAULT
+    DEFAULT,
+    BAD_REQUEST,
+    AUTHENTICATION,
+    INTERNAL_SERVER_ERROR
     ;
 
 }

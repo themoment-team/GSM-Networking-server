@@ -14,7 +14,7 @@ interface StompSender {
      *
      * @param message 전송할 메시지
      */
-    fun sendMessage(message: StompMessage<*>)
+    fun sendMessage(message: StompMessage<*>, path: String)
 
     /**
      * Stomp 에러 메시지를 전송합니다.
@@ -23,7 +23,7 @@ interface StompSender {
      */
     fun sendErrorMessage(ex: StompException) {
         val errorMessage = createErrorMessage(ex)
-        sendMessage(errorMessage)
+        sendMessage(errorMessage, ex.path)
     }
 
     /**
