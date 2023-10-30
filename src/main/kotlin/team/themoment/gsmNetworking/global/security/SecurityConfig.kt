@@ -42,7 +42,7 @@ class SecurityConfig(
             .csrf().disable()
             .cors().configurationSource(corsConfigurationSource())
             .and()
-            .apply(FilterConfig(tokenRequestFilter, exceptionHandlerFilter))
+            .apply(FilterConfig(tokenRequestFilter, exceptionHandlerFilter, loggingFilter))
         logout(http)
         oauth2Login(http)
         authorizeHttpRequests(http)
