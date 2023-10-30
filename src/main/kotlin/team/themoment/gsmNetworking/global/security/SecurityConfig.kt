@@ -4,6 +4,7 @@ import team.themoment.gsmNetworking.global.security.oauth.CustomOauth2UserServic
 import team.themoment.gsmNetworking.global.security.oauth.properties.Oauth2Properties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
@@ -47,6 +48,7 @@ class SecurityConfig(
             // /mentor
             .mvcMatchers("/api/v1/mentor/**").hasAnyRole(Authority.USER.name)
             // /mentee
+            .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(Authority.UNAUTHENTICATED.name)
             .mvcMatchers("/api/v1/mentee/**").hasAnyRole(Authority.USER.name, Authority.TEMP_USER.name)
             // /file
             .mvcMatchers("/api/v1/file").hasAnyRole(Authority.USER.name)
