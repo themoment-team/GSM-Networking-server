@@ -46,4 +46,15 @@ class RoomUser(
 ) {
     val recentChatTime: Instant
         get() = UUIDUtils.getInstant(recentChatId)
+
+    fun refresh(recentChatId: UUID, lastViewedChatId: UUID = this.lastViewedChatId): RoomUser {
+        return RoomUser(
+            id = this.id,
+            room = this.room,
+            roomName = this.roomName,
+            userId = this.userId,
+            lastViewedChatId = lastViewedChatId,
+            recentChatId = recentChatId
+        )
+    }
 }
