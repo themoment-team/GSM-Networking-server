@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.cookie.CookieManager
-import team.themoment.gsmNetworking.common.cookie.impl.CookieUtil
 import team.themoment.gsmNetworking.domain.auth.service.ReissueTokenService
 import team.themoment.gsmNetworking.global.security.jwt.properties.JwtProperties
 import javax.servlet.http.HttpServletRequest

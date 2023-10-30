@@ -5,7 +5,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.cookie.CookieManager
-import team.themoment.gsmNetworking.common.cookie.impl.CookieUtil
 import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.domain.auth.domain.RefreshToken
 import team.themoment.gsmNetworking.domain.auth.repository.RefreshTokenRepository

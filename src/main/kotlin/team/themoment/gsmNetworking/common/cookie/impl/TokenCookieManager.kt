@@ -9,11 +9,10 @@ import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
 
 /**
- * 쿠키에 관한 로직이 담겨있는 util 클래스 입니다.
- *
+ * CookieManager의 토큰 관련 구현체입니다.
  */
 @Component
-class CookieUtil : CookieManager {
+class TokenCookieManager : CookieManager {
 
     @Value("\${server.cookie.domain}")
     private val GSM_NETWORKING_DOMAIN: String = ""
@@ -21,6 +20,9 @@ class CookieUtil : CookieManager {
     @Value("\${server.cookie.secure}")
     private val SECURE: Boolean = false
 
+    /**
+     * 토큰을 쿠키로 만들어주어 쿠키를 담는 메서드 입니다.
+     */
     override fun addTokenCookie(tokenDto: TokenDto, response: HttpServletResponse) {
         val accessTokenCookie = addCookie(
             name = JwtProperties.ACCESS,
@@ -36,6 +38,11 @@ class CookieUtil : CookieManager {
         response.addCookie(refreshTokenCookie)
     }
 
+    /**
+     * 쿠키를 반환해주는 메서드 입니다.
+     *
+     * @return name으로 찾은 쿠키
+     */
     override fun getCookieValueOrNull(cookies: Array<Cookie>, name: String): String? {
         var value: String? = null
         if (cookies.isNotEmpty()) {
@@ -46,6 +53,11 @@ class CookieUtil : CookieManager {
         return value
     }
 
+    /**
+     * 쿠키를 생성해주는 메서드 입니다.
+     *
+     * @return 생성된 쿠키를 반환합니다.
+     */
     private fun addCookie(name: String, value: String, maxAge: Int): Cookie {
         val cookie = Cookie(name, value)
         cookie.maxAge = maxAge
