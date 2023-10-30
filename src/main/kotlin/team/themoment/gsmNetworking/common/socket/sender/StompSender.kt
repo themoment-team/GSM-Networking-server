@@ -8,13 +8,26 @@ import team.themoment.gsmNetworking.common.socket.model.StompErrorResponse
  * Stomp 메시지를 전송하는 역할의 인터페이스입니다.
  */
 interface StompSender {
+    // TODO 역할이 변경되었으므로 적절한 이름으로 변경하고, 주석 내용도 바꾸기
+    //  기존의 STOMP 메시지를 전송하는 것에서
+    //  사용자 상태에 따라 STOMP 메시지 전송 or 알람 등 다른 처리를 진행함
+    //  즉, 외부에선 사용자 상태에 상관없이 해당 객체에 명령만 하면 됨
 
     /**
      * Stomp 메시지를 전송합니다.
      *
      * @param message 전송할 메시지
+     * @param path 메시지를 전송할 경로
      */
     fun sendMessage(message: StompMessage<*>, path: String)
+
+    /**
+     * 특정 User에게 Stomp 메시지를 전송합니다.
+     *
+     * @param message 전송할 메시지
+     * @param userId 메시지를 전송할 사용자의 식별자
+     */
+    fun sendMessageToUser(message: StompMessage<*>, userId: Long)
 
     /**
      * Stomp 에러 메시지를 전송합니다.
