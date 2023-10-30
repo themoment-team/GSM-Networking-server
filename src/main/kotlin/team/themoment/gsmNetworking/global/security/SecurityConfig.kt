@@ -46,12 +46,29 @@ class SecurityConfig(
     private fun authorizeHttpRequests(http: HttpSecurity) {
         http.authorizeHttpRequests()
             // /mentor
-            .mvcMatchers("/api/v1/mentor/**").hasAnyRole(Authority.USER.name)
+            .mvcMatchers("/api/v1/mentor/*").hasAnyRole(
+                Authority.USER.name,
+            )
+            .mvcMatchers(HttpMethod.GET, "/api/v1/mentor").hasAnyRole(
+                Authority.TEMP_USER.name,
+                Authority.USER.name,
+                Authority.ADMIN.name
+            )
+            .mvcMatchers(HttpMethod.POST, "/api/v1/mentor").hasAnyRole(
+                Authority.TEMP_USER.name
+            )
             // /mentee
-            .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(Authority.UNAUTHENTICATED.name)
-            .mvcMatchers("/api/v1/mentee/**").hasAnyRole(Authority.USER.name, Authority.TEMP_USER.name)
+            .mvcMatchers("/api/v1/mentee/*").hasAnyRole(
+                Authority.USER.name,
+                Authority.TEMP_USER.name
+            )
+            .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(
+                Authority.UNAUTHENTICATED.name
+            )
             // /file
-            .mvcMatchers("/api/v1/file").hasAnyRole(Authority.USER.name)
+            .mvcMatchers("/api/v1/file").hasAnyRole(
+                Authority.USER.name
+            )
             .anyRequest().permitAll()
     }
 
