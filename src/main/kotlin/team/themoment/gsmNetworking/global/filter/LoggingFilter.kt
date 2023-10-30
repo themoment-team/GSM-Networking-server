@@ -22,7 +22,7 @@ class LoggingFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val startTime = System.currentTimeMillis()
         val logId = UUID.randomUUID()
@@ -41,13 +41,25 @@ class LoggingFilter : OncePerRequestFilter() {
     }
 
     private fun requestLogging(request: ContentCachingRequestWrapper, logId: UUID) {
-        log.info("Log-ID: $logId, IP: ${request.remoteAddr}, URI: ${request.requestURI}, Http Method: ${request.method}, Params: ${request.queryString}, Content-Type: ${request.contentType}, User-Cookies: ${request.cookies.joinToString(", ") { "${it.name}=${it.value}" }}, Body: ${getRequestBody(request.inputStream)}")
+        log.info(
+            "Log-ID: $logId, IP: ${request.remoteAddr}, URI: ${request.requestURI}, Http Method: ${request.method}, Params: ${request.queryString}, Content-Type: ${request.contentType}, User-Cookies: ${
+                request.cookies.joinToString(
+                    ", "
+                ) { "${it.name}=${it.value}" }
+            }, User-Agent: ${request.getHeader("User-Agent")}, Body: ${getRequestBody(request.inputStream)}"
+        )
     }
 
     private fun responseLogging(response: ContentCachingResponseWrapper, startTime: Long, logId: UUID) {
         val endTime = System.currentTimeMillis()
         val responseTime = endTime - startTime
-        log.info("Log-ID: $logId, Status: ${response.status}, Content-Type: ${response.contentType}, Response Time: ${responseTime}ms, Body: ${String(response.contentAsByteArray)}")
+        log.info(
+            "Log-ID: $logId, Status: ${response.status}, Content-Type: ${response.contentType}, Response Time: ${responseTime}ms, Body: ${
+                String(
+                    response.contentAsByteArray
+                )
+            }"
+        )
     }
 
     private fun getRequestBody(inputStream: InputStream): String {
