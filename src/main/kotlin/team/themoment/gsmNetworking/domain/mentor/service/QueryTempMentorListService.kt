@@ -31,8 +31,9 @@ class QueryTempMentorListService (
                 TempMentorInfoDto.CompanyInfoDto(
                     tempMentor.companyName,
                     tempMentor.companyUrl),
-                tempMentor.sns)
-        };
+                tempMentor.sns
+            )
+        }
 
         return TempMentorListDto(tempMentors)
     }
