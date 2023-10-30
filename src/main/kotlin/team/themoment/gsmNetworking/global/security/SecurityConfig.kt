@@ -15,6 +15,7 @@ import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.global.filter.ExceptionHandlerFilter
+import team.themoment.gsmNetworking.global.filter.LoggingFilter
 import team.themoment.gsmNetworking.global.filter.TokenRequestFilter
 import team.themoment.gsmNetworking.global.filter.config.FilterConfig
 import team.themoment.gsmNetworking.global.security.handler.CustomAccessDeniedHandler
@@ -28,7 +29,8 @@ class SecurityConfig(
     private val logoutSuccessHandler: LogoutSuccessHandler,
     private val authenticationSuccessHandler: AuthenticationSuccessHandler,
     private val tokenRequestFilter: TokenRequestFilter,
-    private val exceptionHandlerFilter: ExceptionHandlerFilter
+    private val exceptionHandlerFilter: ExceptionHandlerFilter,
+    private val loggingFilter: LoggingFilter,
 ) {
 
     @Bean
