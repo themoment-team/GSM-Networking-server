@@ -30,6 +30,14 @@ interface StompSender {
     fun sendMessageToUser(message: StompMessage<*>, userId: Long)
 
     /**
+     * 특정 Session에게 Stomp 메시지를 전송합니다.
+     *
+     * @param message 전송할 메시지
+     * @param sessionId 메시지를 전송할 Client의 sessionId
+     */
+    fun sendMessageToSession(message: StompMessage<*>, sessionId: String)
+
+    /**
      * Stomp 에러 메시지를 전송합니다.
      *
      * @param ex 전송할 에러 메시지
