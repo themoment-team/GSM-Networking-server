@@ -28,7 +28,7 @@ jobs:
         run: |
           rm -rf ./src/main/resources/application-prod.yml
           touch ./src/main/resources/application-prod.yml
-          echo ${{ secrets.YML_FILE }} > ./src/main/resources/application-prod.yml
+          echo "${{ secrets.YML_FILE }}" > ./src/main/resources/application-prod.yml
 
       - name: Run build with Gradle wrapper
         run: ./gradlew clean build
