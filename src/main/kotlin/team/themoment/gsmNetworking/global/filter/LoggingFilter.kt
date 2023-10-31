@@ -43,9 +43,11 @@ class LoggingFilter : OncePerRequestFilter() {
     private fun requestLogging(request: ContentCachingRequestWrapper, logId: UUID) {
         log.info(
             "Log-ID: $logId, IP: ${request.remoteAddr}, URI: ${request.requestURI}, Http Method: ${request.method}, Params: ${request.queryString}, Content-Type: ${request.contentType}, User-Cookies: ${
-                request.cookies.joinToString(
-                    ", "
-                ) { "${it.name}=${it.value}" }
+                request.cookies?.let {
+                    it.joinToString(
+                        ", "
+                    ) { "${it.name}=${it.value}" }
+                }
             }, User-Agent: ${request.getHeader("User-Agent")}, Body: ${getRequestBody(request.inputStream)}"
         )
     }
