@@ -2,6 +2,7 @@ package team.themoment.gsmNetworking.domain.mentor.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorListDto
 import team.themoment.gsmNetworking.domain.mentor.repository.TempMentorRepository
@@ -28,9 +29,10 @@ class QueryTempMentorListService (
                 tempMentor.email,
                 tempMentor.generation,
                 tempMentor.position,
-                TempMentorInfoDto.CompanyInfoDto(
+                CompanyInfoDto(
                     tempMentor.companyName,
-                    tempMentor.companyUrl),
+                    tempMentor.companyUrl
+                ),
                 tempMentor.sns
             )
         }

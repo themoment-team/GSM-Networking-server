@@ -15,12 +15,4 @@ data class TempMentorInfoDto(
     val company: CompanyInfoDto,
     @field:JsonProperty("SNS")
     val snsUrl: String?
-){
-
-    data class CompanyInfoDto(
-        val name: String,
-        @field:JsonProperty("URL")
-        val url: String?
-    )
-
-}
+)

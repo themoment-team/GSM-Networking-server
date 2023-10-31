@@ -2,6 +2,7 @@ package team.themoment.gsmNetworking.domain.mentor.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.SearchTempMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.SearchTempMentorListDto
 import team.themoment.gsmNetworking.domain.mentor.repository.TempMentorRepository
@@ -21,7 +22,7 @@ class SearchTempMentorListService (
      * @param userName 검색할 유저의 이름
      * @return 검색한 임시멘토 정보가 담긴 dto
      */
-    fun execute(name: String): SearchTempMentorListDto{
+    fun execute(name: String): SearchTempMentorListDto {
         val searchTempMentors = tempMentorRepository.findByNameContaining(name).map { tempMentor ->
             SearchTempMentorInfoDto(
                 tempMentor.id,
@@ -29,9 +30,10 @@ class SearchTempMentorListService (
                 tempMentor.email,
                 tempMentor.generation,
                 tempMentor.position,
-                SearchTempMentorInfoDto.CompanyInfoDto(
+                CompanyInfoDto(
                     tempMentor.companyName,
-                    tempMentor.companyUrl),
+                    tempMentor.companyUrl
+                ),
                 tempMentor.sns
             )
         }
