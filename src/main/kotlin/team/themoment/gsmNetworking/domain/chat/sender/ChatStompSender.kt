@@ -30,6 +30,19 @@ class ChatStompSender(
         }
     }
 
+    override fun sendMessageToSession(message: StompMessage<*>, sessionId: String) {
+        val path = "${StompPathUtil.PREFIX_TO_USER}/$sessionId"
+//        if (isSessionSubscribedToPath(sessionId, path)) {
+//            sendMessage(message, path)
+//        }
+
+        // isSessionSubscribedToPath를 쓰면 Apic으로 테스트가 불가능, Apic은 한 session이 한 sub만 가능함
+        if (isSessionSubscribing(sessionId)) {
+            sendMessage(message, path)
+        }
+        // 연결이 끊어진 경우는 응답할 필요가 없으므로 스킵
+    }
+
     override fun sendErrorMessage(ex: StompException) {
         val error = ex as ChatStompException
         // ChatStompException 가 발생하는 경우는 클라이언트가 요청할 때만이므로 sessoin 있는지만 확인
@@ -56,6 +69,11 @@ class ChatStompSender(
     private fun isSessionSubscribedToPath(sessionId: String, path: String): Boolean {
         val connectedInfo = connectedInfoRepository.findById(sessionId).orElse(null)
         return connectedInfo?.subscribes?.any { it.subscribeUrl == path } ?: false
+    }
+
+    private fun isSessionSubscribing(sessionId: String): Boolean {
+        val connectedInfo = connectedInfoRepository.findById(sessionId).orElse(null)
+        return connectedInfo != null
     }
 
 }
