@@ -24,7 +24,7 @@ jobs:
       - name: Setup Gradls's permission
         run: chmod +x gradlew
 
-      - name: make yml file
+      - name: Make YML file
         run: |
           rm -rf ./src/main/resources/application-prod.yml
           touch ./src/main/resources/application-prod.yml
