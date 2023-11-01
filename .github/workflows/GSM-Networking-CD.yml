@@ -6,7 +6,7 @@ on:
   push:
     branches: [ "feature/CI-CD" ]
 
-  # Develop 브랜치에 머지된 코드가 실행완료 되었을때 실행하는 트리거
+  # Develop 브랜치에 머지된 코드의 CI가 실행완료 되었을때 실행하는 트리거
   workflow_run:
     workflows: [ "GSM-Networking On Develop Merge CI" ]
     types:
