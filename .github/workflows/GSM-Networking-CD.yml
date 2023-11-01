@@ -1,8 +1,19 @@
 name: GSM-Networking CD
 
 on:
+
+  # feature/CI-CD 브랜치에 푸쉬될 경우 실행하는 트리거
   push:
-    branches: [ "develop", "feature/CI-CD" ]
+    branches: [ "feature/CI-CD" ]
+
+  # Develop 브랜치에 머지된 코드가 실행완료 되었을때 실행하는 트리거
+  workflow_run:
+    workflows: [ "GSM-Networking On Develop Merge CI" ]
+    types:
+      - completed
+
+  # 수동으로 실행하기 위한 트리거
+  workflow_dispatch:
 
 jobs:
   CD:

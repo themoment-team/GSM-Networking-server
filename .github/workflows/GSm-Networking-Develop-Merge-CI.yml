@@ -1,8 +1,8 @@
-name: GSM-Networking CI
+name: GSM-Networking On Develop Merge CI
 
 on:
-  pull_request:
-    branches: [ "*" ]
+  push:
+    branches: [ "develop" ]
 
 jobs:
   CI:
