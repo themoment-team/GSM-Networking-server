@@ -26,7 +26,7 @@ class RoomMessageController(
 ) {
 
     @MessageMapping("/query/recent-rooms")
-    fun queryRecentChats(
+    fun queryRecentRooms(
         @Payload req: QueryRecentRoomsRequest,
         principal: Principal,
         @Header("simpSessionId") sessionId: String
@@ -34,7 +34,7 @@ class RoomMessageController(
         try {
             val rs = queryRoomService.recentRooms(req.userId, req.limit)
 
-            sendChatsToSession(RoomMapper.roomUserDtosToListRoomUserResponses(rs), sessionId)
+            sendRoomsToSession(RoomMapper.roomUserDtosToListRoomUserResponses(rs), sessionId)
 
         } catch (ex: IllegalArgumentException) {
             throw ChatStompException(
@@ -47,7 +47,7 @@ class RoomMessageController(
     }
 
     @MessageMapping("/query/rooms")
-    fun queryChats(
+    fun queryRooms(
         @Payload req: QueryRoomsRequest,
         principal: Principal,
         @Header("simpSessionId") sessionId: String
@@ -55,7 +55,7 @@ class RoomMessageController(
         try {
             val rs = queryRoomService.roomsByTime(req.userId, Instant.ofEpochMilli(req.time), req.limit)
 
-            sendChatsToSession(RoomMapper.roomUserDtosToListRoomUserResponses(rs), sessionId)
+            sendRoomsToSession(RoomMapper.roomUserDtosToListRoomUserResponses(rs), sessionId)
 
         } catch (ex: IllegalArgumentException) {
             throw ChatStompException(
@@ -67,7 +67,7 @@ class RoomMessageController(
         }
     }
 
-    private fun sendChatsToSession(chats: List<RoomUserResponse>, sessionId: String) {
+    private fun sendRoomsToSession(chats: List<RoomUserResponse>, sessionId: String) {
         chatStompSender.sendMessageToSession(StompMessage(chats), sessionId)
     }
 }
