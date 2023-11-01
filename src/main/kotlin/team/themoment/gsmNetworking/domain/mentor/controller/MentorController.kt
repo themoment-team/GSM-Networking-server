@@ -26,7 +26,7 @@ class MentorController(
     }
 
     @GetMapping
-    fun queryAllMentorList(): ResponseEntity<List<Any>> {
+    fun queryAllMentorList(): ResponseEntity<List<MentorInfoDto>> {
         val mentorList = queryAllMentorListService.execute()
         return ResponseEntity.ok(mentorList)
     }
