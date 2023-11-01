@@ -2,12 +2,8 @@ package team.themoment.gsmNetworking.domain.mentor.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class SearchTempMentorListDto(
-    val searchTempMentors: List<SearchTempMentorInfoDto>
-)
-
 data class SearchTempMentorInfoDto(
-    val id: Int,
+    val id: Long,
     val name: String,
     val email: String?,
     val generation: Int,
