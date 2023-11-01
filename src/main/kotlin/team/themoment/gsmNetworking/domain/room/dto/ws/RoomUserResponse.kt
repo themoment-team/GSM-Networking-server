@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.room.dto.ws
 
+import team.themoment.gsmNetworking.common.util.UUIDUtils
 import team.themoment.gsmNetworking.domain.chat.enums.ChatType
 import java.util.*
 
@@ -15,6 +16,7 @@ data class RoomUserResponse(
         val id: UUID,
         val content: String,
         val senderId: Long,
-        val type: ChatType
+        val type: ChatType,
+        val createAt: Long = UUIDUtils.getEpochMilli(id)
     )
 }
