@@ -1,8 +1,5 @@
 #!/bin/bash
-BUILD_JAR=/home/ec2-user/GSM-Networking-builds/build/libs/gsmNetworking-0.0.1-SNAPSHOT.jar
 JAR_NAME=gsmNetworking-0.0.1-SNAPSHOT.jar
-
-DEPLOY_PATH=/home/ec2-user/GSM-Networking-builds/build/libs/
 
 CURRENT_PID=$(pgrep -f $JAR_NAME)
 if [ -z $CURRENT_PID ]
@@ -14,8 +11,6 @@ else
   sleep 5
 fi
 
-DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
+chmod +x /home/ec2-user/GSM-Networking-builds/build/libs/gsmNetworking-0.0.1-SNAPSHOT.jar
 
-chmod +x $DEPLOY_JAR
-
-nohup java -jar --spring.profiles.active=prod $DEPLOY_JAR > /dev/null 2> /dev/null < /dev/null &
+nohup java -jar -Dspring.profiles.active=prod /home/ec2-user/GSM-Networking-builds/build/libs/gsmNetworking-0.0.1-SNAPSHOT.jar > /dev/null 2> /dev/null < /dev/null &
