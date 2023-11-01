@@ -23,6 +23,7 @@ class StompWebSocketConfig(
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry.addEndpoint("/ws")
             .setAllowedOriginPatterns("*") // TODO 보안 설정 나중에 추가하기
+            .withSockJS()
         registry.setErrorHandler(StompErrorHandler())
     }
 
