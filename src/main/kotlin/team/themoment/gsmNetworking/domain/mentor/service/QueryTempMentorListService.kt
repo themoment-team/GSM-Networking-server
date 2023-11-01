@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
-import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorListDto
 import team.themoment.gsmNetworking.domain.mentor.repository.TempMentorRepository
 
 /**
@@ -12,7 +11,7 @@ import team.themoment.gsmNetworking.domain.mentor.repository.TempMentorRepositor
  */
 @Service
 @Transactional(readOnly = true)
-class QueryTempMentorListService (
+class QueryTempMentorListService(
     private val tempMentorRepository: TempMentorRepository
 ) {
 
@@ -21,12 +20,12 @@ class QueryTempMentorListService (
      *
      * @return 임시멘토 정보가 담긴 dto
      */
-    fun execute(): TempMentorListDto {
+    fun execute(): List<TempMentorInfoDto> {
         val tempMentors = tempMentorRepository.findAll().map { tempMentor ->
             TempMentorInfoDto(
                 tempMentor.id,
                 tempMentor.name,
-                tempMentor.email,
+                tempMentor.email ?: "",
                 tempMentor.generation,
                 tempMentor.position,
                 CompanyInfoDto(
@@ -37,7 +36,7 @@ class QueryTempMentorListService (
             )
         }
 
-        return TempMentorListDto(tempMentors)
+        return tempMentors
     }
 
 }

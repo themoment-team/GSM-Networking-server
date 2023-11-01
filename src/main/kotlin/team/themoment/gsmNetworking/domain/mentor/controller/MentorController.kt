@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorRegistrationDto
 import team.themoment.gsmNetworking.domain.mentor.service.MentorRegistrationService
-import team.themoment.gsmNetworking.domain.mentor.service.QueryMentorListService
+import team.themoment.gsmNetworking.domain.mentor.service.QueryAllMentorsListService
 
 @RestController
 @RequestMapping("api/v1/mentor")
 class MentorController(
     private val mentorRegistrationService: MentorRegistrationService,
-    private val queryMentorListService: QueryMentorListService
+    private val queryAllMentorListService: QueryAllMentorsListService
 ) {
 
     @PostMapping
@@ -26,8 +26,8 @@ class MentorController(
     }
 
     @GetMapping
-    fun queryMentorList(): ResponseEntity<List<MentorInfoDto>> {
-        val mentorList = queryMentorListService.execute()
+    fun queryAllMentorList(): ResponseEntity<List<MentorInfoDto>> {
+        val mentorList = queryAllMentorListService.execute()
         return ResponseEntity.ok(mentorList)
     }
 

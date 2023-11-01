@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
 import team.themoment.gsmNetworking.domain.mentor.domain.QCareer.career
 import team.themoment.gsmNetworking.domain.mentor.domain.QMentor.mentor
+import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.user.domain.QUser.user
 
@@ -29,12 +30,13 @@ class MentorCustomRepositoryImpl(
                 mentor.user.generation,
                 career.position,
                 Projections.constructor(
-                    MentorInfoDto.CompanyInfo::class.java,
+                    CompanyInfoDto::class.java,
                     career.companyName,
                     career.companyUrl
                 ),
                 mentor.user.snsUrl,
-                mentor.user.profileUrl
+                mentor.user.profileUrl,
+                mentor.registered
             )
         )
             .from(mentor, career)

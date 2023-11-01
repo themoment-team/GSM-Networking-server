@@ -12,6 +12,9 @@ class Mentor(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val mentorId: Long = 0,
 
+    @Column(nullable = false, name = "registered")
+    val registered: Boolean,
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User

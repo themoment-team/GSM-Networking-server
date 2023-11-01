@@ -35,7 +35,7 @@ class MentorRegistrationService(
             profileUrl = dto.profileUrl
         )
         val user = userRegistrationService.execute(userRegistrationDto)
-        val mentor = Mentor(user = user)
+        val mentor = Mentor(registered = true, user = user)
         val careerList = dto.career.map {
             Career(
                 mentor = mentor,
