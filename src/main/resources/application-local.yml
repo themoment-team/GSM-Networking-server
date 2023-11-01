@@ -74,3 +74,14 @@ oauth2:
     success:
       sign-up-redirect-url: http://localhost:8080/signup
       default-redirect-url: http://localhost:8080/
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: ${ACTUATOR_BASE_PATH}
+      exposure:
+        include: health
+  endpoint:
+    health:
+      enabled: true
