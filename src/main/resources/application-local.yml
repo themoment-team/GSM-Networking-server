@@ -85,3 +85,5 @@ management:
   endpoint:
     health:
       enabled: true
+  server:
+    port: ${ACTUATOR_SERVER_PORT}
