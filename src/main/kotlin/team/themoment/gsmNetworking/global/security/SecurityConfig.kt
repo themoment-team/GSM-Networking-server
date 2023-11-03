@@ -65,12 +65,13 @@ class SecurityConfig(
                 Authority.TEMP_USER.name
             )
             // /tempMentor
-            .mvcMatchers(HttpMethod.GET, "/api/v1/temp-mentor").hasAnyRole(
-                Authority.USER.name,
+            .mvcMatchers(HttpMethod.GET, "/api/v1/temp-mentor/*").hasAnyRole(
                 Authority.TEMP_USER.name
             )
-            .mvcMatchers(HttpMethod.DELETE, "/api/v1/temp-mentor/*").hasAnyRole(
+            .mvcMatchers(HttpMethod.GET, "/api/v1/temp-mentor/").hasAnyRole(
                 Authority.TEMP_USER.name,
+            )
+            .mvcMatchers(HttpMethod.DELETE, "/api/v1/temp-mentor/*").hasAnyRole(
                 Authority.USER.name
             )
             // /mentee
