@@ -31,6 +31,7 @@ class RoomController(
         try {
             val rs = createRoomService.execute(req.user1Id, req.user2Id)
 
+            // TODO 굳이 채팅 방까지 문자 보낼 필요가 있을까?
             sendChatToRoomUsers(rs.savedChat)
             sendUpdatedRoomInfoToUsers(rs.savedChat, rs.updatedRoomUsers)
         } catch (ex: IllegalArgumentException) {
@@ -41,7 +42,7 @@ class RoomController(
     }
 
     @GetMapping("/by-user-ids")
-    fun findRoomById(
+    fun findRoomByUserIds(
         @RequestParam(name = "user1Id", required = true) user1Id: Long,
         @RequestParam(name = "user2Id", required = true) user2Id: Long
     ): ResponseEntity<FetchRoomDto> {
