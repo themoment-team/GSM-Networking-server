@@ -1,9 +1,13 @@
 package team.themoment.gsmNetworking.domain.mentor.domain
 
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import javax.persistence.*
 
 @Entity
 @Table(name = "temp_mentor")
+@SQLDelete(sql = "UPDATE temp_mentor SET deleted = true WHERE real_id = ?")
+@Where(clause = "deleted = false")
 class TempMentor(
     @Id
     @Column(name = "real_id")
@@ -31,5 +35,8 @@ class TempMentor(
     val companyName: String,
 
     @Column(nullable = false, name = "position")
-    val position: String
+    val position: String,
+
+    @Column(nullable = false, name = "deleted")
+    val deleted: Boolean = false
 )
