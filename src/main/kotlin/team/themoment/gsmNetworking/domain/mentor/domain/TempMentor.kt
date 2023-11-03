@@ -6,7 +6,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "temp_mentor")
-@SQLDelete(sql = "UPDATE temp_mentor SET deleted = true WHERE real_id = ?")
 @Where(clause = "deleted = false")
 class TempMentor(
     @Id
@@ -38,5 +37,5 @@ class TempMentor(
     val position: String,
 
     @Column(nullable = false, name = "deleted")
-    val deleted: Boolean = false
+    var deleted: Boolean = false
 )

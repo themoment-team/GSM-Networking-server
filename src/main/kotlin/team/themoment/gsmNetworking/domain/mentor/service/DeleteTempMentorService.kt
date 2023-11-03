@@ -11,7 +11,8 @@ class DeleteTempMentorService(
 ) {
 
     fun execute(firebaseId: String) {
-        tempMentorRepository.deleteByFirebaseId(firebaseId)
+        val tempMentor = tempMentorRepository.findByFirebaseId(firebaseId)
+        tempMentor.deleted = true
     }
 
 }

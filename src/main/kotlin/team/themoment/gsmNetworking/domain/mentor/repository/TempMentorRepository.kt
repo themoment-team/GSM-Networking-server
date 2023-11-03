@@ -7,6 +7,6 @@ interface TempMentorRepository : CrudRepository<TempMentor, Long> {
 
     fun findByNameContaining(name: String): List<TempMentor>
 
-    fun deleteByFirebaseId(firebaseId: String)
+    fun findByFirebaseId(firebaseId: String): TempMentor
 
 }
