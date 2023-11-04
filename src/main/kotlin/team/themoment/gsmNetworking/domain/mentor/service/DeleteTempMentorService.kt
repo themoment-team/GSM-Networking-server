@@ -14,7 +14,7 @@ class DeleteTempMentorService(
 
     fun execute(firebaseId: String) {
         val tempMentor = tempMentorRepository.findByFirebaseId(firebaseId)
-            ?: throw ExpectedException("존재하지 않는 firebaseId입니다. 요청받은 firebaseId: $firebaseId", HttpStatus.NOT_FOUND)
+            ?: throw ExpectedException("존재하지 않은 firebaseId : $firebaseId 입니다.", HttpStatus.NOT_FOUND)
         tempMentor.deleted = true
     }
 
