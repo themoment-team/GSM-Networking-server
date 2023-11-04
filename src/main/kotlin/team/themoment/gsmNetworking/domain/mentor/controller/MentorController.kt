@@ -36,7 +36,7 @@ class MentorController(
         return ResponseEntity.ok(mentorList)
     }
 
-    @DeleteMapping("/me")
+    @DeleteMapping("/my")
     fun deleteMyMentorInfo(): ResponseEntity<Void> {
         deleteMyMentorInfoService.execute(authenticatedUserManager.getName())
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
