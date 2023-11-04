@@ -9,7 +9,7 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
-class DeleteMeMentorService(
+class DeleteMyMentorInfoService(
     private val userRepository: UserRepository,
     private val mentorRepository: MentorRepository
 ) {
