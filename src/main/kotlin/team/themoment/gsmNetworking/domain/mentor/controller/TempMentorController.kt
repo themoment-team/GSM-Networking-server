@@ -36,7 +36,7 @@ class TempMentorController(
     @DeleteMapping("/{firebaseId}")
     fun deleteTempMentor(@PathVariable firebaseId: String): ResponseEntity<Void> {
         deleteTempMentorService.execute(firebaseId)
-        return ResponseEntity.noContent().build()
+        return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 
 }
