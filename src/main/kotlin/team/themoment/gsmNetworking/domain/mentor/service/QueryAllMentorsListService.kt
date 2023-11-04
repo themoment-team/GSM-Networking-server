@@ -21,17 +21,22 @@ class QueryAllMentorsListService(
      *
      * @return 모든 멘토 정보가 담긴 dto 리스트
      */
-    fun execute(): List<MentorInfoDto> = listOf(
-        mentorRepository.findAllMentorInfoDto(),
-        queryTempMentorListService.execute().map(TempMentorInfoDto::toMentorInfoDto)
-    ).flatten().let(this::increaseMentorInfoCount)
+    fun execute(): List<MentorInfoDto> {
+        val allMentors = (
+                mentorRepository.findAllMentorInfoDto() +
+                        queryTempMentorListService.execute().map(TempMentorInfoDto::toMentorInfoDto)
+                ).distinctBy { it.generation to it.name }
 
-    private fun increaseMentorInfoCount(allMentors: List<MentorInfoDto>): List<MentorInfoDto> {
+        increaseMentorIdCount(allMentors)
+
+        return allMentors
+    }
+
+    private fun increaseMentorIdCount(allMentors: List<MentorInfoDto>): List<MentorInfoDto> {
         var newId = 1L
         allMentors.forEach { mentorInfo ->
             mentorInfo.id = newId++
         }
-
         return allMentors
     }
 
