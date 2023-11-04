@@ -87,8 +87,6 @@ management:
       enabled: true
       show-details: always
   health:
-    redis:
-      enabled: false
     diskspace:
       enabled: false
     ping:
