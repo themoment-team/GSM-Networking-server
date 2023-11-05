@@ -25,7 +25,7 @@ class QueryAllMentorsListService(
         val allMentors = (
                 mentorRepository.findAllMentorInfoDto() +
                         queryTempMentorListService.execute().map(TempMentorInfoDto::toMentorInfoDto)
-                ).distinctBy { it.generation to it.name }
+                ).distinctBy { Pair(it.generation, it.name) }
 
         increaseMentorIdCount(allMentors)
 
