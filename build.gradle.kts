@@ -77,9 +77,6 @@ dependencies {
 
 	/* websocket */
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
-
-	/* actuator */
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 
 tasks.withType<KotlinCompile> {
