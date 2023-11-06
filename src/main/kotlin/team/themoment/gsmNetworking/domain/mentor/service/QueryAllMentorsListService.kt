@@ -33,9 +33,10 @@ class QueryAllMentorsListService(
     }
 
     private fun increaseMentorIdCount(allMentors: List<MentorInfoDto>): List<MentorInfoDto> {
-        val newId = 1L
+        var newId = 1L
         allMentors.forEach { mentorInfo ->
-            mentorInfo.id = newId.inc()
+            mentorInfo.id = newId
+            newId = newId.inc()
         }
         return allMentors
     }
