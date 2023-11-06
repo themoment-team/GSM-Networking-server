@@ -70,16 +70,3 @@ oauth2:
     success:
       sign-up-redirect-url: ${OAUTH2_SIGN_UP_REDIRECT_URI}
       default-redirect-url: ${OAUTH2_DEFAULT_SUCCESS_REDIRECT_URI}
-
-management:
-  endpoints:
-    enabled-by-default: false
-    web:
-      base-path: ${ACTUATOR_BASE_PATH}
-      exposure:
-        include: health
-  endpoint:
-    health:
-      enabled: true
-  server:
-    port: ${ACTUATOR_SERVER_PORT}
