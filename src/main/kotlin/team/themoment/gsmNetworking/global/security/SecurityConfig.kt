@@ -64,6 +64,9 @@ class SecurityConfig(
             .mvcMatchers(HttpMethod.POST, "/api/v1/mentor").hasAnyRole(
                 Authority.TEMP_USER.name
             )
+            .mvcMatchers("/api/v1/mentor/my").hasAnyRole(
+                Authority.USER.name
+            )
             // /tempMentor
             .mvcMatchers(HttpMethod.GET, "/api/v1/temp-mentor/**").hasAnyRole(
                 Authority.TEMP_USER.name
