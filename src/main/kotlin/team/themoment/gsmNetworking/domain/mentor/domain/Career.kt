@@ -22,7 +22,7 @@ class Career(
     @Column(nullable = false)
     val companyName: String,
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     val companyUrl: String,
 
     @Column(nullable = false)
