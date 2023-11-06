@@ -81,11 +81,5 @@ management:
   endpoint:
     health:
       enabled: true
-      show-details: always
-  health:
-    diskspace:
-      enabled: false
-    ping:
-      enabled: false
   server:
     port: ${ACTUATOR_SERVER_PORT}
