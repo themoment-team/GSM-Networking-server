@@ -3,7 +3,7 @@ package team.themoment.gsmNetworking.domain.mentor.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class MentorInfoDto(
-    var id: Long,
+    val id: Long,
     val name: String,
     val email: String,
     val generation: Int,
