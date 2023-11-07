@@ -9,16 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.domain.mentor.dto.SearchTempMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
-import team.themoment.gsmNetworking.domain.mentor.service.DeleteTempMentorService
-import team.themoment.gsmNetworking.domain.mentor.service.QueryTempMentorListService
-import team.themoment.gsmNetworking.domain.mentor.service.QueryTempMentorService
-import team.themoment.gsmNetworking.domain.mentor.service.SearchTempMentorListService
+import team.themoment.gsmNetworking.domain.mentor.service.*
 
 @RestController
 @RequestMapping("/api/v1/temp-mentor")
 class TempMentorController(
     private val queryTempMentorListService: QueryTempMentorListService,
-    private val searchTempMentorListService: SearchTempMentorListService,
+    private val queryTempMentorListByNameService: QueryTempMentorListByNameService,
     private val deleteTempMentorService: DeleteTempMentorService,
     private val queryTempMentorService: QueryTempMentorService
 ) {
@@ -37,7 +34,7 @@ class TempMentorController(
 
     @GetMapping("/search/{name}")
     fun searchTempMentorListByName(@PathVariable name: String): ResponseEntity<List<SearchTempMentorInfoDto>> {
-        val searchTempMentorList = searchTempMentorListService.execute(name)
+        val searchTempMentorList = queryTempMentorListByNameService.execute(name)
         return ResponseEntity.ok(searchTempMentorList)
     }
 
