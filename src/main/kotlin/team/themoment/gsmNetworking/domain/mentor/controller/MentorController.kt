@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorRegistrationDto
 import team.themoment.gsmNetworking.domain.mentor.service.MentorRegistrationService
-import team.themoment.gsmNetworking.domain.mentor.service.QueryAllMentorsListService
+import team.themoment.gsmNetworking.domain.mentor.service.impl.QueryAllMentorsServiceImpl
 
 @RestController
 @RequestMapping("api/v1/mentor")
 class MentorController(
     private val mentorRegistrationService: MentorRegistrationService,
-    private val queryAllMentorListService: QueryAllMentorsListService
+    private val queryAllMentorListService: QueryAllMentorsServiceImpl
 ) {
 
     @PostMapping
