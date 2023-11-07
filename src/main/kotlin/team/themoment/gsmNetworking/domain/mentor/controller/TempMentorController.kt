@@ -35,7 +35,7 @@ class TempMentorController(
         return ResponseEntity.ok(tempMentor)
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/search/{name}")
     fun searchTempMentorListByName(@PathVariable name: String): ResponseEntity<List<SearchTempMentorInfoDto>> {
         val searchTempMentorList = searchTempMentorListService.execute(name)
         return ResponseEntity.ok(searchTempMentorList)
