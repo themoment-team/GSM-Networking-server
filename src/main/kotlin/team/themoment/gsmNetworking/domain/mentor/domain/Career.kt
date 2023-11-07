@@ -14,7 +14,7 @@ class Career(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val careerId: Long = 0,
 
-    @ManyToOne(fetch = FetchType.LAZY, )
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
     val mentor: Mentor,
 
