@@ -189,9 +189,9 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
                 allMentors.indexOf(firstBlueCheckedUser) should beLessThan(allMentors.indexOf(firstTempUser))
             }
 
-            then("인증(블루체크) 여부, 직군, 기수, 이름 순 정렬되어 반환된다") {
+            then("인증(블루체크) 여부(ture가 먼저), 직군, 기수, 이름 순 정렬되어 반환된다") {
                 val sortedMentors = allMentors.sortedWith(
-                    compareBy({ it.registered }, { it.position }, { it.generation }, { it.name })
+                    compareBy({ !it.registered }, { it.position }, { it.generation }, { it.name })
                 )
 
                 allMentors shouldBe sortedMentors
