@@ -16,7 +16,6 @@ class Career(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
-    @Cascade(value = [CascadeType.DELETE]) // 멘토가 삭제될 시에 경력도 삭제 된다.
     val mentor: Mentor,
 
     @Column(nullable = false)
