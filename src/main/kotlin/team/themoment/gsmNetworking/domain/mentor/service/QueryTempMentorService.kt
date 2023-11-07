@@ -16,6 +16,7 @@ import team.themoment.gsmNetworking.domain.mentor.repository.TempMentorRepositor
 class QueryTempMentorService(
     private val tempMentorRepository: TempMentorRepository
 ) {
+
     /**
      * 특정 임시멘토의 정보를 가져오는 메서드입니다,.
      *

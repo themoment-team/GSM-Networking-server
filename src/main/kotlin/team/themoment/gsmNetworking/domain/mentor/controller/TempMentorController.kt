@@ -30,7 +30,7 @@ class TempMentorController(
     }
 
     @GetMapping("/{firebaseId}")
-    fun findTempMentor(@PathVariable firebaseId: String): ResponseEntity<TempMentorInfoDto>{
+    fun findTempMentor(@PathVariable firebaseId: String): ResponseEntity<TempMentorInfoDto> {
         val tempMentor = queryTempMentorService.execute(firebaseId)
         return ResponseEntity.ok(tempMentor)
     }
