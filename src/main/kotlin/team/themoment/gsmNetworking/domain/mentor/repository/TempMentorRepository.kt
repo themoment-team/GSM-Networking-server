@@ -8,7 +8,7 @@ import team.themoment.gsmNetworking.domain.mentor.domain.TempMentor
  */
 interface TempMentorRepository : CrudRepository<TempMentor, Long> {
 
-    fun findByNameContaining(name: String): List<TempMentor>
+    fun findByName(name: String): List<TempMentor>
 
     fun findByFirebaseId(firebaseId: String): TempMentor?
 

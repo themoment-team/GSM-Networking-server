@@ -13,7 +13,7 @@ import team.themoment.gsmNetworking.domain.mentor.repository.MentorCustomReposit
 @Transactional(readOnly = true)
 class QueryAllMentorsListService(
     private val mentorRepository: MentorCustomRepository,
-    private val queryTempMentorListService: QueryTempMentorListService,
+    private val queryTempMentorListService: QueryTempMentorListByNameService,
 ) {
 
     /**
