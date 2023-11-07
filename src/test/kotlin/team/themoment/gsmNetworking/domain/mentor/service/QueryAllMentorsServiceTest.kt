@@ -2,6 +2,10 @@ package team.themoment.gsmNetworking.domain.mentor.service
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldBeIn
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.ints.beLessThan
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.every
@@ -173,35 +177,26 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
         `when`("조회 요청 메서드 실행 시") {
             val allMentors = queryAllMentorsService.execute()
 
-            then("블루체크 된 사용자들이 반환 순서의 앞쪽에 위치한다") {
+            then("임시 사용자와 블루체크 된 사용자 중 블루체크된 사용자가 앞에 존재한다") {
                 val blueCheckedUsers = allMentors.filter { it.registered }
                 val tempUsers = allMentors.filterNot { it.registered }
 
-                val firstBlueCheckedUser = blueCheckedUsers.firstOrNull()
-                val firstTempUser = tempUsers.firstOrNull()
+                // 블루체크 된 사용자와 임시 사용자 리스트가 빈 리스트가 아닌지 확인
+                blueCheckedUsers.shouldNotBeEmpty()
+                tempUsers.shouldNotBeEmpty()
 
-                // 테스트를 위해서 두 종류 각각 하나 이상 더미가 존재해야 함
-                firstBlueCheckedUser shouldNotBe null
-                firstTempUser shouldNotBe null
-
-                val blueCheckedUserIds = blueCheckedUsers.map { it.id }
-                val tempUserIds = tempUsers.map { it.id }
-
-                // 더미와 리턴 결과의 id가 일치하는지 확인
-                dummyMentorInfoDtos.forEach { it.id shouldBeIn blueCheckedUserIds }
-                dummyTempMentorInfoDtos.forEach { it.id shouldBeIn tempUserIds }
+                // 블루체크 된 사용자가 먼저 나오는지 확인
+                val firstBlueCheckedUser = blueCheckedUsers.first()
+                val firstTempUser = tempUsers.first()
+                allMentors.indexOf(firstBlueCheckedUser) should beLessThan(allMentors.indexOf(firstTempUser))
             }
 
-            then("임시 사용자와 블루체크 된 사용자 각각 직군, 기수, 이름(전부 오름차순)을 기준으로 정렬된 상태를 가진다") {
-                val blueCheckedUsers = allMentors.filter { it.registered }
-                val tempUsers = allMentors.filterNot { it.registered }
+            then("인증(블루체크) 여부, 직군, 기수, 이름 순 정렬되어 반환된다") {
+                val sortedMentors = allMentors.sortedWith(
+                    compareBy({ it.registered }, { it.position }, { it.generation }, { it.name })
+                )
 
-                //TODO 근데 이런 식이면 구현이 드러나는 테스트 코드 아닌가? 개선이 필요해 보임
-                val sortedBlueCheckedUsers = blueCheckedUsers.sortedWith(compareBy({ it.registered }, { it.position }, { it.generation }, { it.name }))
-                val sortedTempUsers = tempUsers.sortedWith(compareBy({ it.registered }, { it.position }, { it.generation }, { it.name }))
-
-                allMentors.filter { it.registered } shouldBe sortedBlueCheckedUsers
-                allMentors.filterNot { it.registered } shouldBe sortedTempUsers
+                allMentors shouldBe sortedMentors
             }
         }
     }
