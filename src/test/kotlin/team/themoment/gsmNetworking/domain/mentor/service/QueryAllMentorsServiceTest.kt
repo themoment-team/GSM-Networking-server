@@ -1,8 +1,6 @@
 package team.themoment.gsmNetworking.domain.mentor.service
 
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.collections.shouldBeIn
-import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.ints.beLessThan
 import io.kotest.matchers.should
@@ -170,7 +168,7 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
         snsUrl = "https://www.instagram.com/a"
     )
 
-    given("블루체크 여부(true가 먼저), 직군, 기수, 이름(전부 오름차순)을 기준으로 정렬된 리스트 반환") {
+    given("조회할 멘토, 임시 멘토 리스트가 주어질 때") {
         every { mentorRepository.findAllMentorInfoDto() } returns dummyMentorInfoDtos
         every { queryTempMentorListService.execute() } returns dummyTempMentorInfoDtos
 
@@ -201,7 +199,7 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
         }
     }
 
-    given("블루체크 된 사용자와 임시 사용자의 정보가 동일한 경우, 블루체크 된 사용자 정보만 반환") {
+    given("같은 사용자 정보를 가지는 멘토, 임시 멘토가 주어질 때") {
         every { mentorRepository.findAllMentorInfoDto() } returns listOf(sameUserMentor)
         every { queryTempMentorListService.execute() } returns listOf(sameUserTempMentor)
 
