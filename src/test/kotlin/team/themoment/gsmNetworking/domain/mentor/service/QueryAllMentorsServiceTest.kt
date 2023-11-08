@@ -175,13 +175,17 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
         `when`("조회 요청 메서드 실행 시") {
             val allMentors = queryAllMentorsService.execute()
 
-            then("임시 사용자와 블루체크 된 사용자 중 블루체크된 사용자가 앞에 존재한다") {
+            then("블루체크 된 멘토, 임시 멘토가 결과로 반환되어야 한다") {
                 val blueCheckedUsers = allMentors.filter { it.registered }
                 val tempUsers = allMentors.filterNot { it.registered }
 
-                // 블루체크 된 사용자와 임시 사용자 리스트가 빈 리스트가 아닌지 확인
                 blueCheckedUsers.shouldNotBeEmpty()
                 tempUsers.shouldNotBeEmpty()
+            }
+
+            then("임시 사용자와 블루체크 된 사용자 중 블루체크된 사용자가 앞에 존재한다") {
+                val blueCheckedUsers = allMentors.filter { it.registered }
+                val tempUsers = allMentors.filterNot { it.registered }
 
                 // 블루체크 된 사용자가 먼저 나오는지 확인
                 val firstBlueCheckedUser = blueCheckedUsers.first()
