@@ -13,13 +13,13 @@ import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorRegistrationDto
 import team.themoment.gsmNetworking.domain.mentor.service.DeleteMyMentorInfoService
 import team.themoment.gsmNetworking.domain.mentor.service.MentorRegistrationService
-import team.themoment.gsmNetworking.domain.mentor.service.QueryAllMentorsListService
+import team.themoment.gsmNetworking.domain.mentor.service.QueryAllMentorsService
 
 @RestController
 @RequestMapping("api/v1/mentor")
 class MentorController(
     private val mentorRegistrationService: MentorRegistrationService,
-    private val queryAllMentorListService: QueryAllMentorsListService,
+    private val queryAllMentorListService: QueryAllMentorsService,
     private val deleteMyMentorInfoService: DeleteMyMentorInfoService,
     private val authenticatedUserManager: AuthenticatedUserManager
 ) {
