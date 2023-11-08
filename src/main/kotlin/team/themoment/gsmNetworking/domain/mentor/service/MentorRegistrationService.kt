@@ -40,7 +40,7 @@ class MentorRegistrationService(
             Career(
                 mentor = mentor,
                 companyName = it.companyName,
-                companyUrl = it.companyUrl,
+                companyUrl = it.companyUrl ?: "",
                 position = it.position,
                 startDate = it.startDate,
                 endDate = it.endDate,
