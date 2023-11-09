@@ -13,11 +13,11 @@ class StompErrorProcessor(
     private val senders: List<StompSender>
 ) {
 
-    init {
-        require(senders.isNotEmpty()) {
-            "하나 이상의 ${StompSender::javaClass.name}를 등록해야 합니다"
-        }
-    }
+//    init {
+//        require(senders.isNotEmpty()) {
+//            "하나 이상의 ${StompSender::javaClass.name}를 등록해야 합니다"
+//        }
+//    }
 
     /**
      * 처리 가능한 여러 [StompSender]에게 STOMP 에러 처리를 위임합니다.
