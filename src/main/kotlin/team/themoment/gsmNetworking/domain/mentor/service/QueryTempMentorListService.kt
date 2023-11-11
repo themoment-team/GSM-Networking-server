@@ -21,7 +21,7 @@ class QueryTempMentorListService(
      * @return 임시멘토 정보가 담긴 dto
      */
     fun execute(): List<TempMentorInfoDto> {
-        val tempMentors = tempMentorRepository.findAll().map { tempMentor ->
+        val tempMentors = tempMentorRepository.findAllByDeletedIsFalse().map { tempMentor ->
             TempMentorInfoDto(
                 tempMentor.id,
                 tempMentor.firebaseId,

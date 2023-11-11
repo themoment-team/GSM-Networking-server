@@ -6,7 +6,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "temp_mentor")
-@Where(clause = "deleted = false")
 class TempMentor(
     @Id
     @Column(name = "real_id")

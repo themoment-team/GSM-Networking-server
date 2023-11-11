@@ -22,7 +22,7 @@ class QueryTempMentorListByNameService(
      * @return 가져온 임시멘토 정보가 담긴 dto
      */
     fun execute(name: String): List<SearchTempMentorInfoDto> {
-        val searchTempMentors = tempMentorRepository.findByName(name).map { tempMentor ->
+        val searchTempMentors = tempMentorRepository.findAllByName(name).map { tempMentor ->
             SearchTempMentorInfoDto(
                 tempMentor.id,
                 tempMentor.firebaseId,
