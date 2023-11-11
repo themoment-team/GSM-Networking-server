@@ -29,9 +29,8 @@ class QueryAllMentorsServiceImpl(
                 .map(TempMentorInfoDto::toMentorInfoDto))
                 .distinctBy { Pair(it.generation, it.name) }
                 .sortedWith(compareBy({ !it.registered }, { it.position }, { it.generation }, { it.name }))
-        generateNewMentorIds(allMentors)
 
-        return allMentors
+        return generateNewMentorIds(allMentors)
     }
 
     private fun generateNewMentorIds(allMentors: List<MentorInfoDto>): List<MentorInfoDto> =
