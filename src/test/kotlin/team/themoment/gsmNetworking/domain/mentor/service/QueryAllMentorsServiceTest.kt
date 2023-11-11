@@ -171,7 +171,8 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
     given("조회할 멘토, 임시 멘토 리스트와 예상 결과 리스트가 주어질 때") {
         every { mentorRepository.findAllMentorInfoDto() } returns dummyMentorInfoDtos
         every { queryTempMentorListService.execute() } returns dummyTempMentorInfoDtos
-        val sortedMentorIds = listOf(2, 1, 3, 4, 13, 10, 12, 11)
+        val sortedMentorNames = listOf("김철수", "홍길동", "이영희", "박철호", "김유신", "임꺽정", "정도전", "유관순")
+        val sortedMentorIds = listOf(1, 2, 3, 4, 5, 6, 7, 8)
 
         `when`("조회 요청 메서드 실행 시") {
             val allMentors = queryAllMentorsService.execute()
@@ -195,6 +196,13 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
             }
 
             then("인증(블루체크) 여부(true가 먼저), 직군, 기수, 이름 순 정렬되어 반환된다") {
+                val allMentorNames = allMentors.map { it.name }
+
+                // 실행 결과가 예상 결과 리스트(sortedMentorIds) 처럼 정렬된 상태가 되도록 구현되어야 함
+                allMentorNames shouldBe sortedMentorNames
+            }
+
+            then("id가 1부터 재할당되어 반환된다") {
                 val allMentorIds = allMentors.map { it.id }
 
                 // 실행 결과가 예상 결과 리스트(sortedMentorIds) 처럼 정렬된 상태가 되도록 구현되어야 함
