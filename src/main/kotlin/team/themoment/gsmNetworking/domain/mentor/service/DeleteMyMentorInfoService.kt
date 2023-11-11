@@ -37,7 +37,7 @@ class DeleteMyMentorInfoService(
             ?: throw ExpectedException("존재하지 않는 user입니다.", HttpStatus.NOT_FOUND)
         val mentor = mentorRepository.findByUser(user)
             ?: throw ExpectedException("존재하지 않는 mentor입니다.", HttpStatus.NOT_FOUND)
-        tempMentorRepository.findByGenerationAndName(mentor.user.generation, mentor.user.name)
+        tempMentorRepository.findByGenerationAndName(user.generation, user.name)
             ?.let { it.deleted = false }
 
         deleteMyInfo(user, mentor)
