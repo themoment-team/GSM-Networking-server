@@ -1,6 +1,5 @@
 package team.themoment.gsmNetworking.common.exception
 
-import org.springframework.messaging.support.ErrorMessage
 import team.themoment.gsmNetworking.common.exception.model.ErrorCode
 
 /**
@@ -9,5 +8,6 @@ import team.themoment.gsmNetworking.common.exception.model.ErrorCode
  */
 class StompException(
     val code: ErrorCode = ErrorCode.DEFAULT,
+    val path: String,
     override val message: String
 ) : RuntimeException(message)
