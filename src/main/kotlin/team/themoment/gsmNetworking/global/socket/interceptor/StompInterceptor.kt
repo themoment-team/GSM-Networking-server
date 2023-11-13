@@ -11,8 +11,8 @@ import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Component
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.common.exception.model.ErrorCode
-import team.themoment.gsmNetworking.domain.connect.ConnectInfo
-import team.themoment.gsmNetworking.domain.connect.ConnectedInfoRepository
+import team.themoment.gsmNetworking.global.socket.connect.ConnectInfo
+import team.themoment.gsmNetworking.global.socket.connect.ConnectedInfoRepository
 import team.themoment.gsmNetworking.global.security.jwt.TokenParser
 import team.themoment.gsmNetworking.global.security.principal.AuthenticationDetails
 import team.themoment.gsmNetworking.global.socket.exception.StompAuthenticatationException
