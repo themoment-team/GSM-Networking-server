@@ -44,7 +44,7 @@ class MentorRegistrationService(
                 companyUrl = it.companyUrl ?: "",
                 position = it.position,
                 startDate = it.startDate,
-                endDate = it.endDate ?: DateValueUtil.valueToReplaceNull,
+                endDate = it.endDate ?: DateValueUtil.VALUE_TO_REPLACE_NULL,
                 isWorking = it.isWorking ?: false
             )
         }

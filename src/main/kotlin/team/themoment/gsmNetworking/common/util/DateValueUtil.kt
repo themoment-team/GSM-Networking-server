@@ -5,6 +5,6 @@ import java.time.LocalDate
 class DateValueUtil {
 
     companion object{
-        val valueToReplaceNull = LocalDate.of(9999, 12, 31)!!
+        val VALUE_TO_REPLACE_NULL = LocalDate.of(9999, 12, 31)!!
     }
 }
