@@ -2,12 +2,12 @@ package team.themoment.gsmNetworking.common.util
 
 class StompPathUtil {
     companion object {
-        const val PREFIX_TO_ROOM = "/topic/room"
-        // /queue/user/{sessionId} 로 요청 보냄
-        const val PREFIX_TO_USER = "/queue/user"
+        const val PREFIX_TOPIC_MESSAGE_HEADER = "/topic/messaging"
+        // /queue/user/{sessionId} 로 요청 보낼때 사용
+        const val PREFIX_QUEUE_USER = "/queue/user"
 
         fun getAllPrefix(): List<String> {
-            return listOf(PREFIX_TO_ROOM, PREFIX_TO_USER)
+            return listOf(PREFIX_TOPIC_MESSAGE_HEADER, PREFIX_QUEUE_USER)
         }
     }
 }
