@@ -34,7 +34,7 @@ class GlobalExceptionHandler {
     }
 
     /**
-     * 예외처리 되지 않은 RuntimeException를 포함한 에러를 핸들링하는 메서드 입니다.
+     * 예외처리 되지 않은 RuntimeException을 포함한 하위 에러를 핸들링하는 메서드 입니다.
      *
      * @param e RuntimException 혹은 RuntimeException을 상속하는 클래스
      * @return ResponseEntity
