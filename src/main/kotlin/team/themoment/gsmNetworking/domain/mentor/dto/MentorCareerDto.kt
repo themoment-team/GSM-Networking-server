@@ -15,8 +15,7 @@ data class MentorCareerDto(
     @field:NotBlank
     val startDate: LocalDate,
 
-    @field:NotBlank
-    val endDate: LocalDate,
+    val endDate: LocalDate?,
 
     val isWorking: Boolean?
 )

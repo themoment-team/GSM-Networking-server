@@ -9,6 +9,7 @@ import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
 import team.themoment.gsmNetworking.domain.user.service.UserRegistrationService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import team.themoment.gsmNetworking.common.util.DateValueUtil
 
 /**
  * 멘토를 저장하는 로직이 담긴 서비스 클래스 입니다.
@@ -43,7 +44,7 @@ class MentorRegistrationService(
                 companyUrl = it.companyUrl ?: "",
                 position = it.position,
                 startDate = it.startDate,
-                endDate = it.endDate,
+                endDate = it.endDate ?: DateValueUtil.VALUE_TO_REPLACE_NULL,
                 isWorking = it.isWorking ?: false
             )
         }

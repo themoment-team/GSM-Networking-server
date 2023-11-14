@@ -30,7 +30,7 @@ class Career(
     @Column(nullable = false)
     val startDate: LocalDate,
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     val endDate: LocalDate,
 
     @Column(nullable = false)
