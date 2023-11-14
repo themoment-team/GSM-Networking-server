@@ -34,7 +34,7 @@ class StompSenderImpl(
     }
 
     override fun sendMessageToSession(message: StompMessage<*>, sessionId: String) {
-        val path = "${StompPathUtil.PREFIX_TO_USER}/$sessionId"
+        val path = "${StompPathUtil.PREFIX_QUEUE_USER}/$sessionId"
 
         // isSessionSubscribedToPath를 쓰면 Apic으로 테스트가 불가능, Apic은 한 session이 한 sub만 가능함
         // TODO 위 문제 해결하고 isSessionSubscribedToPath 사용하게 변경
@@ -48,7 +48,7 @@ class StompSenderImpl(
 
     private fun getSubscriptionUrls(userId: Long): List<String> {
         return connectedInfoRepository.findByUserId(userId)
-            .flatMap { connect -> connect.subscribes.filter { it.subscribeUrl.contains(StompPathUtil.PREFIX_TO_USER) } }
+            .flatMap { connect -> connect.subscribes.filter { it.subscribeUrl.contains(StompPathUtil.PREFIX_QUEUE_USER) } }
             .map { it.subscribeUrl }
     }
 
