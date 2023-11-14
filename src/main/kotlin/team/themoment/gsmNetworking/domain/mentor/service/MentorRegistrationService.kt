@@ -9,7 +9,7 @@ import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
 import team.themoment.gsmNetworking.domain.user.service.UserRegistrationService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import team.themoment.gsmNetworking.domain.mentor.util.DateValueUtil
+import team.themoment.gsmNetworking.common.util.DateValueUtil
 
 /**
  * 멘토를 저장하는 로직이 담긴 서비스 클래스 입니다.

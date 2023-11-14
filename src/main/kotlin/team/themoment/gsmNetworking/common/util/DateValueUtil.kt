@@ -1,9 +1,7 @@
-package team.themoment.gsmNetworking.domain.mentor.util
+package team.themoment.gsmNetworking.common.util
 
-import org.springframework.stereotype.Component
 import java.time.LocalDate
 
-@Component
 class DateValueUtil {
 
     companion object{
