@@ -2,9 +2,9 @@ name: GSM-Networking Main CD
 
 on:
 
-  # feature/CI-CD 브랜치에 푸쉬될 경우 실행하는 트리거
-  push:
-    branches: [ "feature/CICD-enviroment-divide" ]
+#  # feature/CI-CD 브랜치에 푸쉬될 경우 실행하는 트리거
+#  push:
+#    branches: [ "feature/CICD-enviroment-divide" ]
 
   # Develop 브랜치에 머지된 코드의 CI가 실행완료 되었을때 실행하는 트리거
   workflow_run:
