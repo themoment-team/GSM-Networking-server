@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.common.util
 
+import com.fasterxml.uuid.Generators
 import java.time.*
 import java.util.*
 
@@ -10,6 +11,13 @@ class UUIDUtils {
 
         val MAX_TIME: Instant = Instant.ofEpochMilli(MAX_EPOCH_MILLIS)
         val MIN_TIME: Instant = Instant.ofEpochMilli(MIN_EPOCH_MILLIS)
+
+        /**
+         * v7 UUID를 생성합니다.
+         *
+         * @return v7 UUID
+         */
+        fun generateUUIDv7(): UUID = Generators.timeBasedEpochGenerator().generate()
 
         /**
          * 주어진 epoch 밀리초를 사용하여 가장 작은 v7 UUID를 생성합니다.
