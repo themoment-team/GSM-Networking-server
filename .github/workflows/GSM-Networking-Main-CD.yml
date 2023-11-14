@@ -1,14 +1,14 @@
-name: GSM-Networking CD
+name: GSM-Networking Main CD
 
 on:
 
-  # feature/CI-CD 브랜치에 푸쉬될 경우 실행하는 트리거
-  push:
-    branches: [ "feature/CI-CD" ]
+#  # feature/CI-CD 브랜치에 푸쉬될 경우 실행하는 트리거
+#  push:
+#    branches: [ "feature/CI-CD" ]
 
   # Develop 브랜치에 머지된 코드의 CI가 실행완료 되었을때 실행하는 트리거
   workflow_run:
-    workflows: [ "GSM-Networking On Develop Merge CI" ]
+    workflows: [ "GSM-Networking On Main Merge CI" ]
     types:
       - completed
 
@@ -39,7 +39,7 @@ jobs:
         run: |
           rm -rf ./src/main/resources/application-prod.yml
           touch ./src/main/resources/application-prod.yml
-          echo "${{ secrets.YML_FILE }}" > ./src/main/resources/application-prod.yml
+          echo "${{ secrets.PROD_YML_FILE }}" > ./src/main/resources/application-prod.yml
 
       - name: Run build with Gradle wrapper
         run: ./gradlew clean build
@@ -56,7 +56,7 @@ jobs:
         shell: bash
 
       - name: Upload to S3
-        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/$GITHUB_SHA.zip
+        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./$GITHUB_SHA.zip s3://${{ secrets.BUCKET_NAME }}/prod/$GITHUB_SHA.zip
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name gsm-networking-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name gsm-networking --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name gsm-networking-codedeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name gsm-networking-prod --s3-location bucket=${{ secrets.BUCKET_NAME }},bundleType=zip,key=prod/$GITHUB_SHA.zip
