@@ -22,8 +22,8 @@ class UUIDUtils {
         /**
          * 주어진 epoch 밀리초를 사용하여 가장 작은 v7 UUID를 생성합니다.
          *
-         * @param epochMilli 특정 시간을 나타내는 epoch 밀리초 값입니다.
-         * @return epoch 밀리초에서 생성된 가장 작은 v7 UUID입니다.
+         * @param epochMilli 특정 시간을 나타내는 epoch 밀리초 값
+         * @return epoch 밀리초에서 생성된 가장 작은 v7 UUID
          */
         private fun generateSmallestUUIDv7(epochMilli: Long): UUID {
             // 지정된 위치에 '-'를 삽입하여 포맷된 UUID 문자열을 생성합니다.
