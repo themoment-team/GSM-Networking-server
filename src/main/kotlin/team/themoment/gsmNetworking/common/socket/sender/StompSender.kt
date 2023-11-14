@@ -8,13 +8,9 @@ import team.themoment.gsmNetworking.common.socket.model.StompErrorResponse
  * Stomp 메시지를 전송하는 역할의 인터페이스입니다.
  */
 interface StompSender {
-    // TODO 역할이 변경되었으므로 적절한 이름으로 변경하고, 주석 내용도 바꾸기
-    //  기존의 STOMP 메시지를 전송하는 것에서
-    //  사용자 상태에 따라 STOMP 메시지 전송 or 알람 등 다른 처리를 진행함
-    //  즉, 외부에선 사용자 상태에 상관없이 해당 객체에 명령만 하면 됨
 
     /**
-     * Stomp 메시지를 전송합니다.
+     * 주어진 경로로 Stomp 메시지를 전송합니다.
      *
      * @param message 전송할 메시지
      * @param path 메시지를 전송할 경로
@@ -22,7 +18,7 @@ interface StompSender {
     fun sendMessage(message: StompMessage<*>, path: String)
 
     /**
-     * 특정 User에게 Stomp 메시지를 전송합니다.
+     * 특정 사용자에게 Stomp 메시지를 전송합니다.
      *
      * @param message 전송할 메시지
      * @param userId 메시지를 전송할 사용자의 식별자
@@ -30,38 +26,47 @@ interface StompSender {
     fun sendMessageToUser(message: StompMessage<*>, userId: Long)
 
     /**
-     * 특정 Session에게 Stomp 메시지를 전송합니다.
+     * 특정 세션에게 Stomp 메시지를 전송합니다.
      *
      * @param message 전송할 메시지
-     * @param sessionId 메시지를 전송할 Client의 sessionId
+     * @param sessionId 메시지를 전송할 클라이언트의 세션 ID
      */
     fun sendMessageToSession(message: StompMessage<*>, sessionId: String)
 
     /**
-     * Stomp 에러 메시지를 전송합니다.
+     * 주어진 경로로 Stomp 에러 메시지를 전송합니다.
      *
      * @param ex 전송할 에러 메시지
+     * @param path 에러 메시지를 전송할 경로
      */
-    fun sendErrorMessage(ex: StompException) {
-        val errorMessage = createErrorMessage(ex)
-        sendMessage(errorMessage, ex.path)
-    }
+    fun sendErrorMessage(ex: StompException, path: String) =
+        sendMessage(createErrorMessage(ex), path)
 
     /**
-     * 지정한 [StompException] 클래스를 지원하는지 확인합니다.
+     * 특정 사용자에게 Stomp 에러 메시지를 전송합니다.
      *
-     * @param clazz 확인할 [StompException] 클래스
-     * @return 지원하는 경우 True, 그렇지 않으면 False
-     * @see StompException
+     * @param ex 전송할 에러 메시지
+     * @param userId 에러 메시지를 전송할 사용자의 식별자
      */
-    fun supportsException(clazz: Class<out StompException>): Boolean
+    fun sendErrorMessageToUser(ex: StompException, userId: Long) =
+        sendMessageToUser(createErrorMessage(ex), userId)
 
     /**
-     * 해당 인터페이스를 구현하는 객체가 지원하는 [StompException]의 특정 구현체에 대한 에러 메시지를 생성합니다.
+     * 특정 세션에게 Stomp 에러 메시지를 전송합니다.
      *
-     * @param ex 에러 메시지를 생성할 [StompException]의 구현체
+     * @param ex 전송할 에러 메시지
+     * @param sessionId 에러 메시지를 전송할 클라이언트의 세션 ID
+     */
+    fun sendErrorMessageToSession(ex: StompException, sessionId: String) =
+        sendMessageToSession(createErrorMessage(ex), sessionId)
+
+    /**
+     * [StompException]에 대한 에러 메시지를 생성합니다.
+     *
+     * @param ex 에러 메시지를 생성할 [StompException]
      * @return 에러 메시지
      */
-    fun createErrorMessage(ex: StompException): StompMessage<StompErrorResponse>
+    fun createErrorMessage(ex: StompException): StompMessage<StompErrorResponse> =
+        StompMessage(StompErrorResponse(ex.code, ex.message))
 
 }

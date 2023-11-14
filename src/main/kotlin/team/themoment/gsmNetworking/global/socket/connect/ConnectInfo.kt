@@ -1,4 +1,4 @@
-package team.themoment.gsmNetworking.domain.connect
+package team.themoment.gsmNetworking.global.socket.connect
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash

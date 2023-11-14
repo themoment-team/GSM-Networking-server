@@ -4,11 +4,12 @@ import org.slf4j.LoggerFactory
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import team.themoment.gsmNetworking.common.exception.StompException
-import team.themoment.gsmNetworking.global.socket.processor.StompErrorProcessor
+import team.themoment.gsmNetworking.common.socket.sender.StompSender
+
 
 @RestControllerAdvice
 class GlobalSocketExceptionHandler(
-    private val stompErrorProcessor: StompErrorProcessor
+    private val stompSender: StompSender
 ) {
     private val log = LoggerFactory.getLogger(this.javaClass)!! //TODO 로깅 구현 통일하기
 
@@ -20,9 +21,8 @@ class GlobalSocketExceptionHandler(
     @MessageExceptionHandler(StompException::class)
     fun handler(e: StompException) {
         log.warn("StompException Occur ", e)
-        stompErrorProcessor.sendErrors(e)
+        stompSender.sendErrorMessage(e, e.path)
     }
-
 
     /**
      * 예외처리하지 않은 에러를 처리합니다.
