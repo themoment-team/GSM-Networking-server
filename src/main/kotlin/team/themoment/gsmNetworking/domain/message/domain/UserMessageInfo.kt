@@ -23,4 +23,12 @@ class UserMessageInfo(
     @Column(name = "last_viewed_message_id", columnDefinition = "BINARY(16)")
     val lastViewedMessageId: UUID?
 ) {
+    fun updateLastViewedMessageId(newLastViewedMessageId: UUID?): UserMessageInfo {
+        return UserMessageInfo(
+            userMessageInfoId = this.userMessageInfoId,
+            userId = this.userId,
+            opponentUserId = this.opponentUserId,
+            lastViewedMessageId = newLastViewedMessageId
+        )
+    }
 }
