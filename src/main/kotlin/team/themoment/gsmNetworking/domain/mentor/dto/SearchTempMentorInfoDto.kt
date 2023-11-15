@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class SearchTempMentorInfoDto(
     val id: Long,
-    val firebaseId: String,
     val name: String,
     val email: String?,
     val generation: Int,

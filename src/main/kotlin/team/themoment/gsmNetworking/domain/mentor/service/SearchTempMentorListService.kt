@@ -25,7 +25,6 @@ class QueryTempMentorListByNameService(
         val searchTempMentors = tempMentorRepository.findByName(name).map { tempMentor ->
             SearchTempMentorInfoDto(
                 tempMentor.id,
-                tempMentor.firebaseId,
                 tempMentor.name,
                 tempMentor.email,
                 tempMentor.generation,

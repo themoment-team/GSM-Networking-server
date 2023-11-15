@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.mentor.service
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,9 +21,9 @@ class DeleteTempMentorService(
      *
      * @param firebaseId 임시멘토의 식별자
      */
-    fun execute(firebaseId: String) {
-        val tempMentor = tempMentorRepository.findByFirebaseId(firebaseId)
-            ?: throw ExpectedException("존재하지 않는 firebaseId : $firebaseId 입니다.", HttpStatus.NOT_FOUND)
+    fun execute(id: Long) {
+        val tempMentor = tempMentorRepository.findByIdOrNull(id)
+            ?: throw ExpectedException("존재하지 않는 id 입니다.", HttpStatus.NOT_FOUND)
         tempMentor.deleted = true
     }
 
