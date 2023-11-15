@@ -7,4 +7,6 @@ import team.themoment.gsmNetworking.domain.message.domain.UserMessageInfo
 interface UserMessageInfoRepository : CrudRepository<UserMessageInfo, Long> {
     fun findByUserId(userId: Long): UserMessageInfo?
 
+    fun findByUserIdAndOpponentUserId(userId: Long, opponentUserId: Long): UserMessageInfo?
+
 }
