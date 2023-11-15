@@ -124,5 +124,5 @@ class SaveMessageServiceImpl(
     }
 
     private fun getUser1IdAndUser2Id(toUserId: Long, fromUserId: Long): Pair<Long, Long> =
-        if (fromUserId < toUserId) fromUserId to toUserId else toUserId to fromUserId
+        if (fromUserId < toUserId) fromUserId to toUserId else toUserId to fromUserId //TODO 서비스 단에서는 user1Id, user2Id, direction로 판단하도록 변경. API 단에서 필터링
 }
