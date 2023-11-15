@@ -22,67 +22,27 @@ class SaveMessageServiceImpl(
 
     @Transactional
     override fun execute(toUserId: Long, fromUserId: Long, message: String): MessageDto {
-        val (user1Id, user2Id) = if (fromUserId < toUserId) fromUserId to toUserId else toUserId to fromUserId // TODO 로직 중복
-
-        val direction =
-            if (user1Id == fromUserId) Message.MessageDirection.ToUser1 else Message.MessageDirection.ToUser2
+        val (user1Id, user2Id) = getUser1IdAndUser2Id(toUserId, fromUserId)
 
         val header = messageRepository.findHeaderBetweenUsers(user1Id, user2Id)
-        val newMessageId = UUIDUtils.generateUUIDv7()
 
-        if (header != null) {
-            val savedMessage = saveMessage(newMessageId, header, direction, message)
+        val savedMessage = saveMessage(toUserId, fromUserId, header, message)
 
-            // 메시지를 보내는 사람은 메시지를 본 대상으로 판단
-            val userMessageInfo = userMessageInfoRepository.findByUserId(fromUserId)
-                ?: throw IllegalArgumentException("userId가 ${fromUserId}인 사용자를 찾을 수 없습니다")
-            userMessageInfoRepository.save(
-                UserMessageInfo(
-                    userMessageInfo.userMessageInfoId,
-                    userMessageInfo.userId,
-                    userMessageInfo.opponentUserId,
-                    newMessageId
-                )
-            )
+        return createMessageDto(savedMessage)
+    }
 
-            return MessageDto(
-                savedMessage.messageId,
-                savedMessage.user1Id,
-                savedMessage.user2Id,
-                savedMessage.direction,
-                savedMessage.content
-            )
-        } else {
-            val savedMessage = saveNewMessage(newMessageId, user1Id, user2Id, direction, message)
+    private fun updateUserMessageInfo(userId: Long, opponentUserId: Long, newMessageId: UUID?) {
+        val userMessageInfo = userMessageInfoRepository.findByUserIdAndOpponentUserId(userId, opponentUserId)
+            ?: throw IllegalArgumentException("유효하지 않은 UserId. $userId 와 $opponentUserId 사이의 메시지를 찾을 수 없습니다.")
 
-            // 새로운 Header, UserMessageInfo 생성
-            // 메시지를 보내는 사람은 메시지를 본 대상으로 판단
-            userMessageInfoRepository.save(
-                UserMessageInfo(
-                    userId = fromUserId,
-                    opponentUserId = toUserId,
-                    lastViewedMessageId = newMessageId
-                )
-            )
+        val updatedInfo = UserMessageInfo(
+            userMessageInfo.userMessageInfoId,
+            userMessageInfo.userId,
+            userMessageInfo.opponentUserId,
+            newMessageId ?: userMessageInfo.lastViewedMessageId
+        )
 
-            // 다른 사용자의 새로운 Header, UserMessageInfo 생성
-            userMessageInfoRepository.save(
-                UserMessageInfo(
-                    userId = toUserId,
-                    opponentUserId = fromUserId,
-                    lastViewedMessageId = null
-                )
-            )
-
-            return MessageDto(
-                savedMessage.messageId,
-                savedMessage.user1Id,
-                savedMessage.user2Id,
-                savedMessage.direction,
-                savedMessage.content
-            )
-        }
-
+        userMessageInfoRepository.save(updatedInfo)
     }
 
     private fun saveMessage(
@@ -91,18 +51,17 @@ class SaveMessageServiceImpl(
         direction: Message.MessageDirection,
         content: String
     ): Message {
-        val refreshedHeader = header.copyWithNewRecentChatId(header, newMessageId)
+        val refreshedHeader = updateHeader(header, newMessageId)
         val newMessage = Message(
             messageId = newMessageId,
             header = refreshedHeader,
             direction = direction,
             content = content
         )
-        headerRepository.save(refreshedHeader)
         return messageRepository.save(newMessage)
     }
 
-    private fun saveNewMessage(
+    private fun saveFirstMessage(
         newMessageId: UUID,
         user1Id: Long,
         user2Id: Long,
@@ -112,11 +71,58 @@ class SaveMessageServiceImpl(
         val newHeader = Header(user1Id, user2Id, newMessageId)
         val newMessage = Message(
             messageId = newMessageId,
-            header = newHeader,
+            header = updateHeader(newHeader, newMessageId),
             direction = direction,
             content = content
         )
-        headerRepository.save(newHeader)
         return messageRepository.save(newMessage)
     }
+
+    private fun updateHeader(header: Header, newMessageId: UUID): Header {
+        val refreshedHeader = header.copyWithNewRecentChatId(header, newMessageId)
+        headerRepository.save(refreshedHeader)
+        return refreshedHeader
+    }
+
+    private fun createMessageDto(savedMessage: Message): MessageDto {
+        return MessageDto(
+            savedMessage.messageId,
+            savedMessage.user1Id,
+            savedMessage.user2Id,
+            savedMessage.direction,
+            savedMessage.content
+        )
+    }
+
+    private fun saveMessage(
+        fromUserId: Long,
+        toUserId: Long,
+        header: Header?,
+        message: String
+    ): Message {
+        val (user1Id, user2Id) = getUser1IdAndUser2Id(toUserId, fromUserId)
+
+        val direction =
+            if (user1Id == fromUserId) Message.MessageDirection.ToUser1 else Message.MessageDirection.ToUser2
+
+        val newMessageId = UUIDUtils.generateUUIDv7()
+
+        if (header != null) {
+            val savedMessage = saveMessage(newMessageId, header, direction, message)
+
+            updateUserMessageInfo(userId = fromUserId, opponentUserId = toUserId, newMessageId = newMessageId)
+
+            return savedMessage
+        } else {
+            val savedMessage = saveFirstMessage(newMessageId, user1Id, user2Id, direction, message)
+
+            updateUserMessageInfo(userId = fromUserId, opponentUserId = toUserId, newMessageId = newMessageId)
+            updateUserMessageInfo(userId = toUserId, opponentUserId = fromUserId, newMessageId = null)
+
+            return savedMessage
+        }
+    }
+
+    private fun getUser1IdAndUser2Id(toUserId: Long, fromUserId: Long): Pair<Long, Long> =
+        if (fromUserId < toUserId) fromUserId to toUserId else toUserId to fromUserId
 }
