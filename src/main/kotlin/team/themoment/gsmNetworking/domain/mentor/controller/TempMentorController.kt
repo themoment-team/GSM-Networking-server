@@ -26,9 +26,9 @@ class TempMentorController(
         return ResponseEntity.ok(tempMentorList)
     }
 
-    @GetMapping("/{firebaseId}")
-    fun findTempMentor(@PathVariable firebaseId: String): ResponseEntity<TempMentorInfoDto> {
-        val tempMentor = queryTempMentorService.execute(firebaseId)
+    @GetMapping("/{id}")
+    fun findTempMentor(@PathVariable id: Long): ResponseEntity<TempMentorInfoDto> {
+        val tempMentor = queryTempMentorService.execute(id)
         return ResponseEntity.ok(tempMentor)
     }
 
@@ -38,9 +38,9 @@ class TempMentorController(
         return ResponseEntity.ok(searchTempMentorList)
     }
 
-    @DeleteMapping("/{firebaseId}")
-    fun deleteTempMentor(@PathVariable firebaseId: String): ResponseEntity<Void> {
-        deleteTempMentorService.execute(firebaseId)
+    @DeleteMapping("/{id}")
+    fun deleteTempMentor(@PathVariable id: Long): ResponseEntity<Void> {
+        deleteTempMentorService.execute(id)
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 

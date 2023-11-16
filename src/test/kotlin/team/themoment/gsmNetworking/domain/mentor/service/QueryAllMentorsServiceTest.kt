@@ -87,7 +87,6 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
     val dummyTempMentorInfoDtos = listOf(
         TempMentorInfoDto(
             id = 10L,
-            firebaseId = "firebase_1",
             name = "임꺽정",
             email = "lim@gmail.com",
             generation = 3,
@@ -100,7 +99,6 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
         ),
         TempMentorInfoDto(
             id = 11L,
-            firebaseId = "firebase_2",
             name = "유관순",
             email = "you@gmail.com",
             generation = 5,
@@ -113,7 +111,6 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
         ),
         TempMentorInfoDto(
             id = 12L,
-            firebaseId = "firebase_3",
             name = "정도전",
             email = "jeong@gmail.com",
             generation = 3,
@@ -126,7 +123,6 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
         ),
         TempMentorInfoDto(
             id = 13L,
-            firebaseId = "firebase_4",
             name = "김유신",
             email = "kim@gmail.com",
             generation = 2,
@@ -156,7 +152,6 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
 
     val sameUserTempMentor = TempMentorInfoDto(
         id = 14L,
-        firebaseId = "firebase_5",
         name = "홍길동",
         email = "hong@gmail.com",
         generation = 3,

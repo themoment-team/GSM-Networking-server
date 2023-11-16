@@ -10,6 +10,4 @@ interface TempMentorRepository : CrudRepository<TempMentor, Long> {
 
     fun findByName(name: String): List<TempMentor>
 
-    fun findByFirebaseId(firebaseId: String): TempMentor?
-
 }
