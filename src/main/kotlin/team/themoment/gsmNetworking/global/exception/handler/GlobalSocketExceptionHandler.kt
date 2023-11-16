@@ -7,6 +7,7 @@ import team.themoment.gsmNetworking.common.exception.StompException
 import team.themoment.gsmNetworking.common.socket.sender.StompSender
 
 
+// TODO 이거 지금 딱히 사용 안되는데 지우고 나중에 필요할 떄 다시 구현하기
 @RestControllerAdvice
 class GlobalSocketExceptionHandler(
     private val stompSender: StompSender
