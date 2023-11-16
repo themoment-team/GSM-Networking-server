@@ -5,10 +5,15 @@ package team.themoment.gsmNetworking.common.socket.message
  */
 class StompMessage<T>(
     val content: T,
+    private val _messageCode: MessageCode,
     val messageType: MessageType = MessageType.MESSAGE
 ) {
     enum class MessageType {
         ERROR,
         MESSAGE
     }
+
+    val messageCode: String
+        get() = _messageCode.code()
 }
+

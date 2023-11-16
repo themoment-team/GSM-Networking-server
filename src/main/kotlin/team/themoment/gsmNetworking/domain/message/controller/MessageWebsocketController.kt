@@ -10,6 +10,7 @@ import team.themoment.gsmNetworking.common.exception.model.ErrorCode
 import team.themoment.gsmNetworking.common.socket.message.StompMessage
 import team.themoment.gsmNetworking.common.util.StompPathUtil
 import team.themoment.gsmNetworking.common.util.UUIDUtils
+import team.themoment.gsmNetworking.domain.message.dto.api.code.MessageMessageCode
 import team.themoment.gsmNetworking.domain.message.dto.api.req.*
 import team.themoment.gsmNetworking.domain.message.dto.api.res.*
 import team.themoment.gsmNetworking.domain.message.service.CheckMessageService
@@ -36,7 +37,7 @@ class MessageWebsocketController(
             val savedMessageDto = saveMessageService.execute(req.to, from, req.message)
 
             stompSender.sendMessage(
-                StompMessage(savedMessageDto),
+                StompMessage(savedMessageDto, MessageMessageCode.MESSAGE),
                 "${StompPathUtil.PREFIX_TOPIC_MESSAGE_HEADER}/${savedMessageDto.user1Id}-${savedMessageDto.user2Id}"
             )
             val messageOccurRes = MessageOccurRes(
@@ -44,8 +45,8 @@ class MessageWebsocketController(
                 savedMessageDto.user2Id,
                 UUIDUtils.getEpochMilli(savedMessageDto.messageId)
             )
-            stompSender.sendMessageToUser(StompMessage(messageOccurRes), from)
-            stompSender.sendMessageToUser(StompMessage(messageOccurRes), req.to)
+            stompSender.sendMessageToUser(StompMessage(messageOccurRes, MessageMessageCode.MESSAGE_OCCUR), from)
+            stompSender.sendMessageToUser(StompMessage(messageOccurRes, MessageMessageCode.MESSAGE_OCCUR), req.to)
 
         } catch (ex: RuntimeException) {
             stompSender.sendErrorMessageToSession(
@@ -72,7 +73,7 @@ class MessageWebsocketController(
             val user2Id = maxOf(req.to, from)
 
             stompSender.sendMessage(
-                StompMessage(CheckMessageRes(req.messageId)),
+                StompMessage(CheckMessageRes(req.messageId), MessageMessageCode.MESSAGE_CHECKED),
                 "${StompPathUtil.PREFIX_TOPIC_MESSAGE_HEADER}/${user1Id}-${user2Id}"
             )
 
@@ -96,10 +97,10 @@ class MessageWebsocketController(
     ) {
         val userId = principal.name.toLong()
         try {
-            val rs =
+            val headerResponses =
                 queryMessageService.getMessageInfosByUserId(userId, Instant.ofEpochMilli(req.epochMilli), req.limit)
 
-            stompSender.sendMessageToSession(StompMessage(rs), sessionId)
+            stompSender.sendMessageToSession(StompMessage(headerResponses, MessageMessageCode.HEADERS), sessionId)
 
         } catch (ex: RuntimeException) {
             stompSender.sendErrorMessageToSession(
@@ -126,7 +127,7 @@ class MessageWebsocketController(
                 req.direction
             )
 
-            stompSender.sendMessageToSession(StompMessage(messageResponses), sessionId)
+            stompSender.sendMessageToSession(StompMessage(messageResponses, MessageMessageCode.MESSAGES), sessionId)
 
         } catch (ex: RuntimeException) {
             stompSender.sendErrorMessageToSession(
