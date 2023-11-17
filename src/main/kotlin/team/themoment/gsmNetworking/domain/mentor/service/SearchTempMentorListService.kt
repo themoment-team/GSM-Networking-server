@@ -39,9 +39,6 @@ class QueryTempMentorListByNameService(
             )
         }
 
-        if (searchTempMentors.isEmpty())
-            throw ExpectedException("검색 결과가 없습니다.", HttpStatus.NOT_FOUND)
-        else
-            return searchTempMentors
+        return searchTempMentors
     }
 }
