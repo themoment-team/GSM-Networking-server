@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorRegistrationDto
+import team.themoment.gsmNetworking.domain.mentor.dto.MyMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.service.DeleteMyMentorInfoService
 import team.themoment.gsmNetworking.domain.mentor.service.MentorRegistrationService
 import team.themoment.gsmNetworking.domain.mentor.service.QueryAllMentorsService
+import team.themoment.gsmNetworking.domain.mentor.service.QueryMyMentorService
 
 @RestController
 @RequestMapping("api/v1/mentor")
@@ -21,7 +23,8 @@ class MentorController(
     private val mentorRegistrationService: MentorRegistrationService,
     private val queryAllMentorListService: QueryAllMentorsService,
     private val deleteMyMentorInfoService: DeleteMyMentorInfoService,
-    private val authenticatedUserManager: AuthenticatedUserManager
+    private val authenticatedUserManager: AuthenticatedUserManager,
+    private val queryMyMentorService: QueryMyMentorService
 ) {
 
     @PostMapping
@@ -34,6 +37,12 @@ class MentorController(
     fun queryAllMentorList(): ResponseEntity<List<MentorInfoDto>> {
         val mentorList = queryAllMentorListService.execute()
         return ResponseEntity.ok(mentorList)
+    }
+
+    @GetMapping("/my")
+    fun queryMyMentorInfo(): ResponseEntity<MyMentorInfoDto> {
+        val myMentorInfo = queryMyMentorService.execute(authenticatedUserManager.getName())
+        return ResponseEntity.ok(myMentorInfo)
     }
 
     @DeleteMapping("/my")
