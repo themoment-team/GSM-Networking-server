@@ -4,7 +4,7 @@ import com.querydsl.core.group.GroupBy.groupBy
 import com.querydsl.core.group.GroupBy.list
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
-import team.themoment.gsmNetworking.domain.mentor.domain.Mentor
+import org.hibernate.NonUniqueResultException
 import team.themoment.gsmNetworking.domain.mentor.domain.QCareer.career
 import team.themoment.gsmNetworking.domain.mentor.domain.QMentor.mentor
 import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
@@ -87,8 +87,10 @@ class MentorCustomRepositoryImpl(
                     )
                 )
             )
-        return if (myMentorInfoDto.isEmpty() || myMentorInfoDto.size > 1)
-            return null
+        return if (myMentorInfoDto.isEmpty())
+            null
+        else if (myMentorInfoDto.size > 1)
+            throw NonUniqueResultException(myMentorInfoDto.size)
         else
             myMentorInfoDto[0]
     }
