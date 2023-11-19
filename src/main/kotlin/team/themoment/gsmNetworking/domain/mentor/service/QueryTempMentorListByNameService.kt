@@ -1,9 +1,7 @@
 package team.themoment.gsmNetworking.domain.mentor.service
 
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.SearchTempMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.repository.TempMentorRepository

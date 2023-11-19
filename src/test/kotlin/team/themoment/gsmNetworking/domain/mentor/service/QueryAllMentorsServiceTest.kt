@@ -13,7 +13,6 @@ import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorCustomRepository
-import team.themoment.gsmNetworking.domain.mentor.service.impl.QueryAllMentorsServiceImpl
 
 @SpringBootTest(classes = [QueryAllMentorsService::class])
 class QueryAllMentorsServiceTest : BehaviorSpec({
@@ -21,8 +20,7 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
     val mentorRepository: MentorCustomRepository = mockk()
     val queryTempMentorListService: QueryTempMentorListService = mockk()
 
-    val queryAllMentorsService: QueryAllMentorsService =
-        QueryAllMentorsServiceImpl(mentorRepository, queryTempMentorListService)
+    val queryAllMentorsService = QueryAllMentorsService(mentorRepository, queryTempMentorListService)
 
     //TODO 더미데이터가 코드를 너무 많이 차지하는데...
     val dummyMentorInfoDtos = listOf(

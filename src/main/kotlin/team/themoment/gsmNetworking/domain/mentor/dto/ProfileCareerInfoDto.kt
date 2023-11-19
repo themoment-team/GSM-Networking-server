@@ -2,7 +2,7 @@ package team.themoment.gsmNetworking.domain.mentor.dto
 
 import java.time.LocalDate
 
-data class MyCareerInfoDto(
+data class ProfileCareerInfoDto(
     val id: Long,
     val position: String,
     val companyName: String,

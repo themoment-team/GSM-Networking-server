@@ -4,14 +4,10 @@ import com.querydsl.core.group.GroupBy.groupBy
 import com.querydsl.core.group.GroupBy.list
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.hibernate.NonUniqueResultException
 import org.springframework.dao.IncorrectResultSizeDataAccessException
 import team.themoment.gsmNetworking.domain.mentor.domain.QCareer.career
 import team.themoment.gsmNetworking.domain.mentor.domain.QMentor.mentor
-import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
-import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
-import team.themoment.gsmNetworking.domain.mentor.dto.MyCareerInfoDto
-import team.themoment.gsmNetworking.domain.mentor.dto.MyMentorInfoDto
+import team.themoment.gsmNetworking.domain.mentor.dto.*
 import team.themoment.gsmNetworking.domain.user.domain.QUser.user
 
 /**
@@ -55,7 +51,7 @@ class MentorCustomRepositoryImpl(
      * @param authenticationId 회원의 식별자
      * @return 멘토의 정보를 감싼 dto
      */
-    override fun findMyMentorInfoDto(authenticationId: Long): MyMentorInfoDto? {
+    override fun findMyMentorInfoDto(authenticationId: Long): ProfileMentorInfoDto? {
         val myMentorInfoDto = queryFactory
             .selectFrom(mentor)
             .join(mentor.user)
@@ -65,7 +61,7 @@ class MentorCustomRepositoryImpl(
             .transform(
                 groupBy(career.mentor.mentorId).list(
                     Projections.constructor(
-                        MyMentorInfoDto::class.java,
+                        ProfileMentorInfoDto::class.java,
                         mentor.mentorId,
                         mentor.user.name,
                         mentor.user.email,
@@ -75,7 +71,7 @@ class MentorCustomRepositoryImpl(
                         mentor.registered,
                         list(
                             Projections.constructor(
-                                MyCareerInfoDto::class.java,
+                                ProfileCareerInfoDto::class.java,
                                 career.careerId,
                                 career.position,
                                 career.companyName,

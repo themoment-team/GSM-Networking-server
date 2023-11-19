@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorRegistrationDto
-import team.themoment.gsmNetworking.domain.mentor.dto.MyMentorInfoDto
+import team.themoment.gsmNetworking.domain.mentor.dto.ProfileMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.service.DeleteMyMentorInfoService
 import team.themoment.gsmNetworking.domain.mentor.service.MentorRegistrationService
 import team.themoment.gsmNetworking.domain.mentor.service.QueryAllMentorsService
@@ -40,7 +40,7 @@ class MentorController(
     }
 
     @GetMapping("/my")
-    fun queryMyMentorInfo(): ResponseEntity<MyMentorInfoDto> {
+    fun queryMyMentorInfo(): ResponseEntity<ProfileMentorInfoDto> {
         val myMentorInfo = queryMyMentorService.execute(authenticatedUserManager.getName())
         return ResponseEntity.ok(myMentorInfo)
     }
