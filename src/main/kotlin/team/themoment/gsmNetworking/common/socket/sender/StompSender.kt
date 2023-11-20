@@ -1,6 +1,7 @@
 package team.themoment.gsmNetworking.common.socket.sender
 
 import team.themoment.gsmNetworking.common.exception.StompException
+import team.themoment.gsmNetworking.common.socket.message.GlobalMessageCode
 import team.themoment.gsmNetworking.common.socket.message.StompMessage
 import team.themoment.gsmNetworking.common.socket.model.StompErrorResponse
 
@@ -67,6 +68,6 @@ interface StompSender {
      * @return 에러 메시지
      */
     fun createErrorMessage(ex: StompException): StompMessage<StompErrorResponse> =
-        StompMessage(StompErrorResponse(ex.code, ex.message))
+        StompMessage(StompErrorResponse(ex.code, ex.message), GlobalMessageCode.ERROR)
 
 }
