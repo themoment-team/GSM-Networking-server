@@ -1,6 +1,5 @@
 package team.themoment.gsmNetworking.domain.message.service.impl
 
-import com.fasterxml.uuid.UUIDComparator
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.util.UUIDUtils
@@ -66,9 +65,9 @@ class QueryMessageServiceImpl(
         val (user1Id, user2Id) = if (user1Id < user2Id) user1Id to user2Id else user2Id to user1Id //TODO 그냥 invalid 예외 던지는게 더 나을듯
 
         val user1MessageInfo = userMessageInfoRepository.findByUserId(user1Id)
-            ?: throw IllegalArgumentException("사용자 ID가 $user1Id 인 사용자를 찾을 수 없습니다")
+            ?: throw IllegalArgumentException("$user1Id, $user2Id 사이의 채팅 기록이 없습니다. 사용자 ID: $user1Id")
         val user2MessageInfo = userMessageInfoRepository.findByUserId(user2Id)
-            ?: throw IllegalArgumentException("사용자 ID가 $user2Id 인 사용자를 찾을 수 없습니다")
+            ?: throw IllegalArgumentException("$user1Id, $user2Id 사이의 채팅 기록이 없습니다. 사용자 ID: $user2Id")
 
         return messageRepository.findMessagesBetweenUsers(user1Id, user2Id, time, limit, direction).map {
             MessageRes(
@@ -78,8 +77,8 @@ class QueryMessageServiceImpl(
                 direction = it.direction,
                 content = it.content,
                 messageTime = UUIDUtils.getEpochMilli(it.messageId),
-                isCheckedUser1 = isCheckedMessage(user1MessageInfo.lastViewedMessageId, it.messageId),
-                isCheckedUser2 = isCheckedMessage(user2MessageInfo.lastViewedMessageId, it.messageId)
+                isCheckedUser1 = isCheckedMessage(user1MessageInfo.lastViewedEpochMilli, UUIDUtils.getEpochMilli(it.messageId)),
+                isCheckedUser2 = isCheckedMessage(user2MessageInfo.lastViewedEpochMilli, UUIDUtils.getEpochMilli(it.messageId))
             )
         }
     }
@@ -95,11 +94,7 @@ class QueryMessageServiceImpl(
             else -> throw RuntimeException("내 아이디($myUserId)가 아이디1($userId1)과 아이디2($userId2) 중 어느 것과도 일치하지 않습니다.")
         }
 
-    private fun isCheckedMessage(lastViewedMessageId: UUID?, messageId: UUID): Boolean {
-        return if (lastViewedMessageId == null) {
-            false
-        } else {
-            UUIDComparator.staticCompare(lastViewedMessageId, messageId) != 1
-        }
+    private fun isCheckedMessage(lastViewedMessageId: Long, messageId: Long): Boolean {
+        return lastViewedMessageId >= messageId
     }
 }
