@@ -1,9 +1,11 @@
 package team.themoment.gsmNetworking.common.socket.message
 
+import team.themoment.gsmNetworking.common.socket.model.StompErrorResponse
+
 enum class GlobalMessageCode(
     private val supportClass: Class<out Any>
 ) : MessageCode {
-    ERROR(StompMessage::class.java);
+    ERROR(StompErrorResponse::class.java);
 
     override val code: String
         get() = name
