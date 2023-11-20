@@ -17,10 +17,10 @@ class ProfileUrlRegistrationService(
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
-        profileUrlRegistration(user, profileUrl)
+        profileUrlRegistered(user, profileUrl)
     }
 
-    fun profileUrlRegistration(user: User, profileUrl: String) {
+    fun profileUrlRegistered(user: User, profileUrl: String) {
         val addProfileUrlToUser = User(
             user.userId,
             user.authenticationId,
