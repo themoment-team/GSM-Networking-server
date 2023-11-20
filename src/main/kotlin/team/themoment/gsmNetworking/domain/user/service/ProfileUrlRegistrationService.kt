@@ -21,7 +21,7 @@ class ProfileUrlRegistrationService(
     }
 
     fun profileUrlRegistered(user: User, profileUrl: String) {
-        val addProfileUrlToUser = User(
+        val userUpdatedProfileUrl = User(
             user.userId,
             user.authenticationId,
             user.name,
@@ -32,6 +32,6 @@ class ProfileUrlRegistrationService(
             profileUrl
         )
 
-        userRepository.save(addProfileUrlToUser)
+        userRepository.save(userUpdatedProfileUrl)
     }
 }
