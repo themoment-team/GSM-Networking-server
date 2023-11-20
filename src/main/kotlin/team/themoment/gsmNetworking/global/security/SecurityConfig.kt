@@ -92,6 +92,10 @@ class SecurityConfig(
             .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(
                 Authority.UNAUTHENTICATED.name
             )
+            // /user
+            .mvcMatchers("/api/v1/user/**").hasAnyRole(
+                Authority.USER.name
+            )
             // /file
             .mvcMatchers("/api/v1/file").hasAnyRole(
                 Authority.USER.name
