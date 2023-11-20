@@ -5,9 +5,12 @@ package team.themoment.gsmNetworking.common.socket.message
  */
 class StompMessage<T : Any>(
     val content: T,
-    private val _messageCode: MessageCode,
+    private val internalMessageCode: MessageCode,
     val messageType: MessageType = MessageType.MESSAGE
 ) {
+    val messageCode: String
+        get() = internalMessageCode.code
+
     enum class MessageType {
         ERROR,
         MESSAGE
@@ -21,15 +24,12 @@ class StompMessage<T : Any>(
     //      지금은 StompMessage(abcContent, AbcMessageCode.ABC) 이런식으로 사용하는 쪽에서 직접 Type을 지정해 주어여 함
     init {
         require(
-            _messageCode.isSupportClass(content::class.java)
+            internalMessageCode.isSupportClass(content::class.java)
         ) {
             "사용 된 content의 Type을 지원하지 않는 MessageCode 입니다. " +
                     "올바른 MessageCode를 사용해 주세요. " +
-                    "해당 객체 생성자에 사용된 MessageCode, $_messageCode 는 ${_messageCode.supportClass()} 클래스를 지원합니다."
+                    "해당 객체 생성자에 사용된 MessageCode, $internalMessageCode 는 ${internalMessageCode.getSupportClass()} 클래스를 지원합니다."
         }
     }
-
-    val messageCode: String
-        get() = _messageCode.code()
 }
 

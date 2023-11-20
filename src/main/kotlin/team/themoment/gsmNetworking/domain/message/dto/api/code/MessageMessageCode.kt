@@ -8,7 +8,7 @@ import team.themoment.gsmNetworking.domain.message.dto.api.res.MessagesRes
 import team.themoment.gsmNetworking.domain.message.dto.domain.MessageDto
 
 enum class MessageMessageCode(
-    private val _supportClass: Class<out Any>
+    private val supportClass: Class<out Any>
 ) : MessageCode {
     MESSAGE(MessageDto::class.java),
     MESSAGES(MessagesRes::class.java),
@@ -16,16 +16,15 @@ enum class MessageMessageCode(
     MESSAGE_OCCUR(MessageOccurRes::class.java),
     MESSAGE_CHECKED(CheckMessageRes::class.java);
 
-    override fun code(): String {
-        return name
-    }
+    override val code: String
+        get() = name
 
     override fun isSupportClass(clazz: Class<out Any>): Boolean {
-        return this._supportClass.isAssignableFrom(clazz)
+        return this.supportClass.isAssignableFrom(clazz)
     }
 
-    override fun supportClass(): Class<out Any> {
-        return this._supportClass
+    override fun getSupportClass(): Class<out Any> {
+        return this.supportClass
     }
 
 }

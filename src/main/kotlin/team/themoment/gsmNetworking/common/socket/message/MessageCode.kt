@@ -7,7 +7,7 @@ interface MessageCode {
      *
      * @return 코드
      */
-    fun code(): String
+    val code: String
 
     /**
      * 제공된 클래스가 메시지 코드에서 지원되는지 확인합니다.
@@ -22,5 +22,5 @@ interface MessageCode {
      *
      * @return 지원 클래스
      */
-    fun supportClass(): Class<out Any>
+    fun getSupportClass(): Class<out Any>
 }
