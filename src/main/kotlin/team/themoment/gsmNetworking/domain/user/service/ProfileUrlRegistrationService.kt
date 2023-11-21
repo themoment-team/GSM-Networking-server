@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.user.domain.User
+import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 
 @Service
@@ -13,14 +14,14 @@ class ProfileUrlRegistrationService(
     private val userRepository: UserRepository
 ) {
 
-    fun execute(authenticationId: Long, profileUrl: String) {
+    fun execute(authenticationId: Long, dto: ProfileUrlRegistrationDto) {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
-        profileUrlRegistered(user, profileUrl)
+        profileUrlRegistered(user, dto.profileUrl)
     }
 
-    fun profileUrlRegistered(user: User, profileUrl: String) {
+    fun profileUrlRegistered(user: User, profileUrl: String?) {
         val userUpdatedProfileUrl = User(
             user.userId,
             user.authenticationId,

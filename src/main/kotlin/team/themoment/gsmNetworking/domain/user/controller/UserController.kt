@@ -4,9 +4,11 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
+import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
 import team.themoment.gsmNetworking.domain.user.service.ProfileUrlRegistrationService
 
 @RestController
@@ -16,10 +18,10 @@ class UserController(
     private val profileUrlRegistrationService: ProfileUrlRegistrationService
 ) {
 
-    @PostMapping("/profile/{profileUrl}")
-    fun profileUrlRegistration(@PathVariable profileUrl: String): ResponseEntity<Void> {
+    @PostMapping("/profile-url")
+    fun profileUrlRegistration(@RequestBody dto: ProfileUrlRegistrationDto): ResponseEntity<Void> {
         val authenticationId = authenticatedUserManager.getName()
-        profileUrlRegistrationService.execute(authenticationId, profileUrl)
+        profileUrlRegistrationService.execute(authenticationId, dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 }
