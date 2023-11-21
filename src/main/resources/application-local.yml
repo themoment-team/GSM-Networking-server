@@ -50,7 +50,7 @@ spring:
         secret-key: ${AWS_SECRET_KEY}
       s3:
         bucket-name: ${AWS_BUCKET_NAME}
-        existing-image-bucket-domain: ${EXISTING-IMAGE-BUCKET_DOMAIN}
+        existing-image-bucket-domain: ${EXISTING_IMAGE_BUCKET_DOMAIN}
         image-bucket-domain: ${IMAGE_BUCKET_DOMAIN}
       region:
         static: ${AWS_REGION}
