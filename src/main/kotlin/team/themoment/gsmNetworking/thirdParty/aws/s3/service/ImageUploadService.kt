@@ -25,8 +25,8 @@ class ImageUploadService(
             val fileExtension = StringUtils.getFilenameExtension(originFileName)
                 ?: throw ExpectedException("파일 확장자가 존재 하지 않는 파일입니다.", HttpStatus.BAD_REQUEST)
             val fileName = createFileName(fileExtension)
-            val s3Resource = s3Template.upload(s3Properties.bucketName, fileName, multipartFile.inputStream, ObjectMetadata.builder().contentType(validateFileExtension(fileExtension)).build())
-            s3ImageBucketDomainChange(s3Resource.url.toString())
+            s3Template.upload(s3Properties.bucketName, fileName, multipartFile.inputStream, ObjectMetadata.builder().contentType(validateFileExtension(fileExtension)).build())
+            s3ImageBucketDomainChange(fileName)
         } catch (e: S3Exception) {
             throw ExpectedException("AWS S3에서 오류 발생", HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -43,9 +43,8 @@ class ImageUploadService(
         return fileExtension
     }
 
-    private fun s3ImageBucketDomainChange(s3ResourceUrl: String): String{
-        val s3ImageKey = s3ResourceUrl.split(s3Properties.existingImageBucketDomain)
-        return s3Properties.imageBucketDomain + s3ImageKey[1]
+    private fun s3ImageBucketDomainChange(fileName: String): String{
+        return s3Properties.imageBucketDomain + fileName
     }
 
 }
