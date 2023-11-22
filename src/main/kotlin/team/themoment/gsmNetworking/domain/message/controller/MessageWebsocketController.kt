@@ -67,13 +67,13 @@ class MessageWebsocketController(
     ) {
         val from = principal.name.toLong()
         try {
-            checkMessageService.execute(req.to, from, req.messageId)
+            checkMessageService.execute(req.to, from, Instant.ofEpochMilli(req.epochMilli))
 
             val user1Id = minOf(req.to, from)
             val user2Id = maxOf(req.to, from)
 
             stompSender.sendMessage(
-                StompMessage(CheckMessageRes(req.messageId), MessageMessageCode.MESSAGE_CHECKED),
+                StompMessage(CheckMessageRes(from, req.epochMilli), MessageMessageCode.MESSAGE_CHECKED),
                 "${StompPathUtil.PREFIX_TOPIC_MESSAGE_HEADER}/${user1Id}-${user2Id}"
             )
 
@@ -100,7 +100,10 @@ class MessageWebsocketController(
             val headerResponses =
                 queryMessageService.getMessageInfosByUserId(userId, Instant.ofEpochMilli(req.epochMilli), req.limit)
 
-            stompSender.sendMessageToSession(StompMessage(HeadersRes(headerResponses), MessageMessageCode.HEADERS), sessionId)
+            stompSender.sendMessageToSession(
+                StompMessage(HeadersRes(headerResponses), MessageMessageCode.HEADERS),
+                sessionId
+            )
 
         } catch (ex: RuntimeException) {
             stompSender.sendErrorMessageToSession(
@@ -127,7 +130,10 @@ class MessageWebsocketController(
                 req.direction
             )
 
-            stompSender.sendMessageToSession(StompMessage(MessagesRes(messageResponses), MessageMessageCode.MESSAGES), sessionId)
+            stompSender.sendMessageToSession(
+                StompMessage(MessagesRes(messageResponses), MessageMessageCode.MESSAGES),
+                sessionId
+            )
 
         } catch (ex: RuntimeException) {
             stompSender.sendErrorMessageToSession(

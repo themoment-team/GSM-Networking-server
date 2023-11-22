@@ -26,7 +26,7 @@ class MessageCustomRepositoryImpl(
                     header.user2Id,
                     message.direction,
                     header.recentMessageId,
-                    userMessageInfo.lastViewedMessageId
+                    userMessageInfo.lastViewedEpochMilli
                 )
             )
             .from(header)
