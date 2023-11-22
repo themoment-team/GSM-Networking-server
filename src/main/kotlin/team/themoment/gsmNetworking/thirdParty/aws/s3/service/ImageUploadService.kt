@@ -9,13 +9,13 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.util.StringUtils
 import org.springframework.web.multipart.MultipartFile
+import team.themoment.gsmNetworking.thirdParty.aws.s3.properties.S3Properties
 import java.time.LocalDateTime
 import java.util.*
 
 @Service
 class ImageUploadService(
-    @Value("\${spring.cloud.aws.s3.bucket-name}")
-    private val bucketName: String,
+    private val s3Properties: S3Properties,
     private val s3Template: S3Template
 ) {
 
@@ -25,8 +25,8 @@ class ImageUploadService(
             val fileExtension = StringUtils.getFilenameExtension(originFileName)
                 ?: throw ExpectedException("파일 확장자가 존재 하지 않는 파일입니다.", HttpStatus.BAD_REQUEST)
             val fileName = createFileName(fileExtension)
-            val s3Resource = s3Template.upload(bucketName, fileName, multipartFile.inputStream, ObjectMetadata.builder().contentType(validateFileExtension(fileExtension)).build())
-            s3Resource.url.toString()
+            s3Template.upload(s3Properties.bucketName, fileName, multipartFile.inputStream, ObjectMetadata.builder().contentType(validateFileExtension(fileExtension)).build())
+            addS3ImageBucketDomain(fileName)
         } catch (e: S3Exception) {
             throw ExpectedException("AWS S3에서 오류 발생", HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -41,6 +41,10 @@ class ImageUploadService(
             throw ExpectedException("지원하지 않는 파일 확장자 입니다.", HttpStatus.BAD_REQUEST)
         }
         return fileExtension
+    }
+
+    private fun addS3ImageBucketDomain(fileName: String): String{
+        return s3Properties.imageBucketDomain + fileName
     }
 
 }
