@@ -56,6 +56,11 @@ spring:
       stack:
         auto: false
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
 encrypt:
   secret-key: ${ENCRYPT_SECRET_KEY}
 

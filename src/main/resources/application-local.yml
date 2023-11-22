@@ -60,6 +60,11 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
 encrypt:
   secret-key: test_encrypt_gsm_networking12345
 
