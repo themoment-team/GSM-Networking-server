@@ -49,8 +49,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(MaxUploadSizeExceededException::class)
     fun maxUploadSizeExceededExceptionHandler(e: MaxUploadSizeExceededException): ResponseEntity<ExceptionResponse> {
-        log.warn("MultipartException : ${e.message}")
-        log.trace("MultipartException Details : $e")
+        log.trace("MaxUploadSizeExceededException Details : $e")
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(ExceptionResponse(message = "파일 크기는 5MB를 넘을 수 없습니다."))
