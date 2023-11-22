@@ -49,6 +49,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(MaxUploadSizeExceededException::class)
     fun maxUploadSizeExceededExceptionHandler(e: MaxUploadSizeExceededException): ResponseEntity<ExceptionResponse> {
+        log.warn("MaxUploadSizeExceededException : ${e.message}")
         log.trace("MaxUploadSizeExceededException Details : $e")
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
