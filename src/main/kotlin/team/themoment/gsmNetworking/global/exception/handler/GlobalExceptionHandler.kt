@@ -52,7 +52,7 @@ class GlobalExceptionHandler {
         log.warn("MaxUploadSizeExceededException : ${e.message}")
         log.trace("MaxUploadSizeExceededException Details : $e")
         return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
+            .status(HttpStatus.PAYLOAD_TOO_LARGE)
             .body(ExceptionResponse(message = "파일 크기는 5MB를 넘을 수 없습니다."))
     }
 }
