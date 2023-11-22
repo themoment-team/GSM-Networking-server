@@ -7,8 +7,8 @@ import team.themoment.gsmNetworking.common.exception.model.ExceptionResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.multipart.MaxUploadSizeExceededException
 import team.themoment.gsmNetworking.global.filter.LoggingFilter
-import java.lang.Exception
 
 private val log = LoggerFactory.getLogger(LoggingFilter::class.java)!!
 
@@ -39,11 +39,20 @@ class GlobalExceptionHandler {
      * @param e RuntimException 혹은 RuntimeException을 상속하는 클래스
      * @return ResponseEntity
      */
-    @ExceptionHandler(Exception::class)
+    @ExceptionHandler(RuntimeException::class)
     fun unExpectedExceptionHandler(e: RuntimeException): ResponseEntity<ExceptionResponse> {
         log.error("UnExpectedException Details : $e")
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ExceptionResponse(message = "예외처리 되지 않은 에러가 발생하였습니다."))
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException::class)
+    fun maxUploadSizeExceededExceptionHandler(e: MaxUploadSizeExceededException): ResponseEntity<ExceptionResponse> {
+        log.warn("MultipartException : ${e.message}")
+        log.trace("MultipartException Details : $e")
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ExceptionResponse(message = "파일 크기는 5MB를 넘을 수 없습니다."))
     }
 }
