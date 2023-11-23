@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
-class GwangyaGenerationService(
+class GenerateGwangyaTokenService(
     private val gwangyaProperties: GwangyaProperties,
     private val gwangyaTokenRepository: GwangyaTokenRepository
 ) {
