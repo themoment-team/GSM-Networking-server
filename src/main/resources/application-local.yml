@@ -99,3 +99,7 @@ management:
       enabled: false
   server:
     port: ${ACTUATOR_SERVER_PORT}
+
+gwangya:
+  time:
+    token-exp: 600
