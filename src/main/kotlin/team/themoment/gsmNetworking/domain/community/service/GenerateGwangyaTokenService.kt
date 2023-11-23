@@ -18,8 +18,9 @@ class GenerateGwangyaTokenService(
 
     fun execute(): GwangyaTokenDto {
         val gwangyaToken = RandomString.make(20);
-        val expiredTime = LocalDateTime.now().plusSeconds(gwangyaProperties.tokenExp)
-        saveGwangyaToken(gwangyaToken, gwangyaProperties.tokenExp)
+        val nowTime = LocalDateTime.now()
+        val expiredTime = nowTime.plusSeconds(gwangyaProperties.tokenExp)
+        saveGwangyaToken(gwangyaToken, nowTime, gwangyaProperties.tokenExp)
 
         return GwangyaTokenDto(
             gwangyaToken,
@@ -27,10 +28,11 @@ class GenerateGwangyaTokenService(
         )
     }
 
-    private fun saveGwangyaToken(gwangyaToken: String, expirationTime: Long) {
+    private fun saveGwangyaToken(gwangyaToken: String, nowTime: LocalDateTime, expirationTime: Long) {
         gwangyaTokenRepository.save(
             GwangyaToken(
                 gwangyaToken,
+                nowTime,
                 expirationTime
             )
         )
