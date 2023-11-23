@@ -95,3 +95,7 @@ management:
       enabled: false
   server:
     port: ${ACTUATOR_SERVER_PORT}
+
+gwangya:
+  token:
+    token-exp: ${GWANGYA_TOKEN_EXPIRED}
