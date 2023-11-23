@@ -100,6 +100,13 @@ class SecurityConfig(
             .mvcMatchers("/api/v1/file").hasAnyRole(
                 Authority.USER.name
             )
+            // /gwangya
+            .mvcMatchers(HttpMethod.POST, "/api/v1/gwangya/token").hasAnyRole(
+                Authority.UNAUTHENTICATED.name,
+                Authority.TEMP_USER.name,
+                Authority.USER.name,
+                Authority.ADMIN.name
+            )
             .anyRequest().permitAll()
     }
 
