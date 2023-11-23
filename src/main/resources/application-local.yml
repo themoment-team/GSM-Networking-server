@@ -101,5 +101,5 @@ management:
     port: ${ACTUATOR_SERVER_PORT}
 
 gwangya:
-  time:
+  token:
     token-exp: 600
