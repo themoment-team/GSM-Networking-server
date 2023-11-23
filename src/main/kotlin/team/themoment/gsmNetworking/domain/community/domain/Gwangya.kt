@@ -12,6 +12,6 @@ class Gwangya(
     @Column(name = "gwangya_id", columnDefinition = "BINARY(16)")
     val gwangyaId: UUID = UUIDUtils.generateUUIDv7(),
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 200)
     val content: String,
 )
