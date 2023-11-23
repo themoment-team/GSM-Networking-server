@@ -48,7 +48,7 @@ class LoggingFilter : OncePerRequestFilter() {
                         ", "
                     ) { "${it.name}=${it.value}" }
                 }
-            }, User-Agent: ${request.getHeader("User-Agent")}, Body: ${getRequestBody(request.inputStream)}"
+            }, User-Agent: ${request.getHeader("User-Agent")}, Body: ${getRequestBody(request.contentAsByteArray)}"
         )
     }
 
@@ -64,9 +64,9 @@ class LoggingFilter : OncePerRequestFilter() {
         )
     }
 
-    private fun getRequestBody(inputStream: InputStream): String {
-        val body = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8)
-        return if (StringUtils.hasText(body)) body else "[empty]"
+    private fun getRequestBody(byteArrayContent: ByteArray): String {
+        val oneLineContent = String(byteArrayContent, Charsets.UTF_8).replace("\\s".toRegex(), "")
+        return if (StringUtils.hasText(oneLineContent)) oneLineContent else "[empty]"
     }
 
 }
