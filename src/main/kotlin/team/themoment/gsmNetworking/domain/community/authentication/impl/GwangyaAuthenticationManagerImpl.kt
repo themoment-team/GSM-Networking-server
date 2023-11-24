@@ -10,9 +10,6 @@ class GwangyaAuthenticationManagerImpl(
     private val gwangyaTokenRepository: GwangyaTokenRepository
 ) : GwangyaAuthenticationManager {
 
-    override fun isValidGwangyaToken(gwangyaToken: String): Boolean {
-        val token = gwangyaTokenRepository.findByIdOrNull(gwangyaToken)
-        println(token)
-        return token != null
-    }
+    override fun isValidGwangyaToken(gwangyaToken: String): Boolean =
+        gwangyaTokenRepository.findByIdOrNull(gwangyaToken) != null
 }
