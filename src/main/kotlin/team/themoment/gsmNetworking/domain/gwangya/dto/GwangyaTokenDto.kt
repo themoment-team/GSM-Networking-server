@@ -1,4 +1,4 @@
-package team.themoment.gsmNetworking.domain.community.dto
+package team.themoment.gsmNetworking.domain.gwangya.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime

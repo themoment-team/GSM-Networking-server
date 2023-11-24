@@ -1,4 +1,4 @@
-package team.themoment.gsmNetworking.domain.community.domain
+package team.themoment.gsmNetworking.domain.gwangya.domain
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash

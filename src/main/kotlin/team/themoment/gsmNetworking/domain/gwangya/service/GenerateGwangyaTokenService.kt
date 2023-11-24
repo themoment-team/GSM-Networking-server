@@ -1,12 +1,11 @@
-package team.themoment.gsmNetworking.domain.community.service
+package team.themoment.gsmNetworking.domain.gwangya.service
 
 import net.bytebuddy.utility.RandomString
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import team.themoment.gsmNetworking.domain.community.domain.GwangyaToken
-import team.themoment.gsmNetworking.domain.community.properties.GwangyaProperties
-import team.themoment.gsmNetworking.domain.community.repository.GwangyaTokenRepository
+import team.themoment.gsmNetworking.domain.gwangya.domain.GwangyaToken
+import team.themoment.gsmNetworking.domain.gwangya.properties.GwangyaProperties
+import team.themoment.gsmNetworking.domain.gwangya.repository.GwangyaTokenRepository
 import java.time.LocalDateTime
 
 @Service

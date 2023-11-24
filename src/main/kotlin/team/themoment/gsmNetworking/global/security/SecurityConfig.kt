@@ -101,7 +101,7 @@ class SecurityConfig(
                 Authority.USER.name
             )
             // /gwangya
-            .mvcMatchers(HttpMethod.POST, "/api/v1/gwangya/token").hasAnyRole(
+            .mvcMatchers(HttpMethod.GET, "/api/v1/gwangya/token").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
                 Authority.TEMP_USER.name,
                 Authority.USER.name,
