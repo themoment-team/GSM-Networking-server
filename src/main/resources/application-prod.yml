@@ -99,3 +99,4 @@ management:
 gwangya:
   token:
     token-exp: ${GWANGYA_TOKEN_EXPIRED}
+    token-renewal-time: ${GWANGYA_TOKEN_RENEWAL_TIME}
