@@ -6,5 +6,5 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConstructorBinding
 @ConfigurationProperties("gwangya.token")
 class GwangyaProperties(
-    val tokenExp: Long
+    val tokenExp: Long,
 )

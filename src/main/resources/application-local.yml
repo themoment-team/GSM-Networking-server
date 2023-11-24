@@ -103,3 +103,4 @@ management:
 gwangya:
   token:
     token-exp: 600
+    token-renewal-time: 600000
