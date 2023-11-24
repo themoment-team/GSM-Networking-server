@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.index.Indexed
 import java.time.LocalDateTime
 
 @RedisHash("gwangya_token")
-class GwangyaToken(
+data class GwangyaToken(
     @Id
     val gwangyaToken: String,
 
