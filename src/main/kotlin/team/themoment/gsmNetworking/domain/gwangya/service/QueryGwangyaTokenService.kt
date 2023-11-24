@@ -1,9 +1,9 @@
-package team.themoment.gsmNetworking.domain.community.service
+package team.themoment.gsmNetworking.domain.gwangya.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import team.themoment.gsmNetworking.domain.community.dto.GwangyaTokenDto
-import team.themoment.gsmNetworking.domain.community.repository.GwangyaTokenRepository
+import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaTokenDto
+import team.themoment.gsmNetworking.domain.gwangya.repository.GwangyaTokenRepository
 import java.time.LocalDateTime
 
 @Service

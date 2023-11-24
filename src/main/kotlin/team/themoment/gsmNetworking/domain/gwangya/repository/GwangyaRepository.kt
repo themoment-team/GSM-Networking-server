@@ -1,7 +1,7 @@
-package team.themoment.gsmNetworking.domain.community.repository
+package team.themoment.gsmNetworking.domain.gwangya.repository
 
 import org.springframework.data.repository.CrudRepository
-import team.themoment.gsmNetworking.domain.community.domain.Gwangya
+import team.themoment.gsmNetworking.domain.gwangya.domain.Gwangya
 import java.util.UUID
 
 interface GwangyaRepository : CrudRepository<Gwangya, UUID> {

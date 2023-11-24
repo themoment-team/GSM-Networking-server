@@ -1,8 +1,8 @@
-package team.themoment.gsmNetworking.domain.community.scheduler
+package team.themoment.gsmNetworking.domain.gwangya.scheduler
 
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import team.themoment.gsmNetworking.domain.community.service.GenerateGwangyaTokenService
+import team.themoment.gsmNetworking.domain.gwangya.service.GenerateGwangyaTokenService
 
 @Component
 class RenewGwangyaTokenScheduler(
