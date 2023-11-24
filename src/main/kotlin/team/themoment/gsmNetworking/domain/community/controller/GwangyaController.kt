@@ -32,7 +32,7 @@ class GwangyaController(
     @PostMapping
     fun generateGwangya(
         @RequestHeader("gwangyaToken") gwangyaToken: String,
-        @RequestBody @Valid gwangyaDto: GwangyaPostsDto
+        @Valid @RequestBody gwangyaDto: GwangyaPostsDto
     ): ResponseEntity<Void> {
         checkGwangyaAuthentication(gwangyaToken)
         generateGwangyaPostsService.execute(gwangyaDto)
