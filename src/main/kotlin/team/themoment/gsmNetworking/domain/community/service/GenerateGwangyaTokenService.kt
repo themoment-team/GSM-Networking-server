@@ -11,13 +11,12 @@ import java.time.LocalDateTime
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
-class RenewGwangyaTokenService(
+class GenerateGwangyaTokenService(
     private val gwangyaProperties: GwangyaProperties,
     private val gwangyaTokenRepository: GwangyaTokenRepository,
 ) {
 
-    @Scheduled(fixedRateString = "\${gwangya.token.token-renewal-time}")
-    fun generateGwangyaToken() {
+    fun execute() {
         val gwangyaToken = RandomString.make(20);
         val nowTime = LocalDateTime.now()
 
