@@ -29,7 +29,6 @@ class GwangyaCustomRepositoryImpl(
             .fetch();
     }
 
-    private fun gtCursorId(cursorId: Long): BooleanExpression {
-        return gwangya.gwangyaId.gt(cursorId)
-    }
+    private fun gtCursorId(cursorId: Long): BooleanExpression =
+        gwangya.gwangyaId.gt(cursorId)
 }
