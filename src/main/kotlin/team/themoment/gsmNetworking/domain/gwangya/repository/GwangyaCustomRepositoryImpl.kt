@@ -10,7 +10,7 @@ class GwangyaCustomRepositoryImpl(
     private val queryFactory: JPAQueryFactory
 ) : GwangyaCustomRepository {
 
-    override fun findAll(cursorId: Long, pageSize: Int): List<GwangyaPostsDto> {
+    override fun findPagebyCursorId(cursorId: Long, pageSize: Int): List<GwangyaPostsDto> {
         return queryFactory
             .select(
                 Projections.constructor(

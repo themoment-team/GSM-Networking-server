@@ -12,5 +12,5 @@ class QueryGwangyaPostsService(
 ) {
 
     fun execute(cursorId: Long, pageSize: Int): List<GwangyaPostsDto> =
-        gwangyaRepository.findAll(cursorId, pageSize)
+        gwangyaRepository.findPagebyCursorId(cursorId, pageSize)
 }
