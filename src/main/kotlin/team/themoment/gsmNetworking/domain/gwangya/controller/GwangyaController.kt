@@ -36,7 +36,7 @@ class GwangyaController(
     @GetMapping
     fun queryGwangya(
         @RequestHeader("gwangyaToken") gwangyaToken: String,
-        @RequestParam cursorId: Long,
+        @RequestParam("gwangyaId") cursorId: Long,
         @RequestParam pageSize: Int
     ): ResponseEntity<List<GwangyaPostsDto>> {
         checkGwangyaAuthentication(gwangyaToken)
