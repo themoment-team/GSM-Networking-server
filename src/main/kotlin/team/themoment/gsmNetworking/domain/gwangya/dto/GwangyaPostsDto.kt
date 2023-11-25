@@ -1,10 +1,11 @@
 package team.themoment.gsmNetworking.domain.gwangya.dto
 
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Size
+import com.fasterxml.jackson.annotation.JsonFormat
+import java.time.LocalDateTime
 
 data class GwangyaPostsDto(
-    @field:NotNull
-    @field:Size(max = 200)
-    val content: String
+    val id: Long,
+    val content: String,
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    val createdAt: LocalDateTime
 )
