@@ -12,6 +12,6 @@ class Gwangya(
     @Column(name = "content", nullable = false, length = 200)
     val content: String,
 
-    @Column(name = "generation_time", nullable = false)
-    val generationTime: LocalDateTime
+    @Column(name = "created_at", nullable = false)
+    val createdAt: LocalDateTime
 )

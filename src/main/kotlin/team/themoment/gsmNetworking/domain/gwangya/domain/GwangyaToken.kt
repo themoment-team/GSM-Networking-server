@@ -14,8 +14,7 @@ data class GwangyaToken(
     @Indexed
     val gwangyaToken: String,
 
-    @Indexed
-    val generationTime: LocalDateTime,
+    val createdAt: LocalDateTime,
 
     @TimeToLive
     val expirationTime: Long
