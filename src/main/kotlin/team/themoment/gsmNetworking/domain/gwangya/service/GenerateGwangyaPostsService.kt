@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.domain.gwangya.domain.Gwangya
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsRegistrationDto
 import team.themoment.gsmNetworking.domain.gwangya.repository.GwangyaRepository
-import java.time.LocalDateTime
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
@@ -16,8 +15,7 @@ class GenerateGwangyaPostsService(
     fun execute(gwangyaPostsDto: GwangyaPostsRegistrationDto) {
 
         val gwangyaPosts = Gwangya(
-            content = gwangyaPostsDto.content,
-            createdAt = LocalDateTime.now()
+            content = gwangyaPostsDto.content
         )
 
         gwangyaRepository.save(gwangyaPosts)

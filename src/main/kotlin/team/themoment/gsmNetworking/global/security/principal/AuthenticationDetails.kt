@@ -14,7 +14,7 @@ class AuthenticationDetails(
 
     override fun getPassword(): String? = null
 
-    override fun getUsername(): String = authentication.authenticationId.toString()
+    override fun getUsername(): String = authentication.id.toString()
 
     override fun isAccountNonExpired(): Boolean = false
 

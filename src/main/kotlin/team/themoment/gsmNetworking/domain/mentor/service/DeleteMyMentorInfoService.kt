@@ -35,7 +35,7 @@ class DeleteMyMentorInfoService(
 
         careerRepository.deleteByMentor(mentor)
         mentorRepository.deleteByUser(user)
-        userRepository.deleteById(user.userId)
+        userRepository.deleteById(user.id)
         authenticatedUserManager.updateAuthority(Authority.TEMP_USER)
     }
 

@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.user.domain
 
+import team.themoment.gsmNetworking.common.domain.BaseEntity
 import team.themoment.gsmNetworking.domain.user.converter.EncryptConverter
 import javax.persistence.*
 
@@ -9,8 +10,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "user")
 class User(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val userId: Long = 0,
+    override val id: Long = 0,
 
     @Column(nullable = false, unique = true)
     val authenticationId: Long,
@@ -33,4 +33,4 @@ class User(
 
     @Column(nullable = true)
     val profileUrl: String?
-)
+) : BaseEntity(id)

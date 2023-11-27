@@ -15,7 +15,7 @@ class GwangyaCustomRepositoryImpl(
             .select(
                 Projections.constructor(
                     GwangyaPostsDto::class.java,
-                    gwangya.gwangyaId,
+                    gwangya.id,
                     gwangya.content,
                     gwangya.createdAt
                 )
@@ -24,11 +24,11 @@ class GwangyaCustomRepositoryImpl(
             .where(
                 gtCursorId(cursorId),
             )
-            .orderBy(gwangya.gwangyaId.asc())
+            .orderBy(gwangya.id.asc())
             .limit(pageSize.toLong())
             .fetch();
     }
 
     private fun gtCursorId(cursorId: Long): BooleanExpression =
-        gwangya.gwangyaId.gt(cursorId)
+        gwangya.id.gt(cursorId)
 }

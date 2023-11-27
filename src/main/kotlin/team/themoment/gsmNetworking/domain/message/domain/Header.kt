@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.message.domain
 
+import team.themoment.gsmNetworking.common.domain.BaseEntity
 import java.util.UUID
 import javax.persistence.*
 
@@ -13,9 +14,7 @@ import javax.persistence.*
 // Header는 Message에 의존적임.
 // Message의 빠른 조회를 위해 비정규화 된 값 값이라고 봐도 됨
 class Header private constructor(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "header_id")
-    val headerId: Long = 0,
+    override val id: Long = 0,
 
     @Column(name = "user1_id", nullable = false)
     val user1Id: Long,
@@ -25,14 +24,14 @@ class Header private constructor(
 
     @Column(name = "recent_message_id", columnDefinition = "BINARY(16)", unique = true, nullable = false)
     val recentMessageId: UUID
-) {
+) : BaseEntity(id) {
     init {
         require(user1Id != user2Id) { "user1Id and user2Id must be different" }
         require(user1Id < user2Id) { "user1Id must be smaller than user2Id" }
     }
 
     constructor(user1Id: Long, user2Id: Long, recentChatId: UUID) : this(
-        headerId = 0,
+        id = 0,
         user1Id = minOf(user1Id, user2Id),
         user2Id = maxOf(user1Id, user2Id),
         recentMessageId = recentChatId
@@ -40,7 +39,7 @@ class Header private constructor(
 
     fun copyWithNewRecentChatId(header: Header, newRecentChatId: UUID): Header {
         return Header(
-            headerId = this.headerId,
+            id = this.id,
             user1Id = this.user1Id,
             user2Id = this.user2Id,
             recentMessageId = newRecentChatId
