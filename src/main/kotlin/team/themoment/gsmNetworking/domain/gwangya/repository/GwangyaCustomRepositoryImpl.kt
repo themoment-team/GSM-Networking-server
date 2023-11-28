@@ -26,7 +26,7 @@ class GwangyaCustomRepositoryImpl(
             )
             .orderBy(gwangya.gwangyaId.desc())
             .limit(pageSize)
-            .fetch();
+            .fetch().reversed()
     }
 
     private fun ltCursorId(cursorId: Long): BooleanExpression =
@@ -45,6 +45,6 @@ class GwangyaCustomRepositoryImpl(
             .from(gwangya)
             .orderBy(gwangya.gwangyaId.desc())
             .limit(pageSize)
-            .fetch();
+            .fetch().reversed()
     }
 }
