@@ -37,12 +37,12 @@ class GwangyaController(
     fun queryGwangya(
         @RequestHeader("gwangyaToken") gwangyaToken: String,
         @RequestParam("gwangyaId") cursorId: Long,
-        @RequestParam pageSize: Int
+        @RequestParam pageSize: Long
     ): ResponseEntity<List<GwangyaPostsDto>> {
         checkGwangyaAuthentication(gwangyaToken)
-        if (pageSize < 0 || cursorId < 0)
+        if (pageSize < 0L || cursorId < 0L)
             throw ExpectedException("0이상부터 가능합니다.", HttpStatus.BAD_REQUEST)
-        else if (pageSize > 20)
+        else if (pageSize > 20L)
             throw ExpectedException("페이지 크기는 20이하까지 가능합니다.", HttpStatus.BAD_REQUEST)
         val gwangyaPosts = queryGwangyaPostsService.execute(cursorId, pageSize)
         return ResponseEntity.ok(gwangyaPosts)
