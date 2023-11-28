@@ -11,7 +11,7 @@ class GwangyaCustomRepositoryImpl(
 ) : GwangyaCustomRepository {
 
     override fun findPagebyCursorId(cursorId: Long, pageSize: Int): List<GwangyaPostsDto> {
-        return queryFactory
+        val query = queryFactory
             .select(
                 Projections.constructor(
                     GwangyaPostsDto::class.java,
@@ -21,14 +21,20 @@ class GwangyaCustomRepositoryImpl(
                 )
             )
             .from(gwangya)
-            .where(
-                gtCursorId(cursorId),
-            )
-            .orderBy(gwangya.gwangyaId.asc())
+
+        if (cursorId > 0L) {
+            query
+                .where(
+                    ltCursorId(cursorId),
+                )
+        }
+
+        return query
+            .orderBy(gwangya.gwangyaId.desc())
             .limit(pageSize.toLong())
             .fetch();
     }
 
-    private fun gtCursorId(cursorId: Long): BooleanExpression =
-        gwangya.gwangyaId.gt(cursorId)
+    private fun ltCursorId(cursorId: Long): BooleanExpression =
+        gwangya.gwangyaId.lt(cursorId)
 }

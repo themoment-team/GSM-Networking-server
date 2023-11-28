@@ -40,7 +40,7 @@ class GwangyaController(
         @RequestParam pageSize: Int
     ): ResponseEntity<List<GwangyaPostsDto>> {
         checkGwangyaAuthentication(gwangyaToken)
-        if (pageSize < 0 || cursorId < 0)
+        if (pageSize < 0 || cursorId < 0L)
             throw ExpectedException("0이상부터 가능합니다.", HttpStatus.BAD_REQUEST)
         else if (pageSize > 20)
             throw ExpectedException("페이지 크기는 20이하까지 가능합니다.", HttpStatus.BAD_REQUEST)
