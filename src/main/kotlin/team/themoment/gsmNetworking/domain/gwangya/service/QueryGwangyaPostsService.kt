@@ -11,6 +11,9 @@ class QueryGwangyaPostsService(
     private val gwangyaRepository: GwangyaCustomRepository
 ) {
 
-    fun execute(cursorId: Long, pageSize: Int): List<GwangyaPostsDto> =
-        gwangyaRepository.findPagebyCursorId(cursorId, pageSize)
+    fun execute(cursorId: Long, pageSize: Long): List<GwangyaPostsDto> =
+        if (cursorId == 0L)
+            gwangyaRepository.findPageWithRecentPosts(pageSize)
+        else
+            gwangyaRepository.findPagebyCursorId(cursorId, pageSize)
 }
