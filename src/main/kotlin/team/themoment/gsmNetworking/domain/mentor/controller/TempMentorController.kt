@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.mentor.dto.SearchTempMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
-import team.themoment.gsmNetworking.domain.mentor.service.*
+import team.themoment.gsmNetworking.domain.mentor.service.QueryTempMentorListService
+import team.themoment.gsmNetworking.domain.mentor.service.QueryTempMentorService
+import team.themoment.gsmNetworking.domain.mentor.service.QueryTempMentorListByNameService
+import team.themoment.gsmNetworking.domain.mentor.service.DeleteTempMentorService
 
 @RestController
 @RequestMapping("/api/v1/temp-mentor")
@@ -45,7 +48,7 @@ class TempMentorController(
 
     @DeleteMapping("/{id}")
     fun deleteTempMentor(@PathVariable id: Long): ResponseEntity<Void> {
-        deleteTempMentorService.execute(id)
+        deleteTempMentorService.deleteTempMentorExecute(id)
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 
