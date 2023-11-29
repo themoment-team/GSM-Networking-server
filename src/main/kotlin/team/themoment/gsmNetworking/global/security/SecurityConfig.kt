@@ -75,11 +75,13 @@ class SecurityConfig(
             // /tempMentor
             .mvcMatchers(HttpMethod.GET, "api/v1/temp-mentor/search/*").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
-                Authority.TEMP_USER.name
+                Authority.TEMP_USER.name,
+                Authority.ADMIN.name
             )
             .mvcMatchers(HttpMethod.GET, "/api/v1/temp-mentor/**").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
-                Authority.TEMP_USER.name
+                Authority.TEMP_USER.name,
+                Authority.ADMIN.name
             )
             .mvcMatchers(HttpMethod.DELETE, "/api/v1/temp-mentor/*").hasAnyRole(
                 Authority.USER.name
@@ -105,6 +107,9 @@ class SecurityConfig(
                 Authority.UNAUTHENTICATED.name,
                 Authority.TEMP_USER.name,
                 Authority.USER.name,
+                Authority.ADMIN.name
+            )
+            .mvcMatchers(HttpMethod.DELETE, "/api/v1/gwangya/*").hasAnyRole(
                 Authority.ADMIN.name
             )
             .anyRequest().permitAll()

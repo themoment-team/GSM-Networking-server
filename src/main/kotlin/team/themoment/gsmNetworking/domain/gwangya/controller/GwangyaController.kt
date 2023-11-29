@@ -2,7 +2,9 @@ package team.themoment.gsmNetworking.domain.gwangya.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -14,6 +16,7 @@ import team.themoment.gsmNetworking.domain.gwangya.authentication.GwangyaAuthent
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsDto
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsRegistrationDto
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaTokenDto
+import team.themoment.gsmNetworking.domain.gwangya.service.DeleteGwangyaService
 import team.themoment.gsmNetworking.domain.gwangya.service.GenerateGwangyaPostsService
 import team.themoment.gsmNetworking.domain.gwangya.service.QueryGwangyaPostsService
 import team.themoment.gsmNetworking.domain.gwangya.service.QueryGwangyaTokenService
@@ -25,6 +28,7 @@ class GwangyaController(
     private val queryGwangyaTokenService: QueryGwangyaTokenService,
     private val generateGwangyaPostsService: GenerateGwangyaPostsService,
     private val queryGwangyaPostsService: QueryGwangyaPostsService,
+    private val deleteGwangyaService: DeleteGwangyaService,
     private val gwangyaAuthenticationManager: GwangyaAuthenticationManager
 ) {
     @GetMapping("/token")
@@ -56,6 +60,14 @@ class GwangyaController(
         checkGwangyaAuthentication(gwangyaToken)
         generateGwangyaPostsService.execute(gwangyaDto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
+
+    @DeleteMapping("/{gwangyaId}")
+    fun deleteGwangya(
+        @PathVariable gwangyaId: Long
+    ): ResponseEntity<Void> {
+        deleteGwangyaService.execute(gwangyaId)
+        return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 
     private fun checkGwangyaAuthentication(gwangyaToken: String) {
