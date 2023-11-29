@@ -12,15 +12,23 @@ import org.springframework.boot.test.context.SpringBootTest
 import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
+import team.themoment.gsmNetworking.domain.mentor.repository.CareerRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorCustomRepository
+import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
+import team.themoment.gsmNetworking.domain.mentor.repository.TempMentorRepository
+import team.themoment.gsmNetworking.domain.mentor.service.impl.MentorService
+import team.themoment.gsmNetworking.domain.user.service.UserRegistrationService
 
 @SpringBootTest(classes = [QueryAllMentorsService::class])
 class QueryAllMentorsServiceTest : BehaviorSpec({
 
-    val mentorRepository: MentorCustomRepository = mockk()
+    val mentorRepository: MentorRepository = mockk()
     val queryTempMentorListService: QueryTempMentorListService = mockk()
+    val userRegistrationService: UserRegistrationService = mockk()
+    val careerRepository: CareerRepository = mockk()
+    val tempMentorRepository: TempMentorRepository = mockk()
 
-    val queryAllMentorsService = QueryAllMentorsService(mentorRepository, queryTempMentorListService)
+    val mentorService = MentorService(userRegistrationService, mentorRepository, careerRepository, tempMentorRepository, queryTempMentorListService)
 
     //TODO 더미데이터가 코드를 너무 많이 차지하는데...
     val dummyMentorInfoDtos = listOf(
@@ -168,7 +176,7 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
         val sortedMentorIds = listOf(1, 2, 3, 4, 5, 6, 7, 8)
 
         `when`("조회 요청 메서드 실행 시") {
-            val allMentors = queryAllMentorsService.execute()
+            val allMentors = mentorService.queryAllMentorsExecute()
 
             then("블루체크 된 멘토, 임시 멘토가 결과로 반환되어야 한다") {
                 val blueCheckedUsers = allMentors.filter { it.registered }
@@ -209,7 +217,7 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
         every { queryTempMentorListService.execute() } returns listOf(sameUserTempMentor)
 
         `when`("조회 요청 메서드 실행 시") {
-            val allMentors = queryAllMentorsService.execute()
+            val allMentors = mentorService.queryAllMentorsExecute()
 
             then("임시 사용자와 블루체크 된 사용자 정보가 중복된다면, 블루체크 된 사용자만 반환") {
                 val blueCheckedUsers = allMentors.filter { it.registered }
