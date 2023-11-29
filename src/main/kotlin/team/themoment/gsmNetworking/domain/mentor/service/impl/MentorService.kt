@@ -23,7 +23,7 @@ class MentorService(
     private val careerRepository: CareerRepository,
     private val tempMentorRepository: TempMentorRepository,
     private val queryTempMentorLIstService: QueryTempMentorListService
-) : DeleteTempMentorService, MentorRegistrationService, QueryAllMentorService {
+) : DeleteTempMentorService, MentorRegistrationService, QueryAllMentorsService {
 
     override fun deleteTempMentorExecute(id: Long) {
         val tempMentor = tempMentorRepository.findByIdOrNull(id)
@@ -57,7 +57,7 @@ class MentorService(
         careerRepository.saveAll(careerList)
     }
 
-    override fun queryAllMentorExecute(): List<MentorInfoDto> {
+    override fun queryAllMentorsExecute(): List<MentorInfoDto> {
         val allMentors =
             (mentorRepository.findAllMentorInfoDto() + queryTempMentorLIstService.execute()
                 .map(TempMentorInfoDto::toMentorInfoDto))
