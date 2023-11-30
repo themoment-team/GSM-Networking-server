@@ -1,7 +1,10 @@
 package team.themoment.gsmNetworking.domain.gwangya.service
 
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.gwangya.repository.GwangyaRepository
 
 @Service
@@ -11,6 +14,8 @@ class DeleteGwangyaService(
 ) {
 
     fun execute(gwangyaId: Long) {
-        gwangyaRepository.deleteById(gwangyaId)
+        val gwangya = gwangyaRepository.findByIdOrNull(gwangyaId)
+            ?: throw ExpectedException("광야 게시물을 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+        gwangyaRepository.delete(gwangya)
     }
 }
