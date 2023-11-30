@@ -15,7 +15,7 @@ class DeleteGwangyaService(
 
     fun execute(gwangyaId: Long) {
         val gwangya = gwangyaRepository.findByIdOrNull(gwangyaId)
-            ?: throw ExpectedException("광야 게시물을 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+            ?: throw ExpectedException("광야 게시물을 찾을 수 없습니다. 요청한 gwnagyaId: $gwangyaId", HttpStatus.NOT_FOUND)
         gwangyaRepository.delete(gwangya)
     }
 }
