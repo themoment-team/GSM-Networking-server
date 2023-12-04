@@ -100,3 +100,8 @@ gwangya:
   token:
     token-exp: ${GWANGYA_TOKEN_EXPIRED}
     token-renewal-time: ${GWANGYA_TOKEN_RENEWAL_TIME}
+
+gsm:
+  student:
+    account:
+      otherwise-redirect: ${REDIRECT_FOR_NON_GSM_STUDENT_ACCOUNT}
