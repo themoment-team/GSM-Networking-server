@@ -1,0 +1,102 @@
+server:
+  shutdown: graceful
+
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  cookie:
+    domain: ${GSM_NETWORKING_DOMAIN}
+    secure: ${COOKIE_SECURE}
+
+spring:
+
+  datasource:
+    driver-class-name: ${DB_CLASS_NAME}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    database-platform: ${DB_PLATFORM}
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO}
+
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: ${GOOGLE_REDIRECT_URI}
+            scope: ${GOOGLE_SCOPE}
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+        bucket-name: ${AWS_BUCKET_NAME}
+        image-bucket-domain: ${IMAGE_BUCKET_DOMAIN}
+      region:
+        static: ${AWS_REGION}
+      stack:
+        auto: false
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+encrypt:
+  secret-key: ${ENCRYPT_SECRET_KEY}
+
+jwt:
+  access-secret: ${JWT_ACCESS_SECRET}
+  refresh-secret: ${JWT_REFRESH_SECRET}
+  time:
+    access-exp: ${JWT_ACCESS_EXPIRED}
+    refresh-exp: ${JWT_REFRESH_EXPIRED}
+
+oauth2:
+  login:
+    success:
+      sign-up-redirect-url: ${OAUTH2_SIGN_UP_REDIRECT_URI}
+      default-redirect-url: ${OAUTH2_DEFAULT_SUCCESS_REDIRECT_URI}
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: ${ACTUATOR_BASE_PATH}
+      exposure:
+        include: health
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  health:
+    diskspace:
+      enabled: false
+    ping:
+      enabled: false
+  server:
+    port: ${ACTUATOR_SERVER_PORT}
+
+gwangya:
+  token:
+    token-exp: ${GWANGYA_TOKEN_EXPIRED}
+    token-renewal-time: ${GWANGYA_TOKEN_RENEWAL_TIME}

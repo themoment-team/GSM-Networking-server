@@ -1,0 +1,106 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  cookie:
+    domain: localhost
+    secure: false
+
+spring:
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/gsm_networking
+    username: root
+    password: ${DB_LOCAL_PASSWORD}
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  redis:
+    host: localhost
+    port: 6379
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            scope: profile,email
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+        bucket-name: ${AWS_BUCKET_NAME}
+        image-bucket-domain: ${IMAGE_BUCKET_DOMAIN}
+      region:
+        static: ${AWS_REGION}
+      stack:
+        auto: false
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+encrypt:
+  secret-key: test_encrypt_gsm_networking12345
+
+jwt:
+  access-secret: ${JWT_ACCESS_SECRET}
+  refresh-secret: ${JWT_REFRESH_SECRET}
+  time:
+    access-exp: 10800
+    refresh-exp: 2592000
+
+oauth2:
+  login:
+    success:
+      sign-up-redirect-url: http://localhost:8080/signup
+      default-redirect-url: http://localhost:8080/
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: ${ACTUATOR_BASE_PATH}
+      exposure:
+        include: health
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  health:
+    diskspace:
+      enabled: false
+    ping:
+      enabled: false
+  server:
+    port: ${ACTUATOR_SERVER_PORT}
+
+gwangya:
+  token:
+    token-exp: 600
+    token-renewal-time: 600000
