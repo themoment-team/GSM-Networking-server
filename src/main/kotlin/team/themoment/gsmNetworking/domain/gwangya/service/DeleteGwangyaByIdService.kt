@@ -9,7 +9,7 @@ import team.themoment.gsmNetworking.domain.gwangya.repository.GwangyaRepository
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
-class DeleteGwangyaService(
+class DeleteGwangyaByIdService(
     private val gwangyaRepository: GwangyaRepository
 ) {
 

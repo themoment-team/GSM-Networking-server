@@ -16,7 +16,7 @@ import team.themoment.gsmNetworking.domain.gwangya.authentication.GwangyaAuthent
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsDto
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsRegistrationDto
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaTokenDto
-import team.themoment.gsmNetworking.domain.gwangya.service.DeleteGwangyaService
+import team.themoment.gsmNetworking.domain.gwangya.service.DeleteGwangyaByIdService
 import team.themoment.gsmNetworking.domain.gwangya.service.GenerateGwangyaPostsService
 import team.themoment.gsmNetworking.domain.gwangya.service.QueryGwangyaPostsService
 import team.themoment.gsmNetworking.domain.gwangya.service.QueryGwangyaTokenService
@@ -28,7 +28,7 @@ class GwangyaController(
     private val queryGwangyaTokenService: QueryGwangyaTokenService,
     private val generateGwangyaPostsService: GenerateGwangyaPostsService,
     private val queryGwangyaPostsService: QueryGwangyaPostsService,
-    private val deleteGwangyaService: DeleteGwangyaService,
+    private val deleteGwangyaByIdService: DeleteGwangyaByIdService,
     private val gwangyaAuthenticationManager: GwangyaAuthenticationManager
 ) {
     @GetMapping("/token")
@@ -66,7 +66,7 @@ class GwangyaController(
     fun deleteGwangya(
         @PathVariable gwangyaId: Long
     ): ResponseEntity<Void> {
-        deleteGwangyaService.execute(gwangyaId)
+        deleteGwangyaByIdService.execute(gwangyaId)
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 
