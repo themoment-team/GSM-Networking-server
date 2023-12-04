@@ -52,10 +52,10 @@ class GwangyaController(
     fun generateGwangya(
         @RequestHeader("gwangyaToken") gwangyaToken: String,
         @Valid @RequestBody gwangyaDto: GwangyaPostsRegistrationDto
-    ): ResponseEntity<Void> {
+    ): ResponseEntity<GwangyaPostsDto> {
         checkGwangyaAuthentication(gwangyaToken)
-        generateGwangyaPostsService.execute(gwangyaDto)
-        return ResponseEntity.status(HttpStatus.CREATED).build()
+        val gwangyaPost = generateGwangyaPostsService.execute(gwangyaDto)
+        return ResponseEntity.status(HttpStatus.CREATED).body(gwangyaPost)
     }
 
     private fun checkGwangyaAuthentication(gwangyaToken: String) {
