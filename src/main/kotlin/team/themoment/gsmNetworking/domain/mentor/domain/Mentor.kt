@@ -10,12 +10,10 @@ import javax.persistence.*
 @Entity
 @Table(name = "mentor")
 class Mentor(
-    override val id: Long = 0,
-
     @Column(nullable = false, name = "registered")
     val registered: Boolean,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User
-) : BaseEntity(id)
+) : BaseEntity()

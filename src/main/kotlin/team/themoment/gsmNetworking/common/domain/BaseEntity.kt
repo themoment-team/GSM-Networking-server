@@ -3,8 +3,8 @@ package team.themoment.gsmNetworking.common.domain
 import javax.persistence.*
 
 @MappedSuperclass
-abstract class BaseEntity(
+abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long
-)
+    val id: Long = 0
+}

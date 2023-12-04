@@ -5,9 +5,7 @@ import javax.persistence.Column
 import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
-abstract class BaseTimeEntity(
-    override val id: Long,
-
+abstract class BaseTimeEntity : BaseEntity() {
     @Column(name = "created_at", nullable = false, updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now()
-) : BaseEntity(id)
+}

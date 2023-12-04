@@ -33,4 +33,4 @@ class User(
 
     @Column(nullable = true)
     val profileUrl: String?
-) : BaseEntity(id)
+) : BaseEntity()

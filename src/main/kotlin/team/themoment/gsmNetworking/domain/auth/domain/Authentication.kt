@@ -18,4 +18,4 @@ class Authentication(
 
     @Enumerated(EnumType.STRING)
     val authority: Authority
-) : BaseEntity(id)
+) : BaseEntity()

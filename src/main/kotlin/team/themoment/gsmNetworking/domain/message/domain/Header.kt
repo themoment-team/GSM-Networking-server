@@ -14,7 +14,7 @@ import javax.persistence.*
 // Header는 Message에 의존적임.
 // Message의 빠른 조회를 위해 비정규화 된 값 값이라고 봐도 됨
 class Header private constructor(
-    override val id: Long = 0,
+    override val id: Long,
 
     @Column(name = "user1_id", nullable = false)
     val user1Id: Long,
@@ -24,7 +24,7 @@ class Header private constructor(
 
     @Column(name = "recent_message_id", columnDefinition = "BINARY(16)", unique = true, nullable = false)
     val recentMessageId: UUID
-) : BaseEntity(id) {
+) : BaseEntity() {
     init {
         require(user1Id != user2Id) { "user1Id and user2Id must be different" }
         require(user1Id < user2Id) { "user1Id must be smaller than user2Id" }
