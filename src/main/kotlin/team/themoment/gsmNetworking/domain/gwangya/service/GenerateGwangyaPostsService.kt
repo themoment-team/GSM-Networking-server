@@ -22,7 +22,7 @@ class GenerateGwangyaPostsService(
         val savedGwangyaPost = gwangyaRepository.save(gwangyaPosts)
 
         return GwangyaPostsDto(
-            savedGwangyaPost.gwangyaId,
+            savedGwangyaPost.id,
             savedGwangyaPost.content,
             savedGwangyaPost.createdAt
         )
