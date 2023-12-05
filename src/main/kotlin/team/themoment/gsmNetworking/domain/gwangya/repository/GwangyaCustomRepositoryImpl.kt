@@ -4,17 +4,17 @@ import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import team.themoment.gsmNetworking.domain.gwangya.domain.QGwangya.gwangya
-import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsDto
+import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostDto
 
 class GwangyaCustomRepositoryImpl(
     private val queryFactory: JPAQueryFactory
 ) : GwangyaCustomRepository {
 
-    override fun findPagebyCursorId(cursorId: Long, pageSize: Long): List<GwangyaPostsDto> {
+    override fun findPagebyCursorId(cursorId: Long, pageSize: Long): List<GwangyaPostDto> {
         return queryFactory
             .select(
                 Projections.constructor(
-                    GwangyaPostsDto::class.java,
+                    GwangyaPostDto::class.java,
                     gwangya.id,
                     gwangya.content,
                     gwangya.createdAt
@@ -32,11 +32,11 @@ class GwangyaCustomRepositoryImpl(
     private fun ltCursorId(cursorId: Long): BooleanExpression =
         gwangya.id.lt(cursorId)
 
-    override fun findPageWithRecentPosts(pageSize: Long): List<GwangyaPostsDto> {
+    override fun findPageWithRecentPosts(pageSize: Long): List<GwangyaPostDto> {
         return queryFactory
             .select(
                 Projections.constructor(
-                    GwangyaPostsDto::class.java,
+                    GwangyaPostDto::class.java,
                     gwangya.id,
                     gwangya.content,
                     gwangya.createdAt

@@ -3,25 +3,25 @@ package team.themoment.gsmNetworking.domain.gwangya.service
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.domain.gwangya.domain.Gwangya
-import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsDto
-import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsRegistrationDto
+import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostDto
+import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostRegistrationDto
 import team.themoment.gsmNetworking.domain.gwangya.repository.GwangyaRepository
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
-class GenerateGwangyaPostsService(
+class GenerateGwangyaPostService(
     private val gwangyaRepository: GwangyaRepository
 ) {
 
-    fun execute(gwangyaPostsDto: GwangyaPostsRegistrationDto): GwangyaPostsDto {
+    fun execute(gwangyaPostDto: GwangyaPostRegistrationDto): GwangyaPostDto {
 
-        val gwangyaPosts = Gwangya(
-            content = gwangyaPostsDto.content
+        val gwangyaPost = Gwangya(
+            content = gwangyaPostDto.content,
         )
 
-        val savedGwangyaPost = gwangyaRepository.save(gwangyaPosts)
+        val savedGwangyaPost = gwangyaRepository.save(gwangyaPost)
 
-        return GwangyaPostsDto(
+        return GwangyaPostDto(
             savedGwangyaPost.id,
             savedGwangyaPost.content,
             savedGwangyaPost.createdAt
