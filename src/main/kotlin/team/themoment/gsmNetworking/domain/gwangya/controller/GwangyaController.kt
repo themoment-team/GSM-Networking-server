@@ -54,8 +54,8 @@ class GwangyaController(
         @Valid @RequestBody gwangyaDto: GwangyaPostsRegistrationDto
     ): ResponseEntity<GwangyaPostsDto> {
         checkGwangyaAuthentication(gwangyaToken)
-        val gwangyaPost = generateGwangyaPostsService.execute(gwangyaDto)
-        return ResponseEntity.status(HttpStatus.CREATED).body(gwangyaPost)
+        val savedGwangyaPost = generateGwangyaPostsService.execute(gwangyaDto)
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedGwangyaPost)
     }
 
     private fun checkGwangyaAuthentication(gwangyaToken: String) {
