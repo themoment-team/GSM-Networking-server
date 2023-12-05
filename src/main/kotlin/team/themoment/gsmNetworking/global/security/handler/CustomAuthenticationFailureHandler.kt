@@ -33,7 +33,7 @@ class CustomAuthenticationFailureHandler(
         response: HttpServletResponse,
     ) {
         if (exception.error.errorCode == "NOT_STUDENT_ACCOUNT") {
-            log.warn("Oauth2AuthenticationException error code: ${exception.message}")
+            log.warn("Oauth2AuthenticationException message: ${exception.message}")
             response.sendRedirect(redirectUriForNonGSMStudentAccount)
         }
     }
