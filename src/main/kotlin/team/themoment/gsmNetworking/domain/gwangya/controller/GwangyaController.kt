@@ -58,8 +58,8 @@ class GwangyaController(
         @Valid @RequestBody gwangyaDto: GwangyaPostRegistrationDto
     ): ResponseEntity<GwangyaPostDto> {
         checkGwangyaAuthentication(gwangyaToken)
-        val gwangyaPost = generateGwangyaPostService.execute(gwangyaDto)
-        return ResponseEntity.status(HttpStatus.CREATED).body(gwangyaPost)
+        val savedGwangyaPost = generateGwangyaPostService.execute(gwangyaDto)
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedGwangyaPost)
     }
 
     @DeleteMapping("/{gwangyaId}")
