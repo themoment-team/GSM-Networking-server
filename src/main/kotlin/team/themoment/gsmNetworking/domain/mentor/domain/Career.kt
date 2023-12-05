@@ -1,6 +1,6 @@
 package team.themoment.gsmNetworking.domain.mentor.domain
 
-import team.themoment.gsmNetworking.common.domain.BaseEntity
+import team.themoment.gsmNetworking.common.domain.BaseIdEntity
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -31,4 +31,4 @@ class Career(
 
     @Column(nullable = false)
     val isWorking: Boolean
-) : BaseEntity()
+) : BaseIdEntity()

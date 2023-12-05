@@ -1,6 +1,6 @@
 package team.themoment.gsmNetworking.domain.message.domain
 
-import team.themoment.gsmNetworking.common.domain.BaseEntity
+import team.themoment.gsmNetworking.common.domain.BaseIdEntity
 import javax.persistence.*
 
 @Entity
@@ -17,7 +17,7 @@ class UserMessageInfo(
 
     @Column(name = "last_viewed_time")
     val lastViewedEpochMilli: Long = 0
-) : BaseEntity() {
+) : BaseIdEntity() {
     fun updateLastViewedEpochMilli(newLastViewedEpochMilli: Long): UserMessageInfo {
         return UserMessageInfo(
             userId = this.userId,

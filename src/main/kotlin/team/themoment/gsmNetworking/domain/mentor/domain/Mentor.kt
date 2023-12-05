@@ -1,6 +1,6 @@
 package team.themoment.gsmNetworking.domain.mentor.domain
 
-import team.themoment.gsmNetworking.common.domain.BaseEntity
+import team.themoment.gsmNetworking.common.domain.BaseIdEntity
 import team.themoment.gsmNetworking.domain.user.domain.User
 import javax.persistence.*
 
@@ -16,4 +16,4 @@ class Mentor(
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User
-) : BaseEntity()
+) : BaseIdEntity()
