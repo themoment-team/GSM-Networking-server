@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException
 import org.springframework.security.oauth2.core.OAuth2Error
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
+import team.themoment.gsmNetworking.global.security.handler.CustomAuthenticationFailureHandler
 import java.time.LocalDateTime
 
 @Service
@@ -41,6 +42,12 @@ class CustomOauth2UserService(
         return UserInfo(authorities, attributes, userNameAttributeName)
     }
 
+    /**
+     * 이메일이 정규식 조건에 부합하는지 확인하는 메서드입니다.
+     *
+     * @param email 사용자의 이메일
+     * @see CustomAuthenticationFailureHandler.oauth2AuthenticationExceptionHandler
+     */
     private fun validateEmailDomain(email: String): String {
         val regex = Regex("^[A-Za-z0-9._%+-]+@gsm\\.hs\\.kr$")
         if (!regex.matches(email)) {

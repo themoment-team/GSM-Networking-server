@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.stereotype.Component
 import team.themoment.gsmNetworking.global.filter.LoggingFilter
+import team.themoment.gsmNetworking.global.security.oauth.CustomOauth2UserService
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -18,6 +19,13 @@ class CustomAuthenticationFailureHandler(
     private val redirectUriForNonGSMStudentAccount: String,
 ) : AuthenticationFailureHandler {
 
+    /**
+     * 인증 과정에서 발생한 예외를 핸들링합니다.
+     *
+     * @param request 요청 받은 servletRequest
+     * @param response 응답할 servletResponse
+     * @param exception 인증 과정에서 발생한 예외
+     */
     override fun onAuthenticationFailure(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -28,6 +36,14 @@ class CustomAuthenticationFailureHandler(
         }
     }
 
+    /**
+     * oauth2AuthenticationException을 핸들링합니다.
+     *
+     * @param exception oauth2 인증 과정에서 발생한 예외
+     * @param response 응답할 servletResponse
+     *
+     * @see CustomOauth2UserService.validateEmailDomain
+     */
     private fun oauth2AuthenticationExceptionHandler(
         exception: OAuth2AuthenticationException,
         response: HttpServletResponse,
