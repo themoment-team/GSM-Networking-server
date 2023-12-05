@@ -10,13 +10,14 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException
+import org.springframework.security.oauth2.core.OAuth2Error
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
 class CustomOauth2UserService(
-    private val authenticationRepository: AuthenticationRepository
+    private val authenticationRepository: AuthenticationRepository,
 ) : OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
@@ -43,7 +44,12 @@ class CustomOauth2UserService(
     private fun validateEmailDomain(email: String): String {
         val regex = Regex("^[A-Za-z0-9._%+-]+@gsm\\.hs\\.kr$")
         if (!regex.matches(email)) {
-            throw OAuth2AuthenticationException("요청한 이메일이 GSM 학생용 이메일이 아닙니다.")
+            throw OAuth2AuthenticationException(
+                OAuth2Error(
+                    "NOT_STUDENT_ACCOUNT",
+                ),
+                "요청한 이메일이 GSM 학생용 이메일이 아닙니다."
+            )
         }
         return email
     }
