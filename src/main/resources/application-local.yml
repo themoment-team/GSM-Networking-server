@@ -104,3 +104,8 @@ gwangya:
   token:
     token-exp: 600
     token-renewal-time: 600000
+
+gsm:
+  student:
+    account:
+      otherwise-redirect: http://localhost:8080/signup

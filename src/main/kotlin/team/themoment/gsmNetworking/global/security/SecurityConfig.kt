@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
 import org.springframework.web.cors.CorsConfiguration
@@ -29,6 +30,7 @@ class SecurityConfig(
     private val customOauth2UserService: CustomOauth2UserService,
     private val logoutSuccessHandler: LogoutSuccessHandler,
     private val authenticationSuccessHandler: AuthenticationSuccessHandler,
+    private val authenticationFailureHandler: AuthenticationFailureHandler,
     private val tokenRequestFilter: TokenRequestFilter,
     private val exceptionHandlerFilter: ExceptionHandlerFilter,
     private val loggingFilter: LoggingFilter,
@@ -75,11 +77,13 @@ class SecurityConfig(
             // /tempMentor
             .mvcMatchers(HttpMethod.GET, "api/v1/temp-mentor/search/*").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
-                Authority.TEMP_USER.name
+                Authority.TEMP_USER.name,
+                Authority.ADMIN.name
             )
             .mvcMatchers(HttpMethod.GET, "/api/v1/temp-mentor/**").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
-                Authority.TEMP_USER.name
+                Authority.TEMP_USER.name,
+                Authority.ADMIN.name
             )
             .mvcMatchers(HttpMethod.DELETE, "/api/v1/temp-mentor/*").hasAnyRole(
                 Authority.USER.name
@@ -107,6 +111,9 @@ class SecurityConfig(
                 Authority.USER.name,
                 Authority.ADMIN.name
             )
+            .mvcMatchers(HttpMethod.DELETE, "/api/v1/gwangya/*").hasAnyRole(
+                Authority.ADMIN.name
+            )
             .anyRequest().permitAll()
     }
 
@@ -123,6 +130,7 @@ class SecurityConfig(
             .and()
             .authorizationEndpoint().baseUri(Oauth2Properties.OAUTH2_LOGIN_END_POINT_BASE_URI).and()
             .successHandler(authenticationSuccessHandler)
+            .failureHandler(authenticationFailureHandler)
     }
 
     private fun logout(http: HttpSecurity) {

@@ -2,7 +2,9 @@ package team.themoment.gsmNetworking.domain.gwangya.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -14,6 +16,7 @@ import team.themoment.gsmNetworking.domain.gwangya.authentication.GwangyaAuthent
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsDto
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsRegistrationDto
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaTokenDto
+import team.themoment.gsmNetworking.domain.gwangya.service.DeleteGwangyaByIdService
 import team.themoment.gsmNetworking.domain.gwangya.service.GenerateGwangyaPostsService
 import team.themoment.gsmNetworking.domain.gwangya.service.QueryGwangyaPostsService
 import team.themoment.gsmNetworking.domain.gwangya.service.QueryGwangyaTokenService
@@ -25,6 +28,7 @@ class GwangyaController(
     private val queryGwangyaTokenService: QueryGwangyaTokenService,
     private val generateGwangyaPostsService: GenerateGwangyaPostsService,
     private val queryGwangyaPostsService: QueryGwangyaPostsService,
+    private val deleteGwangyaByIdService: DeleteGwangyaByIdService,
     private val gwangyaAuthenticationManager: GwangyaAuthenticationManager
 ) {
     @GetMapping("/token")
@@ -37,12 +41,12 @@ class GwangyaController(
     fun queryGwangya(
         @RequestHeader("gwangyaToken") gwangyaToken: String,
         @RequestParam("gwangyaId") cursorId: Long,
-        @RequestParam pageSize: Int
+        @RequestParam pageSize: Long
     ): ResponseEntity<List<GwangyaPostsDto>> {
         checkGwangyaAuthentication(gwangyaToken)
-        if (pageSize < 0 || cursorId < 0)
+        if (pageSize < 0L || cursorId < 0L)
             throw ExpectedException("0이상부터 가능합니다.", HttpStatus.BAD_REQUEST)
-        else if (pageSize > 20)
+        else if (pageSize > 20L)
             throw ExpectedException("페이지 크기는 20이하까지 가능합니다.", HttpStatus.BAD_REQUEST)
         val gwangyaPosts = queryGwangyaPostsService.execute(cursorId, pageSize)
         return ResponseEntity.ok(gwangyaPosts)
@@ -52,10 +56,18 @@ class GwangyaController(
     fun generateGwangya(
         @RequestHeader("gwangyaToken") gwangyaToken: String,
         @Valid @RequestBody gwangyaDto: GwangyaPostsRegistrationDto
-    ): ResponseEntity<Void> {
+    ): ResponseEntity<GwangyaPostsDto> {
         checkGwangyaAuthentication(gwangyaToken)
-        generateGwangyaPostsService.execute(gwangyaDto)
-        return ResponseEntity.status(HttpStatus.CREATED).build()
+        val gwangyaPost = generateGwangyaPostsService.execute(gwangyaDto)
+        return ResponseEntity.status(HttpStatus.CREATED).body(gwangyaPost)
+    }
+
+    @DeleteMapping("/{gwangyaId}")
+    fun deleteGwangya(
+        @PathVariable gwangyaId: Long
+    ): ResponseEntity<Void> {
+        deleteGwangyaByIdService.execute(gwangyaId)
+        return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 
     private fun checkGwangyaAuthentication(gwangyaToken: String) {

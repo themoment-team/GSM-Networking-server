@@ -10,25 +10,41 @@ class GwangyaCustomRepositoryImpl(
     private val queryFactory: JPAQueryFactory
 ) : GwangyaCustomRepository {
 
-    override fun findPagebyCursorId(cursorId: Long, pageSize: Int): List<GwangyaPostsDto> {
+    override fun findPagebyCursorId(cursorId: Long, pageSize: Long): List<GwangyaPostsDto> {
         return queryFactory
             .select(
                 Projections.constructor(
                     GwangyaPostsDto::class.java,
-                    gwangya.id,
+                    gwangya.gwangyaId,
                     gwangya.content,
                     gwangya.createdAt
                 )
             )
             .from(gwangya)
             .where(
-                gtCursorId(cursorId),
+                ltCursorId(cursorId),
             )
-            .orderBy(gwangya.id.asc())
-            .limit(pageSize.toLong())
-            .fetch();
+            .orderBy(gwangya.gwangyaId.desc())
+            .limit(pageSize)
+            .fetch().reversed()
     }
 
-    private fun gtCursorId(cursorId: Long): BooleanExpression =
-        gwangya.id.gt(cursorId)
+    private fun ltCursorId(cursorId: Long): BooleanExpression =
+        gwangya.gwangyaId.lt(cursorId)
+
+    override fun findPageWithRecentPosts(pageSize: Long): List<GwangyaPostsDto> {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    GwangyaPostsDto::class.java,
+                    gwangya.gwangyaId,
+                    gwangya.content,
+                    gwangya.createdAt
+                )
+            )
+            .from(gwangya)
+            .orderBy(gwangya.gwangyaId.desc())
+            .limit(pageSize)
+            .fetch().reversed()
+    }
 }
