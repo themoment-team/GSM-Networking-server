@@ -17,7 +17,6 @@ abstract class BaseTimestampEntity {
     )
     val createdAt: LocalDateTime = LocalDateTime.now()
 
-    @LastModifiedDate
     @Column(
         name = "updated_at",
         nullable = false,
