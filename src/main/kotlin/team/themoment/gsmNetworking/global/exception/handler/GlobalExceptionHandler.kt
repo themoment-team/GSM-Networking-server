@@ -46,7 +46,7 @@ class GlobalExceptionHandler {
         log.error("UnExpectedException Details : $e")
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ExceptionResponse(message = "예외처리 되지 않은 에러가 발생하였습니다."))
+            .body(ExceptionResponse(message = "알 수 없는 문제가 발생하였습니다."))
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException::class)
