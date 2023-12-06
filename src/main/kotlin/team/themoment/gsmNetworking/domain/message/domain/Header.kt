@@ -1,6 +1,7 @@
 package team.themoment.gsmNetworking.domain.message.domain
 
 import team.themoment.gsmNetworking.common.domain.BaseIdEntity
+import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import java.util.UUID
 import javax.persistence.*
 
@@ -24,7 +25,7 @@ class Header private constructor(
 
     @Column(name = "recent_message_id", columnDefinition = "BINARY(16)", unique = true, nullable = false)
     val recentMessageId: UUID
-) : BaseIdEntity() {
+) : BaseIdTimestampEntity() {
     init {
         require(user1Id != user2Id) { "user1Id and user2Id must be different" }
         require(user1Id < user2Id) { "user1Id must be smaller than user2Id" }

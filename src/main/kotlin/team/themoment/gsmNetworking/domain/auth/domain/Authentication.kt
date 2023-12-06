@@ -1,6 +1,6 @@
 package team.themoment.gsmNetworking.domain.auth.domain
 
-import team.themoment.gsmNetworking.common.domain.BaseIdEntity
+import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import javax.persistence.*
 
 /**
@@ -18,4 +18,4 @@ class Authentication(
 
     @Enumerated(EnumType.STRING)
     val authority: Authority
-) : BaseIdEntity()
+) : BaseIdTimestampEntity()

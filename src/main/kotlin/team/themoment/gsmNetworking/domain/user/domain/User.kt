@@ -1,6 +1,6 @@
 package team.themoment.gsmNetworking.domain.user.domain
 
-import team.themoment.gsmNetworking.common.domain.BaseIdEntity
+import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import team.themoment.gsmNetworking.domain.user.converter.EncryptConverter
 import javax.persistence.*
 
@@ -33,4 +33,4 @@ class User(
 
     @Column(nullable = true)
     val profileUrl: String?
-) : BaseIdEntity()
+) : BaseIdTimestampEntity()

@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
-abstract class BaseIdTimestampEntity : BaseIdEntity() {
+abstract class BaseTimestampEntity {
     @Column(
         name = "created_at",
         nullable = false,
