@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 import org.springframework.web.multipart.MaxUploadSizeExceededException
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.common.exception.model.ExceptionResponse
@@ -65,6 +66,15 @@ class GlobalExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(ExceptionResponse(message = methodArgumentNotValidExceptionToJson(e)))
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    fun methodArgumentTypeMismatchExceptionHandler(e: MethodArgumentTypeMismatchException): ResponseEntity<ExceptionResponse> {
+        log.warn("MethodArgumentTypeMismatchException : ${e.message}")
+        log.trace("MethodArgumentTypeMismatchException Details : $e")
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ExceptionResponse(message = "잘못된 타입의 인자로 요청을 하였습니다."))
     }
 
     private fun methodArgumentNotValidExceptionToJson(e: MethodArgumentNotValidException): String {
