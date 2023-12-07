@@ -35,7 +35,7 @@ class CustomLogoutSuccessHandler(
         response: HttpServletResponse,
         authentication: Authentication?,
     ) {
-        response.status = HttpServletResponse.SC_RESET_CONTENT
+        response.status = HttpServletResponse.SC_NO_CONTENT
         response.sendRedirect(oauth2Properties.defaultRedirectUrl)
     }
 
