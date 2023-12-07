@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.security.web.authentication.logout.LogoutHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
@@ -28,6 +29,7 @@ import team.themoment.gsmNetworking.global.security.jwt.properties.JwtProperties
 @EnableWebSecurity
 class SecurityConfig(
     private val customOauth2UserService: CustomOauth2UserService,
+    private val logoutHandler: LogoutHandler,
     private val logoutSuccessHandler: LogoutSuccessHandler,
     private val authenticationSuccessHandler: AuthenticationSuccessHandler,
     private val authenticationFailureHandler: AuthenticationFailureHandler,
@@ -136,6 +138,7 @@ class SecurityConfig(
     private fun logout(http: HttpSecurity) {
         http.logout()
             .logoutUrl(Oauth2Properties.LOGOUT_URI)
+            .addLogoutHandler(logoutHandler)
             .logoutSuccessHandler(logoutSuccessHandler)
             .deleteCookies(JwtProperties.ACCESS, JwtProperties.REFRESH)
     }
