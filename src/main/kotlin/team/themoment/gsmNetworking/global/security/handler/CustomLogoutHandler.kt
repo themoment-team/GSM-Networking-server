@@ -24,7 +24,7 @@ class CustomLogoutHandler(
     ) {
         if (authentication != null) {
             val refreshToken = refreshTokenRepository.findByIdOrNull(authentication.name)
-                ?: throw ExpectedException("존재하지 않는 refresh token 입니다.", HttpStatus.NOT_FOUND)
+                ?: throw ExpectedException("${authentication.name}로/으로 refreshToken을 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
             refreshTokenRepository.delete(refreshToken)
         } else {
             response.sendRedirect(oauth2Properties.defaultRedirectUrl)
