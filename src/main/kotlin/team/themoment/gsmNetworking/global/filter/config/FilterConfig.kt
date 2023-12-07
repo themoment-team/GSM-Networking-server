@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.authentication.logout.LogoutFilter
 import org.springframework.stereotype.Component
 import team.themoment.gsmNetworking.global.filter.ExceptionHandlerFilter
 import team.themoment.gsmNetworking.global.filter.LoggingFilter
@@ -19,8 +20,10 @@ class FilterConfig(
 
     override fun configure(builder: HttpSecurity) {
         builder.addFilterBefore(tokenRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
+        builder.addFilterBefore(tokenRequestFilter, LogoutFilter::class.java)
         builder.addFilterBefore(exceptionHandlerFilter, OAuth2LoginAuthenticationFilter::class.java)
         builder.addFilterBefore(exceptionHandlerFilter, TokenRequestFilter::class.java)
+        builder.addFilterBefore(exceptionHandlerFilter, LogoutFilter::class.java)
         builder.addFilterBefore(loggingFilter, ExceptionHandlerFilter::class.java)
     }
 
