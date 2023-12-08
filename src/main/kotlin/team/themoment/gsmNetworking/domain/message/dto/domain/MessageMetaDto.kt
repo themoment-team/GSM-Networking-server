@@ -8,5 +8,5 @@ data class MessageMetaDto(
     val user2Id: Long,
     val messageDirection: Message.MessageDirection,
     val recentMessageId: UUID,
-    val lastViewedChatId: UUID?
+    val lastViewedEpochMilli: Long
 )

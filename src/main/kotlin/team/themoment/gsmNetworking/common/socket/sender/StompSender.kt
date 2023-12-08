@@ -68,6 +68,6 @@ interface StompSender {
      * @return 에러 메시지
      */
     fun createErrorMessage(ex: StompException): StompMessage<StompErrorResponse> =
-        StompMessage(StompErrorResponse(ex.code, ex.message), GlobalMessageCode.ERROR)
+        StompMessage(StompErrorResponse(ex.code, ex.message), GlobalMessageCode.ERROR, StompMessage.MessageType.ERROR)
 
 }

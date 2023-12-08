@@ -5,9 +5,11 @@ import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import team.themoment.gsmNetworking.common.util.UUIDUtils
 import team.themoment.gsmNetworking.domain.message.domain.Header
+import team.themoment.gsmNetworking.domain.message.domain.QHeader
 import team.themoment.gsmNetworking.domain.message.domain.QHeader.header
 import team.themoment.gsmNetworking.domain.message.domain.QMessage.message
 import team.themoment.gsmNetworking.domain.message.domain.QUserMessageInfo.userMessageInfo
+import team.themoment.gsmNetworking.domain.message.domain.UserMessageInfo
 import team.themoment.gsmNetworking.domain.message.dto.domain.MessageMetaDto
 import team.themoment.gsmNetworking.domain.message.dto.domain.MessageDto
 import team.themoment.gsmNetworking.domain.message.enums.QueryDirection
@@ -38,8 +40,8 @@ class MessageCustomRepositoryImpl(
             )
             .innerJoin(userMessageInfo)
             .on(
+                userMessageInfo.header.headerId.eq(header.headerId),
                 userMessageInfo.userId.eq(userId),
-                (userMessageInfo.opponentUserId.`in`(header.user1Id, header.user2Id))
             )
             .orderBy(header.recentMessageId.desc())
             .limit(limit)
@@ -86,6 +88,23 @@ class MessageCustomRepositoryImpl(
                 header.user2Id.eq(user2Id)
             )
             .fetchOne()
+
+    override fun findPairUserMessageInfoBetweenUsers(
+        user1Id: Long,
+        user2Id: Long
+    ): Pair<UserMessageInfo, UserMessageInfo>? {
+        val userMessageInfos = queryFactory
+            .selectFrom(userMessageInfo)
+            .where(
+                userMessageInfo.header.user1Id.eq(user1Id),
+                userMessageInfo.header.user1Id.eq(user2Id)
+            ).orderBy(userMessageInfo.userId.asc())
+            .fetch()
+        if (userMessageInfos.size == 0) return null
+        if (userMessageInfos.size != 2) throw IllegalStateException("서버 에러. 데이터 정합성이 일치하지 않음. 하나의 Header는 2개의 UserMessageInfo를 가져야만 합니다.")
+        // pair 앞이 user1(id가 더 작음), 뒤가 user2(id가 더 큼)
+        return Pair(userMessageInfos[0], userMessageInfos[1])
+    }
 
     private fun recentChatIdLt(time: Instant): BooleanExpression =
         // 입력받은 시간 + 1을 미만 조건으로 검색

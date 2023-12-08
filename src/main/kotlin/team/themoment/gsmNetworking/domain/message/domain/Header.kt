@@ -5,11 +5,7 @@ import javax.persistence.*
 
 
 @Entity
-@Table(
-    name = "header", indexes = [Index(name = "idx_user1_user2", columnList = "user1_id, user2_id", unique = true),
-        Index(name = "idx_user2_time", columnList = "user2_id, recent_message_id desc", unique = true),
-        Index(name = "idx_user1_time", columnList = "user1_id, recent_message_id desc", unique = true)]
-)
+@Table(name = "header", indexes = [Index(name = "idx_user1_user2", columnList = "user1_id, user2_id", unique = true)])
 // Header는 Message에 의존적임.
 // Message의 빠른 조회를 위해 비정규화 된 값 값이라고 봐도 됨
 class Header private constructor(
