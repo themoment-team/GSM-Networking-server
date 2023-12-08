@@ -22,7 +22,7 @@ interface MessageCode {
      * 인자로 제공된 class 지원 여부를 반환합니다.
      *
      * @param clazz
-     * @return 지원한다면 true, 아니라면 false 반환
+     * @return clazz가 class를 지원한다면 true, 아니라면 false 반환
      */
     fun isSupportClass(clazz: Class<out Any>): Boolean
 
