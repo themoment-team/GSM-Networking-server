@@ -49,7 +49,7 @@ class QueryMessageServiceImpl(
                 it.recentMessageId,
                 opponentUserId,
                 UUIDUtils.getInstant(it.recentMessageId),
-                isAllCheckedMessage(it.recentMessageId, it.lastViewedChatId)
+                isCheckedMessage(UUIDUtils.getEpochMilli(it.recentMessageId), it.lastViewedEpochMilli)
             )
         }
     }
@@ -64,10 +64,11 @@ class QueryMessageServiceImpl(
     ): List<MessageRes> {
         val (user1Id, user2Id) = if (user1Id < user2Id) user1Id to user2Id else user2Id to user1Id //TODO 그냥 invalid 예외 던지는게 더 나을듯
 
-        val user1MessageInfo = userMessageInfoRepository.findByUserId(user1Id)
-            ?: throw IllegalArgumentException("$user1Id, $user2Id 사이의 채팅 기록이 없습니다. 사용자 ID: $user1Id")
-        val user2MessageInfo = userMessageInfoRepository.findByUserId(user2Id)
-            ?: throw IllegalArgumentException("$user1Id, $user2Id 사이의 채팅 기록이 없습니다. 사용자 ID: $user2Id")
+        val userMessageInfoPair = messageRepository.findPairUserMessageInfoBetweenUsers(user1Id, user2Id)
+            ?: throw IllegalArgumentException("유효하지 않은 UserId. $user1Id 와 $user2Id 사이의 메시지 정보를 찾을 수 없습니다.")
+
+        val user1MessageInfo = userMessageInfoPair.first
+        val user2MessageInfo = userMessageInfoPair.second
 
         return messageRepository.findMessagesBetweenUsers(user1Id, user2Id, time, limit, direction).map {
             MessageRes(
@@ -82,10 +83,6 @@ class QueryMessageServiceImpl(
             )
         }
     }
-
-
-    private fun isAllCheckedMessage(recentMessageId: UUID, lastViewedChatId: UUID?): Boolean =
-        if (lastViewedChatId == null) false else recentMessageId <= lastViewedChatId
 
     private fun findOtherUserId(myUserId: Long, userId1: Long, userId2: Long): Long =
         when (myUserId) {

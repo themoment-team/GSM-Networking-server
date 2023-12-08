@@ -2,6 +2,7 @@ package team.themoment.gsmNetworking.domain.message.repository
 
 import team.themoment.gsmNetworking.domain.message.domain.Header
 import team.themoment.gsmNetworking.domain.message.domain.Message
+import team.themoment.gsmNetworking.domain.message.domain.UserMessageInfo
 import team.themoment.gsmNetworking.domain.message.dto.domain.MessageMetaDto
 import team.themoment.gsmNetworking.domain.message.dto.domain.MessageDto
 import team.themoment.gsmNetworking.domain.message.enums.QueryDirection
@@ -45,4 +46,5 @@ interface MessageCustomRepository {
      * @return nullable [Message]
      */
     fun findHeaderBetweenUsers(user1Id: Long, user2Id: Long): Header?
+    fun findPairUserMessageInfoBetweenUsers(user1Id: Long, user2Id: Long): Pair<UserMessageInfo, UserMessageInfo>?
 }
