@@ -3,23 +3,25 @@ package team.themoment.gsmNetworking.domain.message.service.impl
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.util.UUIDUtils
-import team.themoment.gsmNetworking.domain.message.dto.domain.HeaderDto
 import team.themoment.gsmNetworking.domain.message.dto.api.res.HeaderRes
 import team.themoment.gsmNetworking.domain.message.dto.api.res.MessageRes
+import team.themoment.gsmNetworking.domain.message.dto.domain.HeaderDto
 import team.themoment.gsmNetworking.domain.message.enums.QueryDirection
 import team.themoment.gsmNetworking.domain.message.repository.MessageRepository
-import team.themoment.gsmNetworking.domain.message.repository.UserMessageInfoRepository
-import team.themoment.gsmNetworking.domain.message.service.QueryMessageService
+import team.themoment.gsmNetworking.domain.message.service.QueryHeaderService
+import team.themoment.gsmNetworking.domain.message.service.QueryHeadersService
+import team.themoment.gsmNetworking.domain.message.service.QueryMessagesService
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import java.time.Instant
-import java.util.UUID
 
+/**
+ * Message 도메인과 관련된 Query Service 인터페이스의 구현체.
+ */
 @Service
 class QueryMessageServiceImpl(
     private val messageRepository: MessageRepository,
-    private val userMessageInfoRepository: UserMessageInfoRepository,
     private val userRepository: UserRepository
-) : QueryMessageService {
+) : QueryHeadersService, QueryHeaderService, QueryMessagesService {
 
     @Transactional(readOnly = true)
     override fun getHeaderByUserIds(user1Id: Long, user2Id: Long): HeaderDto? {
@@ -78,8 +80,14 @@ class QueryMessageServiceImpl(
                 direction = it.direction,
                 content = it.content,
                 messageTime = UUIDUtils.getEpochMilli(it.messageId),
-                isCheckedUser1 = isCheckedMessage(user1MessageInfo.lastViewedEpochMilli, UUIDUtils.getEpochMilli(it.messageId)),
-                isCheckedUser2 = isCheckedMessage(user2MessageInfo.lastViewedEpochMilli, UUIDUtils.getEpochMilli(it.messageId))
+                isCheckedUser1 = isCheckedMessage(
+                    user1MessageInfo.lastViewedEpochMilli,
+                    UUIDUtils.getEpochMilli(it.messageId)
+                ),
+                isCheckedUser2 = isCheckedMessage(
+                    user2MessageInfo.lastViewedEpochMilli,
+                    UUIDUtils.getEpochMilli(it.messageId)
+                )
             )
         }
     }
