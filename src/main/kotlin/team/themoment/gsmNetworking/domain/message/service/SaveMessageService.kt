@@ -14,5 +14,5 @@ interface SaveMessageService {
      * @param message 저장하려는 메시지
      * @return [MessageDto]
      */
-    fun execute(toUserId: Long, fromUserId: Long, message: String): MessageDto
+    fun saveMessage(toUserId: Long, fromUserId: Long, message: String): MessageDto
 }

@@ -15,5 +15,5 @@ interface CheckMessageService {
      * @param fromUserId 상대방 사용자의 고유 식별자
      * @param time 변경하려는 시간
      */
-    fun execute(toUserId: Long, fromUserId: Long, time: Instant)
+    fun checkMessage(toUserId: Long, fromUserId: Long, time: Instant)
 }
