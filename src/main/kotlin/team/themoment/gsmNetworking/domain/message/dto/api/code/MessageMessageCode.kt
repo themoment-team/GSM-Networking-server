@@ -7,9 +7,6 @@ import team.themoment.gsmNetworking.domain.message.dto.api.res.MessageOccurRes
 import team.themoment.gsmNetworking.domain.message.dto.api.res.MessagesRes
 import team.themoment.gsmNetworking.domain.message.dto.domain.MessageDto
 
-/**
- * Message 도메인과 관련된 message code를 정의하는 [MessageCode]의 구현체.
- */
 enum class MessageMessageCode(
     private val supportClass: Class<out Any>
 ) : MessageCode {

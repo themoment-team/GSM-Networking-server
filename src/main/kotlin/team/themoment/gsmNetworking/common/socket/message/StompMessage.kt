@@ -11,15 +11,6 @@ class StompMessage<T : Any>(
     val messageCode: String
         get() = internalMessageCode.code
 
-    /**
-     * Message 타입을 나타내는 Enum 클래스.
-     *
-     * [MessageCode]와 동일한 기능을 수행한다고 판단할 수 있지만, 역할이 다르다.
-     * ```
-     * MessageCode: DTO와 매핑하기 위한 Code를 지정하기 위해 사용된다.
-     * MessageType: Message의 타입을 나타내기 위해 사용된다.
-     * ```
-     */
     enum class MessageType {
         ERROR,
         MESSAGE

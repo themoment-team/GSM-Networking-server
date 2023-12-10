@@ -72,9 +72,9 @@ class SaveMessageServiceImpl(
             direction = direction,
             content = content
         )
-        // 둘 다 채팅을 아직 확인하지 않았으므로 기본값이 부여됨
-        userMessageInfoRepository.save(UserMessageInfo(userId = user1Id, opponentUserId = user2Id, header = newHeader))
-        userMessageInfoRepository.save(UserMessageInfo(userId = user2Id, opponentUserId = user1Id, header = newHeader))
+        // 둘 다 상대방의 채팅을 아직 확인하지 않았으므로 기본값이 부여됨
+        userMessageInfoRepository.save(UserMessageInfo(userId = user1Id, opponentUserId = user2Id))
+        userMessageInfoRepository.save(UserMessageInfo(userId = user2Id, opponentUserId = user1Id))
 
         return messageRepository.save(newMessage)
     }

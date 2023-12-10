@@ -6,7 +6,6 @@ import java.util.*
 
 class UUIDUtils {
     companion object {
-        // Instant.MAX는 너무 커서 MySQL의 데이터타입으로 저장이 불가능함
         private const val MAX_EPOCH_MILLIS = 95649119999000L // 5000-12-31 23:59:59 GMT
         private const val MIN_EPOCH_MILLIS = 0L // 1970-1-1 00:00:00 GMT
 
