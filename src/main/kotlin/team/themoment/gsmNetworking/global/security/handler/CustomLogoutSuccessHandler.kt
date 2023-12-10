@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class CustomLogoutSuccessHandler(
     private val oauth2Properties: Oauth2Properties,
-    private val refreshTokenRepository: RefreshTokenRepository,
 ) : LogoutSuccessHandler {
 
     /**
@@ -36,26 +35,8 @@ class CustomLogoutSuccessHandler(
         response: HttpServletResponse,
         authentication: Authentication?,
     ) {
-        if (authentication != null) {
-            val refreshToken = refreshTokenRepository.findByIdOrNull(authentication.name)
-                ?: throw ExpectedException("존재하지 않는 refresh token 입니다.", HttpStatus.NOT_FOUND)
-            refreshTokenRepository.delete(refreshToken)
-            response.status = HttpServletResponse.SC_RESET_CONTENT
-            response.sendRedirect(oauth2Properties.defaultRedirectUrl)
-        }
-        sendErrorResponse(response)
-    }
-
-    /**
-     * authentication 객체가 존재하지 않을 경우 에러 메세지를 반환하는 메서드 입니다.
-     *
-     * @param response 응답할 serveltResponse
-     */
-    private fun sendErrorResponse(response: HttpServletResponse) {
-        response.status = HttpServletResponse.SC_BAD_REQUEST
-        response.contentType = MediaType.APPLICATION_JSON_VALUE
-        val map = mapOf("message" to "이미 로그아웃 된 사용자 입니다.")
-        response.writer.write(ObjectMapper().writeValueAsString(map))
+        response.status = HttpServletResponse.SC_NO_CONTENT
+        response.sendRedirect(oauth2Properties.defaultRedirectUrl)
     }
 
 }

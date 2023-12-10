@@ -13,9 +13,7 @@ import team.themoment.gsmNetworking.common.util.UUIDUtils
 import team.themoment.gsmNetworking.domain.message.dto.api.code.MessageMessageCode
 import team.themoment.gsmNetworking.domain.message.dto.api.req.*
 import team.themoment.gsmNetworking.domain.message.dto.api.res.*
-import team.themoment.gsmNetworking.domain.message.service.CheckMessageService
-import team.themoment.gsmNetworking.domain.message.service.QueryMessageService
-import team.themoment.gsmNetworking.domain.message.service.SaveMessageService
+import team.themoment.gsmNetworking.domain.message.service.*
 import java.security.Principal
 import java.time.Instant
 
@@ -24,7 +22,8 @@ class MessageWebsocketController(
     private val stompSender: StompSender,
     private val saveMessageService: SaveMessageService,
     private val checkMessageService: CheckMessageService,
-    private val queryMessageService: QueryMessageService
+    private val queryHeadersService: QueryHeadersService,
+    private val queryMessagesService: QueryMessagesService,
 ) {
     @MessageMapping("/message")
     fun sendMessage(
@@ -34,7 +33,7 @@ class MessageWebsocketController(
     ) {
         val from = principal.name.toLong()
         try {
-            val savedMessageDto = saveMessageService.execute(req.to, from, req.message)
+            val savedMessageDto = saveMessageService.saveMessage(req.to, from, req.message)
 
             stompSender.sendMessage(
                 StompMessage(savedMessageDto, MessageMessageCode.MESSAGE),
@@ -67,7 +66,7 @@ class MessageWebsocketController(
     ) {
         val from = principal.name.toLong()
         try {
-            checkMessageService.execute(req.to, from, Instant.ofEpochMilli(req.epochMilli))
+            checkMessageService.checkMessage(req.to, from, Instant.ofEpochMilli(req.epochMilli))
 
             val user1Id = minOf(req.to, from)
             val user2Id = maxOf(req.to, from)
@@ -98,7 +97,7 @@ class MessageWebsocketController(
         val userId = principal.name.toLong()
         try {
             val headerResponses =
-                queryMessageService.getMessageInfosByUserId(userId, Instant.ofEpochMilli(req.epochMilli), req.limit)
+                queryHeadersService.getMessageInfosByUserId(userId, Instant.ofEpochMilli(req.epochMilli), req.limit)
 
             stompSender.sendMessageToSession(
                 StompMessage(HeadersRes(headerResponses), MessageMessageCode.HEADERS),
@@ -122,7 +121,7 @@ class MessageWebsocketController(
         @Header("simpSessionId") sessionId: String
     ) {
         try {
-            val messageResponses = queryMessageService.getMessagesBetweenUsers(
+            val messageResponses = queryMessagesService.getMessagesBetweenUsers(
                 req.user1Id,
                 req.user2Id,
                 Instant.ofEpochMilli(req.epochMilli),

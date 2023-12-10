@@ -8,16 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.domain.message.dto.api.req.*
 import team.themoment.gsmNetworking.domain.message.dto.domain.HeaderDto
-import team.themoment.gsmNetworking.domain.message.service.QueryMessageService
+import team.themoment.gsmNetworking.domain.message.service.QueryHeaderService
+import team.themoment.gsmNetworking.domain.message.service.QueryHeadersService
 
 @RestController
 @RequestMapping("api/v1/message")
 class MessageHttpController(
-    private val queryMessageService: QueryMessageService
+    private val queryHeaderService: QueryHeaderService
 ) {
     @GetMapping("/header")
     fun getMetaMessage(@RequestBody req: QueryHeaderReq): ResponseEntity<HeaderDto?> {
-        val headerDto = queryMessageService.getHeaderByUserIds(req.user1Id, req.user2Id)
+        val headerDto = queryHeaderService.getHeaderByUserIds(req.user1Id, req.user2Id)
         return if (headerDto == null) {
             ResponseEntity.status(HttpStatus.NO_CONTENT).build()
         } else {
