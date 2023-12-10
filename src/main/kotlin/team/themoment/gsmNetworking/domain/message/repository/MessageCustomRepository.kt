@@ -2,11 +2,20 @@ package team.themoment.gsmNetworking.domain.message.repository
 
 import team.themoment.gsmNetworking.domain.message.domain.Header
 import team.themoment.gsmNetworking.domain.message.domain.Message
+import team.themoment.gsmNetworking.domain.message.domain.UserMessageInfo
 import team.themoment.gsmNetworking.domain.message.dto.domain.MessageMetaDto
 import team.themoment.gsmNetworking.domain.message.dto.domain.MessageDto
 import team.themoment.gsmNetworking.domain.message.enums.QueryDirection
 import java.time.Instant
 
+/**
+ * [Message] 엔티티와 관련된 쿼리 기능을 담당하는 Repository.
+ *
+ * [Message] 엔티티 외에도 다른 엔티티 정보를 반환하기도 합니다.
+ *
+ * 역할을 명확히 분리하기 어렵고, 분리하더라도 ~~CustomRepository가 너무 많아지기 때문입니다.
+ * 추후 기능이 많아지면 필요에 따라 분리할 수도 있습니다.
+ */
 interface MessageCustomRepository {
 
     /**
@@ -45,4 +54,13 @@ interface MessageCustomRepository {
      * @return nullable [Message]
      */
     fun findHeaderBetweenUsers(user1Id: Long, user2Id: Long): Header?
+
+    /**
+     * 두 사용자 간의 메시지 정보를 가져옵니다.
+     *
+     * @param user1Id 사용자1의 고유 식별자
+     * @param user2Id 사용자2의 고유 식별자
+     * @return Pair<UserMessageInfo, UserMessageInfo> first가 user1, second가 user2 정보를 담고 있습니다.
+     */
+    fun findPairUserMessageInfoBetweenUsers(user1Id: Long, user2Id: Long): Pair<UserMessageInfo, UserMessageInfo>?
 }
