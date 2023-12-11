@@ -1,7 +1,5 @@
 package team.themoment.gsmNetworking.domain.mentor.domain
 
-import org.hibernate.annotations.Cascade
-import org.hibernate.annotations.CascadeType
 import java.time.LocalDate
 import javax.persistence.*
 

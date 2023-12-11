@@ -4,6 +4,8 @@ import java.time.LocalDate
 import javax.validation.constraints.NotBlank
 
 data class MentorCareerDto(
+    val id: Long,
+
     @field:NotBlank
     val companyName: String,
 
