@@ -44,6 +44,6 @@ class ModifyMyUserInfoService(
 
     private fun validateExistUserByEmail(email: String) {
         if (userRepository.existsByEmail(email))
-            throw ExpectedException("이미 서용중인 이메일입니다.", HttpStatus.BAD_REQUEST)
+            throw ExpectedException("이미 사용중인 이메일입니다.", HttpStatus.BAD_REQUEST)
     }
 }
