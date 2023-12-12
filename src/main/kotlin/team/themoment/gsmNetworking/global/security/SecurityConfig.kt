@@ -102,9 +102,6 @@ class SecurityConfig(
             .mvcMatchers("/api/v1/user/**").hasAnyRole(
                 Authority.USER.name
             )
-            .mvcMatchers(HttpMethod.PUT, "/api/v1/user/my").hasAnyRole(
-                Authority.USER.name
-            )
             // /file
             .mvcMatchers("/api/v1/file").hasAnyRole(
                 Authority.USER.name
