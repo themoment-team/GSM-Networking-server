@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.mentor.dto.*
 import team.themoment.gsmNetworking.domain.mentor.service.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("api/v1/mentor")
@@ -21,11 +22,11 @@ class MentorController(
     private val deleteMyMentorInfoService: DeleteMyMentorInfoService,
     private val authenticatedUserManager: AuthenticatedUserManager,
     private val queryMyMentorService: QueryMyMentorService,
-    private val modifyMyCareerInfoService: ModifyMyCareerInfoService
+    private val modifyMyMentorInfoService: ModifyMyMentorInfoService
 ) {
 
     @PostMapping
-    fun saveMentorInfo(@RequestBody dto: MentorRegistrationDto): ResponseEntity<Void> {
+    fun saveMentorInfo(@RequestBody @Valid dto: MentorSaveInfoDto): ResponseEntity<Void> {
         mentorRegistrationService.execute(dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
@@ -48,9 +49,9 @@ class MentorController(
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 
-    @PutMapping("/career/my")
-    fun modifyMyCareerInfo(@RequestBody dto: MentorCareerDto): ResponseEntity<Void> {
-        modifyMyCareerInfoService.execute(dto)
+    @PutMapping("/my")
+    fun modifyMyCareerInfo(@RequestBody @Valid dto: MentorSaveInfoDto): ResponseEntity<Void> {
+        modifyMyMentorInfoService.execute(dto)
         return ResponseEntity.noContent().build()
     }
 
