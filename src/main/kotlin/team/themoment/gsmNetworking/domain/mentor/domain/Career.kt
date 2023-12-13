@@ -1,6 +1,7 @@
 package team.themoment.gsmNetworking.domain.mentor.domain
 
 import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
+import team.themoment.gsmNetworking.domain.mentor.dto.MentorCareerDto
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -31,4 +32,22 @@ class Career(
 
     @Column(nullable = false)
     val isWorking: Boolean
-) : BaseIdTimestampEntity()
+) : BaseIdTimestampEntity() {
+
+    companion object{
+        fun ofCareers(mentorCareerDto: List<MentorCareerDto>, mentor: Mentor): List<Career>{
+            return mentorCareerDto.map {
+                Career(
+                    it.id,
+                    mentor,
+                    it.companyName,
+                    it.companyUrl ?: "",
+                    it.position,
+                    it.startDate,
+                    it.endDate,
+                    it.isWorking ?: false
+                )
+            }
+        }
+    }
+}
