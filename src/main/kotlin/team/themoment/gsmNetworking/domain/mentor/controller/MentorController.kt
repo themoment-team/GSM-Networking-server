@@ -26,7 +26,7 @@ class MentorController(
 ) {
 
     @PostMapping
-    fun saveMentorInfo(@RequestBody @Valid dto: MentorSaveInfoDto): ResponseEntity<Void> {
+    fun saveMentorInfo(@RequestBody @Valid dto: MentorRegistrationDto): ResponseEntity<Void> {
         mentorRegistrationService.execute(dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
@@ -50,7 +50,7 @@ class MentorController(
     }
 
     @PutMapping("/my")
-    fun modifyMyCareerInfo(@RequestBody @Valid dto: MentorSaveInfoDto): ResponseEntity<Void> {
+    fun modifyMyCareerInfo(@RequestBody @Valid dto: MentorUpdateInfoDto): ResponseEntity<Void> {
         modifyMyMentorInfoService.execute(dto)
         return ResponseEntity.noContent().build()
     }

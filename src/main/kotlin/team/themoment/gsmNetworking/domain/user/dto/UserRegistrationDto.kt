@@ -1,6 +1,6 @@
 package team.themoment.gsmNetworking.domain.user.dto
 
-data class UserSaveInfoDto(
+data class UserRegistrationDto(
     val name: String,
     val generation: Int,
     val phoneNumber: String,

@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.user.domain.User
-import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
+import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
+import team.themoment.gsmNetworking.domain.user.dto.UserUpdateInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 
 @Service
@@ -14,24 +15,24 @@ class ModifyMyUserInfoService(
     private val userRepository: UserRepository,
 ) {
 
-    fun execute(authenticationId: Long, userSaveInfoDto: UserSaveInfoDto) {
+    fun execute(authenticationId: Long, userUpdateInfoDto: UserUpdateInfoDto) {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
-        if (userSaveInfoDto.phoneNumber != user.phoneNumber)
-            validateExistUserByPhoneNumber(userSaveInfoDto.phoneNumber)
-        else if (userSaveInfoDto.email != user.email)
-            validateExistUserByEmail(userSaveInfoDto.email)
+        if (userUpdateInfoDto.phoneNumber != user.phoneNumber)
+            validateExistUserByPhoneNumber(userUpdateInfoDto.phoneNumber)
+        else if (userUpdateInfoDto.email != user.email)
+            validateExistUserByEmail(userUpdateInfoDto.email)
 
         val updatedUser = User(
             user.userId,
             authenticationId,
-            userSaveInfoDto.name,
-            userSaveInfoDto.generation,
-            userSaveInfoDto.email,
-            userSaveInfoDto.phoneNumber,
-            userSaveInfoDto.snsUrl,
-            userSaveInfoDto.profileUrl
+            userUpdateInfoDto.name,
+            userUpdateInfoDto.generation,
+            userUpdateInfoDto.email,
+            userUpdateInfoDto.phoneNumber,
+            userUpdateInfoDto.snsUrl,
+            userUpdateInfoDto.profileUrl
         )
 
         userRepository.save(updatedUser)

@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.mentor.domain.Career
-import team.themoment.gsmNetworking.domain.mentor.dto.MentorSaveInfoDto
+import team.themoment.gsmNetworking.domain.mentor.dto.MentorUpdateInfoDto
 import team.themoment.gsmNetworking.domain.mentor.repository.CareerRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
-import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
+import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
+import team.themoment.gsmNetworking.domain.user.dto.UserUpdateInfoDto
 import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoService
 
 @Service
@@ -20,11 +21,11 @@ class ModifyMyMentorInfoService(
     private val modifyMyUserInfoService: ModifyMyUserInfoService
 ) {
 
-    fun execute(mentorSaveInfoDto: MentorSaveInfoDto) {
-        val mentor = mentorRepository.findByIdOrNull(mentorSaveInfoDto.id)
+    fun execute(mentorUpdateInfoDto: MentorUpdateInfoDto) {
+        val mentor = mentorRepository.findByIdOrNull(mentorUpdateInfoDto.id)
             ?: throw ExpectedException("mentor를 찾을 수 없습니다", HttpStatus.NOT_FOUND)
 
-        val updatedCareerList = mentorSaveInfoDto.career.map {
+        val updatedCareerList = mentorUpdateInfoDto.career.map {
             Career(
                 it.id,
                 mentor,
@@ -37,13 +38,13 @@ class ModifyMyMentorInfoService(
             )
         }
 
-        val userSaveInfoDto = UserSaveInfoDto(
-            mentorSaveInfoDto.name,
-            mentorSaveInfoDto.generation,
-            mentorSaveInfoDto.phoneNumber,
-            mentorSaveInfoDto.email,
-            mentorSaveInfoDto.snsUrl,
-            mentorSaveInfoDto.profileUrl
+        val userSaveInfoDto = UserUpdateInfoDto(
+            mentorUpdateInfoDto.name,
+            mentorUpdateInfoDto.generation,
+            mentorUpdateInfoDto.phoneNumber,
+            mentorUpdateInfoDto.email,
+            mentorUpdateInfoDto.snsUrl,
+            mentorUpdateInfoDto.profileUrl
         )
 
         modifyMyUserInfoService.execute(mentor.user.authenticationId, userSaveInfoDto)

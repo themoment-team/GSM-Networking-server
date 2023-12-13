@@ -4,10 +4,7 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
-data class MentorSaveInfoDto(
-    @field:NotNull
-    val id: Long,
-
+data class MentorRegistrationDto(
     @field:NotBlank
     val name: String,
 
