@@ -2,8 +2,12 @@ package team.themoment.gsmNetworking.domain.mentor.dto
 
 import java.time.LocalDate
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 data class MentorCareerDto(
+    @field:NotNull
+    val id: Long,
+
     @field:NotBlank
     val companyName: String,
 
