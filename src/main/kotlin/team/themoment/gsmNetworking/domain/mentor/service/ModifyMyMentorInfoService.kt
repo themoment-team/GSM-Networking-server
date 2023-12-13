@@ -25,18 +25,7 @@ class ModifyMyMentorInfoService(
         val mentor = mentorRepository.findByIdOrNull(mentorUpdateInfoDto.id)
             ?: throw ExpectedException("mentor를 찾을 수 없습니다", HttpStatus.NOT_FOUND)
 
-        val updatedCareerList = mentorUpdateInfoDto.career.map {
-            Career(
-                it.id,
-                mentor,
-                it.companyName,
-                it.companyUrl ?: "",
-                it.position,
-                it.startDate,
-                it.endDate,
-                it.isWorking ?: false
-            )
-        }
+        val updateCareers = Career.ofCareers(mentorUpdateInfoDto.career, mentor)
 
         val userSaveInfoDto = UserUpdateInfoDto(
             mentorUpdateInfoDto.name,
@@ -48,6 +37,6 @@ class ModifyMyMentorInfoService(
         )
 
         modifyMyUserInfoService.execute(mentor.user.authenticationId, userSaveInfoDto)
-        careerRepository.saveAll(updatedCareerList)
+        careerRepository.saveAll(updateCareers)
     }
 }
