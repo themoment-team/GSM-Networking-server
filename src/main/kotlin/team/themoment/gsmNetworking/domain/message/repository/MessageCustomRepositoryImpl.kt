@@ -40,7 +40,7 @@ class MessageCustomRepositoryImpl(
             )
             .innerJoin(userMessageInfo)
             .on(
-                userMessageInfo.header.headerId.eq(header.headerId),
+                userMessageInfo.header.id.eq(header.id),
                 userMessageInfo.userId.eq(userId),
             )
             .orderBy(header.recentMessageId.desc())

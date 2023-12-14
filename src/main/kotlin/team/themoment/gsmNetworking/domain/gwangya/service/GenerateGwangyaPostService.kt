@@ -6,7 +6,6 @@ import team.themoment.gsmNetworking.domain.gwangya.domain.Gwangya
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostDto
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostRegistrationDto
 import team.themoment.gsmNetworking.domain.gwangya.repository.GwangyaRepository
-import java.time.LocalDateTime
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
@@ -18,13 +17,12 @@ class GenerateGwangyaPostService(
 
         val gwangyaPost = Gwangya(
             content = gwangyaPostDto.content,
-            createdAt = LocalDateTime.now()
         )
 
         val savedGwangyaPost = gwangyaRepository.save(gwangyaPost)
 
         return GwangyaPostDto(
-            savedGwangyaPost.gwangyaId,
+            savedGwangyaPost.id,
             savedGwangyaPost.content,
             savedGwangyaPost.createdAt
         )

@@ -15,7 +15,7 @@ class GwangyaCustomRepositoryImpl(
             .select(
                 Projections.constructor(
                     GwangyaPostDto::class.java,
-                    gwangya.gwangyaId,
+                    gwangya.id,
                     gwangya.content,
                     gwangya.createdAt
                 )
@@ -24,26 +24,26 @@ class GwangyaCustomRepositoryImpl(
             .where(
                 ltCursorId(cursorId),
             )
-            .orderBy(gwangya.gwangyaId.desc())
+            .orderBy(gwangya.id.desc())
             .limit(pageSize)
             .fetch().reversed()
     }
 
     private fun ltCursorId(cursorId: Long): BooleanExpression =
-        gwangya.gwangyaId.lt(cursorId)
+        gwangya.id.lt(cursorId)
 
     override fun findPageWithRecentPosts(pageSize: Long): List<GwangyaPostDto> {
         return queryFactory
             .select(
                 Projections.constructor(
                     GwangyaPostDto::class.java,
-                    gwangya.gwangyaId,
+                    gwangya.id,
                     gwangya.content,
                     gwangya.createdAt
                 )
             )
             .from(gwangya)
-            .orderBy(gwangya.gwangyaId.desc())
+            .orderBy(gwangya.id.desc())
             .limit(pageSize)
             .fetch().reversed()
     }

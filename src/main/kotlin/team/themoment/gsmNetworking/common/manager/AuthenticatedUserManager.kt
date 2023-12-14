@@ -40,7 +40,7 @@ class AuthenticatedUserManager(
             ?: throw ExpectedException("인증 절차를 수행하지 않아 id가 없는 사용자 입니다.", HttpStatus.NOT_FOUND)
         authenticationRepository.save(
             Authentication(
-                authenticationId = authenticationId,
+                id = authenticationId,
                 email = authentication.email,
                 providerId = authentication.providerId,
                 authority = newAuthority

@@ -32,7 +32,7 @@ class CustomOauth2UserService(
         val userNameAttributeName = userRequest.clientRegistration
             .providerDetails.userInfoEndpoint.userNameAttributeName
         val attributes = mapOf(
-            "sub" to authentication.authenticationId,
+            "sub" to authentication.id,
             "provider_id" to providerId,
             "authority" to authority,
             "last_login_time" to LocalDateTime.now()

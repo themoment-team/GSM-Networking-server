@@ -33,7 +33,7 @@ class QueryMessageServiceImpl(
             throw IllegalArgumentException("사용자 ID가 $user2Id 인 사용자를 찾을 수 없습니다")
         }
         return messageRepository.findHeaderBetweenUsers(user1Id, user2Id)
-            ?.let { HeaderDto(it.headerId, it.user1Id, it.user2Id, it.recentMessageId) }
+            ?.let { HeaderDto(it.id, it.user1Id, it.user2Id, it.recentMessageId) }
     }
 
     @Transactional(readOnly = true)

@@ -23,7 +23,7 @@ class ProfileUrlRegistrationService(
 
     fun profileUrlRegistered(user: User, profileUrl: String?) {
         val userUpdatedProfileUrl = User(
-            user.userId,
+            user.id,
             user.authenticationId,
             user.name,
             user.generation,
