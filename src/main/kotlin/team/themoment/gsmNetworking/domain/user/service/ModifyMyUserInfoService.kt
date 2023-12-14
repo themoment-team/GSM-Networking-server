@@ -25,7 +25,7 @@ class ModifyMyUserInfoService(
             validateExistUserByEmail(userUpdateInfoDto.email)
 
         val updatedUser = User(
-            user.userId,
+            user.id,
             authenticationId,
             userUpdateInfoDto.name,
             userUpdateInfoDto.generation,

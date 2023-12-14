@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.message.domain
 
+import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import javax.persistence.*
 
 @Entity

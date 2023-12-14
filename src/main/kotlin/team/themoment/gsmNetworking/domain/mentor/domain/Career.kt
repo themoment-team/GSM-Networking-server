@@ -11,6 +11,8 @@ import javax.persistence.*
 @Entity
 @Table(name = "career")
 class Career(
+    override val id: Long = 0,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
     val mentor: Mentor,
