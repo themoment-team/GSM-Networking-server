@@ -9,6 +9,8 @@ import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
 import team.themoment.gsmNetworking.domain.user.service.UserRegistrationService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
+import team.themoment.gsmNetworking.domain.auth.domain.Authority
 
 /**
  * 멘토를 저장하는 로직이 담긴 서비스 클래스 입니다.
@@ -19,6 +21,7 @@ class MentorRegistrationService(
     private val userRegistrationService: UserRegistrationService,
     private val mentorRepository: MentorRepository,
     private val careerRepository: CareerRepository,
+    private val authenticatedUserManager: AuthenticatedUserManager
 ) {
 
     /**
@@ -34,6 +37,7 @@ class MentorRegistrationService(
             snsUrl = dto.snsUrl,
             profileUrl = dto.profileUrl
         )
+        authenticatedUserManager.updateAuthority(Authority.USER)
         val user = userRegistrationService.execute(userRegistrationDto)
         val mentor = Mentor(registered = true, user = user)
         val careerList = dto.career.map {

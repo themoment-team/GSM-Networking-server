@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
-import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.domain.user.domain.User
 import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
@@ -24,9 +23,9 @@ class UserRegistrationService(
      * @return 저장된 user 엔티티
      */
     fun execute(dto: UserRegistrationDto): User {
-        val authenticationId = authenticatedUserManager.getName()
         validateExistUserByPhoneNumber(dto.phoneNumber)
         validateExistUserByEmail(dto.email)
+        val authenticationId = authenticatedUserManager.getName()
         val user = User(
             authenticationId = authenticationId,
             name = dto.name,
@@ -36,7 +35,6 @@ class UserRegistrationService(
             snsUrl = dto.snsUrl,
             profileUrl = dto.profileUrl
         )
-        authenticatedUserManager.updateAuthority(Authority.USER)
         return userRepository.save(user)
     }
 

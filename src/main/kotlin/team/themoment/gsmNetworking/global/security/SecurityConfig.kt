@@ -91,12 +91,12 @@ class SecurityConfig(
                 Authority.USER.name
             )
             // /mentee
+            .mvcMatchers(HttpMethod.POST, "/api/v1/mentee/update").hasAnyRole(
+                Authority.UNAUTHENTICATED.name
+            )
             .mvcMatchers("/api/v1/mentee/*").hasAnyRole(
                 Authority.USER.name,
                 Authority.TEMP_USER.name
-            )
-            .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(
-                Authority.UNAUTHENTICATED.name
             )
             // /user
             .mvcMatchers("/api/v1/user/**").hasAnyRole(
