@@ -13,7 +13,7 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 @Transactional(rollbackFor = [Exception::class])
 class UserRegistrationService(
     private val userRepository: UserRepository,
-    private val authenticatedUserManager: AuthenticatedUserManager
+    private val authenticatedUserManager: AuthenticatedUserManager,
 ) {
 
     /**
@@ -26,6 +26,8 @@ class UserRegistrationService(
         validateExistUserByPhoneNumber(dto.phoneNumber)
         validateExistUserByEmail(dto.email)
         val authenticationId = authenticatedUserManager.getName()
+        if (userRepository.existsByAuthenticationId(authenticationId))
+            throw ExpectedException("이미 등록되어있는 user입니다.", HttpStatus.BAD_REQUEST)
         val user = User(
             authenticationId = authenticationId,
             name = dto.name,
