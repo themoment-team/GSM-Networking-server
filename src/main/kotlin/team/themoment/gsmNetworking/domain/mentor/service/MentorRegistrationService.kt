@@ -9,6 +9,8 @@ import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
 import team.themoment.gsmNetworking.domain.user.service.UserRegistrationService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
+import team.themoment.gsmNetworking.domain.auth.domain.Authority
 
 /**
  * 멘토를 저장하는 로직이 담긴 서비스 클래스 입니다.
@@ -25,7 +27,7 @@ class MentorRegistrationService(
      * 멘토의 정보를 저장한다.
      * 현재 단계에서는 멘티의 정보를 저장하고 있지 않기 때문에 바로 이 메서드에서 user 정보와 멘티 정보를 저장한다.
      */
-    fun execute(dto: MentorRegistrationDto) {
+    fun execute(dto: MentorRegistrationDto, authenticationId: Long) {
         val userRegistrationDto = UserRegistrationDto(
             name = dto.name,
             generation = dto.generation,
@@ -34,7 +36,7 @@ class MentorRegistrationService(
             snsUrl = dto.snsUrl,
             profileUrl = dto.profileUrl
         )
-        val user = userRegistrationService.execute(userRegistrationDto)
+        val user = userRegistrationService.execute(userRegistrationDto, authenticationId)
         val mentor = Mentor(registered = true, user = user)
         val careerList = dto.career.map {
             Career(

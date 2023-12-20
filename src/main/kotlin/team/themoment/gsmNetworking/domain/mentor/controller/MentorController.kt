@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
+import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.domain.mentor.dto.*
 import team.themoment.gsmNetworking.domain.mentor.service.*
 import javax.validation.Valid
@@ -22,12 +23,14 @@ class MentorController(
     private val deleteMyMentorInfoService: DeleteMyMentorInfoService,
     private val authenticatedUserManager: AuthenticatedUserManager,
     private val queryMyMentorService: QueryMyMentorService,
-    private val modifyMyMentorInfoService: ModifyMyMentorInfoService
+    private val modifyMyMentorInfoService: ModifyMyMentorInfoService,
 ) {
 
     @PostMapping
     fun saveMentorInfo(@RequestBody @Valid dto: MentorRegistrationDto): ResponseEntity<Void> {
-        mentorRegistrationService.execute(dto)
+        val authenticationId = authenticatedUserManager.getName()
+        mentorRegistrationService.execute(dto, authenticationId)
+        authenticatedUserManager.updateAuthority(Authority.USER)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
-import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.domain.user.domain.User
 import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
@@ -14,7 +13,7 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 @Transactional(rollbackFor = [Exception::class])
 class UserRegistrationService(
     private val userRepository: UserRepository,
-    private val authenticatedUserManager: AuthenticatedUserManager
+    private val authenticatedUserManager: AuthenticatedUserManager,
 ) {
 
     /**
@@ -23,10 +22,11 @@ class UserRegistrationService(
      *
      * @return 저장된 user 엔티티
      */
-    fun execute(dto: UserRegistrationDto): User {
-        val authenticationId = authenticatedUserManager.getName()
+    fun execute(dto: UserRegistrationDto, authenticationId: Long): User {
         validateExistUserByPhoneNumber(dto.phoneNumber)
         validateExistUserByEmail(dto.email)
+        if (userRepository.existsByAuthenticationId(authenticationId))
+            throw ExpectedException("이미 등록되어있는 user입니다.", HttpStatus.BAD_REQUEST)
         val user = User(
             authenticationId = authenticationId,
             name = dto.name,
@@ -36,7 +36,6 @@ class UserRegistrationService(
             snsUrl = dto.snsUrl,
             profileUrl = dto.profileUrl
         )
-        authenticatedUserManager.updateAuthority(Authority.USER)
         return userRepository.save(user)
     }
 
