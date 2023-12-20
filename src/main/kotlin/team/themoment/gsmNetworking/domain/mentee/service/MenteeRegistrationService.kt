@@ -13,7 +13,7 @@ class MenteeRegistrationService(
     private val menteeRepository: MenteeRepository
 ) {
 
-    fun execute(menteeRegistrationDto: MenteeRegistrationDto) {
+    fun execute(menteeRegistrationDto: MenteeRegistrationDto, authenticationId: Long) {
         val userRegistrationDto = UserRegistrationDto(
             menteeRegistrationDto.name,
             menteeRegistrationDto.generation,
@@ -22,7 +22,7 @@ class MenteeRegistrationService(
             null,
             menteeRegistrationDto.profileUrl
         )
-        val user = userRegistrationService.execute(userRegistrationDto)
+        val user = userRegistrationService.execute(userRegistrationDto, authenticationId)
         val mentee = Mentee(user)
 
         menteeRepository.save(mentee)

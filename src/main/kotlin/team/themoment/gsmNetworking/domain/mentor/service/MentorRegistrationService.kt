@@ -21,14 +21,13 @@ class MentorRegistrationService(
     private val userRegistrationService: UserRegistrationService,
     private val mentorRepository: MentorRepository,
     private val careerRepository: CareerRepository,
-    private val authenticatedUserManager: AuthenticatedUserManager
 ) {
 
     /**
      * 멘토의 정보를 저장한다.
      * 현재 단계에서는 멘티의 정보를 저장하고 있지 않기 때문에 바로 이 메서드에서 user 정보와 멘티 정보를 저장한다.
      */
-    fun execute(dto: MentorRegistrationDto) {
+    fun execute(dto: MentorRegistrationDto, authenticationId: Long) {
         val userRegistrationDto = UserRegistrationDto(
             name = dto.name,
             generation = dto.generation,
@@ -37,8 +36,7 @@ class MentorRegistrationService(
             snsUrl = dto.snsUrl,
             profileUrl = dto.profileUrl
         )
-        authenticatedUserManager.updateAuthority(Authority.USER)
-        val user = userRegistrationService.execute(userRegistrationDto)
+        val user = userRegistrationService.execute(userRegistrationDto, authenticationId)
         val mentor = Mentor(registered = true, user = user)
         val careerList = dto.career.map {
             Career(

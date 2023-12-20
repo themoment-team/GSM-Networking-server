@@ -22,10 +22,9 @@ class UserRegistrationService(
      *
      * @return 저장된 user 엔티티
      */
-    fun execute(dto: UserRegistrationDto): User {
+    fun execute(dto: UserRegistrationDto, authenticationId: Long): User {
         validateExistUserByPhoneNumber(dto.phoneNumber)
         validateExistUserByEmail(dto.email)
-        val authenticationId = authenticatedUserManager.getName()
         if (userRepository.existsByAuthenticationId(authenticationId))
             throw ExpectedException("이미 등록되어있는 user입니다.", HttpStatus.BAD_REQUEST)
         val user = User(
