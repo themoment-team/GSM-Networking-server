@@ -6,6 +6,7 @@ data class MyMentorInfoDto(
     val id: Long,
     val name: String,
     val email: String,
+    val phoneNumber: String,
     val generation: Int,
     @field:JsonProperty("SNS")
     val sns: String?,
