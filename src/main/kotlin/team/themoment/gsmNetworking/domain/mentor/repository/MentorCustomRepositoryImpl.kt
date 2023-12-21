@@ -69,6 +69,7 @@ class MentorCustomRepositoryImpl(
                         mentor.id,
                         mentor.user.name,
                         mentor.user.email,
+                        mentor.user.phoneNumber,
                         mentor.user.generation,
                         mentor.user.snsUrl,
                         mentor.user.profileUrl,
