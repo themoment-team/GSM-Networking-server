@@ -13,4 +13,4 @@ fi
 
 chmod +x /home/ec2-user/GSM-Networking-builds/build/libs/gsmNetworking-0.0.1-SNAPSHOT.jar
 
-nohup java -jar -Dspring.profiles.active=prod /home/ec2-user/GSM-Networking-builds/build/libs/gsmNetworking-0.0.1-SNAPSHOT.jar > /home/ec2-user/nohup.out 2>&1 &
+nohup java -jar -Dspring.profiles.active=prod -Duser.timezone=Asia/Seoul /home/ec2-user/GSM-Networking-builds/build/libs/gsmNetworking-0.0.1-SNAPSHOT.jar > /home/ec2-user/nohup.out 2>&1 &
