@@ -25,10 +25,8 @@ class QueryGwangyaPostService(
     private fun convertPostsCreatedAtToKoreanTime(gwangyaPostDtos: List<GwangyaPostDto>): List<GwangyaPostDto> =
         gwangyaPostDtos
             .map {
-                GwangyaPostDto(
-                    it.id,
-                    it.content,
-                    it.createdAt.atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()
+                it.copy(
+                    createdAt = it.createdAt.atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime()
                 )
             }
 }
