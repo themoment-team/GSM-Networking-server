@@ -6,7 +6,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "mentee")
-data class Mentee (
+class Mentee (
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User
