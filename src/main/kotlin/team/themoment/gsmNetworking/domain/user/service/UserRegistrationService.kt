@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.user.domain.User
-import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
+import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 
 @Service
@@ -22,7 +22,7 @@ class UserRegistrationService(
      *
      * @return 저장된 user 엔티티
      */
-    fun execute(dto: UserRegistrationDto, authenticationId: Long): User {
+    fun execute(dto: UserSaveInfoDto, authenticationId: Long): User {
         validateExistUserByPhoneNumber(dto.phoneNumber)
         validateExistUserByEmail(dto.email)
         if (userRepository.existsByAuthenticationId(authenticationId))

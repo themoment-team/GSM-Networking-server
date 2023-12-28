@@ -27,7 +27,7 @@ class MentorController(
 ) {
 
     @PostMapping
-    fun saveMentorInfo(@RequestBody @Valid dto: MentorRegistrationDto): ResponseEntity<Void> {
+    fun saveMentorInfo(@RequestBody @Valid dto: MentorSaveInfoDto): ResponseEntity<Void> {
         val authenticationId = authenticatedUserManager.getName()
         mentorRegistrationService.execute(dto, authenticationId)
         authenticatedUserManager.updateAuthority(Authority.USER)
@@ -53,8 +53,9 @@ class MentorController(
     }
 
     @PutMapping("/my")
-    fun modifyMyCareerInfo(@RequestBody @Valid dto: MentorUpdateInfoDto): ResponseEntity<Void> {
-        modifyMyMentorInfoService.execute(dto)
+    fun modifyMyCareerInfo(@RequestBody @Valid dto: MentorSaveInfoDto): ResponseEntity<Void> {
+        val authenticationId = authenticatedUserManager.getName()
+        modifyMyMentorInfoService.execute(authenticationId, dto)
         return ResponseEntity.noContent().build()
     }
 
