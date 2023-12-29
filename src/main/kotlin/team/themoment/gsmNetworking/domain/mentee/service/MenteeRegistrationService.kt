@@ -15,12 +15,12 @@ class MenteeRegistrationService(
 
     fun execute(menteeRegistrationDto: MenteeRegistrationDto, authenticationId: Long) {
         val userSaveInfoDto = UserSaveInfoDto(
-            menteeRegistrationDto.name,
-            menteeRegistrationDto.generation,
-            menteeRegistrationDto.phoneNumber,
-            menteeRegistrationDto.email,
-            null,
-            menteeRegistrationDto.profileUrl
+            name = menteeRegistrationDto.name,
+            generation = menteeRegistrationDto.generation,
+            phoneNumber = menteeRegistrationDto.phoneNumber,
+            email = menteeRegistrationDto.email,
+            snsUrl = null,
+            profileUrl = menteeRegistrationDto.profileUrl
         )
         val user = userRegistrationService.execute(userSaveInfoDto, authenticationId)
         val mentee = Mentee(user)

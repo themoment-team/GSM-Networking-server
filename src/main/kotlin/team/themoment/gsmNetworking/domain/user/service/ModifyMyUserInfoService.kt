@@ -24,14 +24,14 @@ class ModifyMyUserInfoService(
             validateExistUserByEmail(userSaveInfoDto.email)
 
         val updatedUser = User(
-            user.id,
-            authenticationId,
-            userSaveInfoDto.name,
-            userSaveInfoDto.generation,
-            userSaveInfoDto.email,
-            userSaveInfoDto.phoneNumber,
-            userSaveInfoDto.snsUrl,
-            userSaveInfoDto.profileUrl
+            id = user.id,
+            authenticationId = authenticationId,
+            name = userSaveInfoDto.name,
+            generation = userSaveInfoDto.generation,
+            email = userSaveInfoDto.email,
+            phoneNumber = userSaveInfoDto.phoneNumber,
+            snsUrl = userSaveInfoDto.snsUrl,
+            profileUrl = userSaveInfoDto.profileUrl
         )
 
         userRepository.save(updatedUser)

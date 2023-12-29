@@ -31,12 +31,12 @@ class ModifyMyMentorInfoService(
         val updateCareers = Career.ofCareers(mentorSaveInfoDto.career, mentor)
 
         val userSaveInfoDto = UserSaveInfoDto(
-            mentorSaveInfoDto.name,
-            mentorSaveInfoDto.generation,
-            mentorSaveInfoDto.phoneNumber,
-            mentorSaveInfoDto.email,
-            mentorSaveInfoDto.snsUrl,
-            mentorSaveInfoDto.profileUrl
+            name = mentorSaveInfoDto.name,
+            generation = mentorSaveInfoDto.generation,
+            phoneNumber = mentorSaveInfoDto.phoneNumber,
+            email = mentorSaveInfoDto.email,
+            snsUrl = mentorSaveInfoDto.snsUrl,
+            profileUrl = mentorSaveInfoDto.profileUrl
         )
 
         modifyMyUserInfoService.execute(mentor.user.authenticationId, userSaveInfoDto)
