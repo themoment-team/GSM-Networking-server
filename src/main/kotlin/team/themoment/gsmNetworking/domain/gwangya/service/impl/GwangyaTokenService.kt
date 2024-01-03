@@ -24,8 +24,8 @@ class GwangyaTokenService(
         val expiredTime = LocalDateTime.now().plusSeconds(token.expirationTime)
 
         return GwangyaTokenDto(
-            token.gwangyaToken,
-            expiredTime
+            gwangyaToken = token.gwangyaToken,
+            expiredTime = expiredTime
         )
     }
 
@@ -40,10 +40,10 @@ class GwangyaTokenService(
     private fun saveGwangyaToken(tokenId: String, gwangyaToken: String, nowTime: LocalDateTime, expirationTime: Long) =
         gwangyaTokenRepository.save(
             GwangyaToken(
-                tokenId,
-                gwangyaToken,
-                nowTime,
-                expirationTime
+                id = tokenId,
+                gwangyaToken = gwangyaToken,
+                createdAt = nowTime,
+                expirationTime = expirationTime
             )
         )
 }

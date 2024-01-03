@@ -18,15 +18,15 @@ class MenteeService(
     @Transactional(rollbackFor = [Exception::class])
     override fun generateMentee(menteeRegistrationDto: MenteeRegistrationDto, authenticationId: Long) {
         val userRegistrationDto = UserRegistrationDto(
-            menteeRegistrationDto.name,
-            menteeRegistrationDto.generation,
-            menteeRegistrationDto.phoneNumber,
-            menteeRegistrationDto.email,
-            null,
-            menteeRegistrationDto.profileUrl
+            name = menteeRegistrationDto.name,
+            generation = menteeRegistrationDto.generation,
+            phoneNumber = menteeRegistrationDto.phoneNumber,
+            email = menteeRegistrationDto.email,
+            snsUrl = null,
+            profileUrl = menteeRegistrationDto.profileUrl
         )
         val user = generateUserUseCase.generateUser(userRegistrationDto, authenticationId)
-        val mentee = Mentee(user)
+        val mentee = Mentee(user = user)
 
         menteeRepository.save(mentee)
     }

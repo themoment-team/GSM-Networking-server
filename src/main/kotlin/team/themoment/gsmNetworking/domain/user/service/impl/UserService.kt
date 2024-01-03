@@ -49,14 +49,14 @@ class UserService(
             validateExistUserByEmail(userUpdateInfoDto.email)
 
         val updatedUser = User(
-            user.id,
-            authenticationId,
-            userUpdateInfoDto.name,
-            userUpdateInfoDto.generation,
-            userUpdateInfoDto.email,
-            userUpdateInfoDto.phoneNumber,
-            userUpdateInfoDto.snsUrl,
-            userUpdateInfoDto.profileUrl
+            id = user.id,
+            authenticationId = authenticationId,
+            name = userUpdateInfoDto.name,
+            generation = userUpdateInfoDto.generation,
+            email = userUpdateInfoDto.email,
+            phoneNumber = userUpdateInfoDto.phoneNumber,
+            snsUrl = userUpdateInfoDto.snsUrl,
+            profileUrl = userUpdateInfoDto.profileUrl
         )
 
         userRepository.save(updatedUser)
@@ -82,14 +82,14 @@ class UserService(
 
     fun profileUrlRegistered(user: User, profileUrl: String?) {
         val userUpdatedProfileUrl = User(
-            user.id,
-            user.authenticationId,
-            user.name,
-            user.generation,
-            user.email,
-            user.phoneNumber,
-            user.snsUrl,
-            profileUrl
+            id = user.id,
+            authenticationId = user.authenticationId,
+            name = user.name,
+            generation = user.generation,
+            email = user.email,
+            phoneNumber = user.phoneNumber,
+            snsUrl = user.snsUrl,
+            profileUrl = profileUrl
         )
 
         userRepository.save(userUpdatedProfileUrl)

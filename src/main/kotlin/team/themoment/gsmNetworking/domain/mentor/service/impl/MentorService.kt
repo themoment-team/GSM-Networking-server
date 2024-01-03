@@ -116,12 +116,12 @@ class MentorService(
         val updateCareers = Career.ofCareers(mentorUpdateInfoDto.career, mentor)
 
         val userSaveInfoDto = UserUpdateInfoDto(
-            mentorUpdateInfoDto.name,
-            mentorUpdateInfoDto.generation,
-            mentorUpdateInfoDto.phoneNumber,
-            mentorUpdateInfoDto.email,
-            mentorUpdateInfoDto.snsUrl,
-            mentorUpdateInfoDto.profileUrl
+            name = mentorUpdateInfoDto.name,
+            generation = mentorUpdateInfoDto.generation,
+            phoneNumber = mentorUpdateInfoDto.phoneNumber,
+            email = mentorUpdateInfoDto.email,
+            snsUrl = mentorUpdateInfoDto.snsUrl,
+            profileUrl = mentorUpdateInfoDto.profileUrl
         )
 
         modifyMyUserInfoUseCase.modifyMyUserInfo(mentor.user.authenticationId, userSaveInfoDto)

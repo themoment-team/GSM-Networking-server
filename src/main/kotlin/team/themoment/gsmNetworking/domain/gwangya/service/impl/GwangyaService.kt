@@ -36,9 +36,9 @@ class GwangyaService(
         val savedGwangyaPost = gwangyaRepository.save(gwangyaPost)
 
         return GwangyaPostDto(
-            savedGwangyaPost.id,
-            savedGwangyaPost.content,
-            savedGwangyaPost.createdAt
+            id = savedGwangyaPost.id,
+            content = savedGwangyaPost.content,
+            createdAt = savedGwangyaPost.createdAt
         )
     }
 

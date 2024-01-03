@@ -31,16 +31,16 @@ class TempMentorService(
     override fun queryAllTempMentors(): List<TempMentorInfoDto> {
         val tempMentors = tempMentorRepository.findAll().map { tempMentor ->
             TempMentorInfoDto(
-                tempMentor.id,
-                tempMentor.name,
-                tempMentor.email ?: "",
-                tempMentor.generation,
-                tempMentor.position,
-                CompanyInfoDto(
-                    tempMentor.companyName,
-                    tempMentor.companyUrl
+                id = tempMentor.id,
+                name = tempMentor.name,
+                email = tempMentor.email ?: "",
+                generation = tempMentor.generation,
+                position = tempMentor.position,
+                company = CompanyInfoDto(
+                    name = tempMentor.companyName,
+                    url = tempMentor.companyUrl
                 ),
-                tempMentor.sns
+                snsUrl = tempMentor.sns
             )
         }
 
@@ -59,16 +59,16 @@ class TempMentorService(
             ?: throw ExpectedException("존재하지 않는 id 입니다.", HttpStatus.NOT_FOUND)
 
         return TempMentorInfoDto(
-            tempMentor.id,
-            tempMentor.name,
-            tempMentor.email ?: "",
-            tempMentor.generation,
-            tempMentor.position,
-            CompanyInfoDto(
-                tempMentor.companyName,
-                tempMentor.companyUrl
+            id = tempMentor.id,
+            name = tempMentor.name,
+            email = tempMentor.email ?: "",
+            generation = tempMentor.generation,
+            position = tempMentor.position,
+            company = CompanyInfoDto(
+                name = tempMentor.companyName,
+                url = tempMentor.companyUrl
             ),
-            tempMentor.sns
+            snsUrl = tempMentor.sns
         )
     }
 
@@ -82,16 +82,16 @@ class TempMentorService(
     override fun queryTempMentorsByName(name: String): List<SearchTempMentorInfoDto> {
         val searchTempMentors = tempMentorRepository.findByName(name).map { tempMentor ->
             SearchTempMentorInfoDto(
-                tempMentor.id,
-                tempMentor.name,
-                tempMentor.email,
-                tempMentor.generation,
-                tempMentor.position,
-                CompanyInfoDto(
-                    tempMentor.companyName,
-                    tempMentor.companyUrl
+                id = tempMentor.id,
+                name = tempMentor.name,
+                email = tempMentor.email,
+                generation = tempMentor.generation,
+                position = tempMentor.position,
+                company = CompanyInfoDto(
+                    name = tempMentor.companyName,
+                    url = tempMentor.companyUrl
                 ),
-                tempMentor.sns
+                snsUrl = tempMentor.sns
             )
         }
 
