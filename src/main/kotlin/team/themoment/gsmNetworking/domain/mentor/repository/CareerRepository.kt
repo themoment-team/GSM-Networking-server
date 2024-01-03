@@ -11,4 +11,5 @@ interface CareerRepository : CrudRepository<Career, Long> {
 
     fun deleteByMentor(mentor: Mentor)
 
+    fun deleteAllByMentor(mentor: Mentor)
 }
