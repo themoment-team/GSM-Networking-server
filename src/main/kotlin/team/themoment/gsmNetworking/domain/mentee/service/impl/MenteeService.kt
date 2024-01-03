@@ -1,19 +1,22 @@
-package team.themoment.gsmNetworking.domain.mentee.service
+package team.themoment.gsmNetworking.domain.mentee.service.impl
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.domain.mentee.domain.Mentee
 import team.themoment.gsmNetworking.domain.mentee.dto.MenteeRegistrationDto
 import team.themoment.gsmNetworking.domain.mentee.repository.MenteeRepository
+import team.themoment.gsmNetworking.domain.mentee.service.GenerateMenteeUseCase
 import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
 
 @Service
-class MenteeRegistrationService(
+class MenteeService(
+    private val menteeRepository: MenteeRepository,
     private val generateUserUseCase: GenerateUserUseCase,
-    private val menteeRepository: MenteeRepository
-) {
+) : GenerateMenteeUseCase {
 
-    fun execute(menteeRegistrationDto: MenteeRegistrationDto, authenticationId: Long) {
+    @Transactional(rollbackFor = [Exception::class])
+    override fun generateMentee(menteeRegistrationDto: MenteeRegistrationDto, authenticationId: Long) {
         val userRegistrationDto = UserRegistrationDto(
             menteeRegistrationDto.name,
             menteeRegistrationDto.generation,
