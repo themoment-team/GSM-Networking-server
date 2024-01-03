@@ -18,43 +18,44 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("api/v1/mentor")
 class MentorController(
-    private val mentorRegistrationService: MentorRegistrationService,
-    private val queryAllMentorListService: QueryAllMentorsService,
-    private val deleteMyMentorInfoService: DeleteMyMentorInfoService,
+    private val mentorRegistrationUseCase: MentorRegistrationUseCase,
+    private val queryAllMentorsUseCase: QueryAllMentorsUseCase,
+    private val queryMyMentorInfoUseCase: QueryMyMentorInfoUseCase,
+    private val deleteMyMentorInfoUseCase: DeleteMyMentorInfoUseCase,
+    private val modifyMyMentorInfoUseCase: ModifyMyMentorInfoUseCase,
     private val authenticatedUserManager: AuthenticatedUserManager,
-    private val queryMyMentorService: QueryMyMentorService,
-    private val modifyMyMentorInfoService: ModifyMyMentorInfoService,
 ) {
 
     @PostMapping
     fun saveMentorInfo(@RequestBody @Valid dto: MentorRegistrationDto): ResponseEntity<Void> {
         val authenticationId = authenticatedUserManager.getName()
-        mentorRegistrationService.execute(dto, authenticationId)
+        mentorRegistrationUseCase.mentorRegistration(dto, authenticationId)
         authenticatedUserManager.updateAuthority(Authority.USER)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
     @GetMapping
     fun queryAllMentorList(): ResponseEntity<List<MentorInfoDto>> {
-        val mentorList = queryAllMentorListService.execute()
+        val mentorList = queryAllMentorsUseCase.queryAllMentors()
         return ResponseEntity.ok(mentorList)
     }
 
     @GetMapping("/my")
     fun queryMyMentorInfo(): ResponseEntity<MyMentorInfoDto> {
-        val myMentorInfo = queryMyMentorService.execute(authenticatedUserManager.getName())
+        val myMentorInfo = queryMyMentorInfoUseCase.queryMyMentorInfo(authenticatedUserManager.getName())
         return ResponseEntity.ok(myMentorInfo)
     }
 
     @DeleteMapping("/my")
     fun deleteMyMentorInfo(): ResponseEntity<Void> {
-        deleteMyMentorInfoService.execute(authenticatedUserManager.getName())
+        deleteMyMentorInfoUseCase.deleteMyMentorInfo(authenticatedUserManager.getName())
+        authenticatedUserManager.updateAuthority(Authority.TEMP_USER)
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 
     @PutMapping("/my")
-    fun modifyMyCareerInfo(@RequestBody @Valid dto: MentorUpdateInfoDto): ResponseEntity<Void> {
-        modifyMyMentorInfoService.execute(dto)
+    fun modifyMyMentorInfo(@RequestBody @Valid dto: MentorUpdateInfoDto): ResponseEntity<Void> {
+        modifyMyMentorInfoUseCase.modifyMyMentorInfo(dto)
         return ResponseEntity.noContent().build()
     }
 

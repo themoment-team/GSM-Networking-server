@@ -13,7 +13,6 @@ import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorCustomRepository
-import team.themoment.gsmNetworking.domain.mentor.service.impl.QueryAllMentorsServiceImpl
 
 @SpringBootTest(classes = [QueryAllMentorsService::class])
 class QueryAllMentorsServiceTest : BehaviorSpec({
