@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
-import team.themoment.gsmNetworking.domain.user.service.ProfileUrlRegistrationService
+import team.themoment.gsmNetworking.domain.user.service.GenerateProfileUrlUseCase
 
 @RestController
 @RequestMapping("/api/v1/user")
 class UserController(
     private val authenticatedUserManager: AuthenticatedUserManager,
-    private val profileUrlRegistrationService: ProfileUrlRegistrationService,
+    private val generateProfileUrlUseCase: GenerateProfileUrlUseCase
 ) {
 
     @PostMapping("/profile-url")
     fun profileUrlRegistration(@RequestBody dto: ProfileUrlRegistrationDto): ResponseEntity<Void> {
         val authenticationId = authenticatedUserManager.getName()
-        profileUrlRegistrationService.execute(authenticationId, dto)
+        generateProfileUrlUseCase.generateProfileUrl(authenticationId, dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 }

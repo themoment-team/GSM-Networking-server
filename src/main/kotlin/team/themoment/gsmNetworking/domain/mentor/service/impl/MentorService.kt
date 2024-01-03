@@ -14,8 +14,8 @@ import team.themoment.gsmNetworking.domain.mentor.service.*
 import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
 import team.themoment.gsmNetworking.domain.user.dto.UserUpdateInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
-import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoService
-import team.themoment.gsmNetworking.domain.user.service.UserRegistrationService
+import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
+import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoUseCase
 
 /**
  * 멘토 관련 로직이 담긴 클래스 입니다.
@@ -26,8 +26,8 @@ class MentorService(
     private val careerRepository: CareerRepository,
     private val userRepository: UserRepository,
     private val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase,
-    private val userRegistrationService: UserRegistrationService,
-    private val modifyMyUserInfoService: ModifyMyUserInfoService,
+    private val generateUserUseCase: GenerateUserUseCase,
+    private val modifyMyUserInfoUseCase: ModifyMyUserInfoUseCase
 ) : QueryAllMentorsUseCase,
     MentorRegistrationUseCase,
     QueryMyMentorInfoUseCase,
@@ -67,7 +67,7 @@ class MentorService(
             snsUrl = dto.snsUrl,
             profileUrl = dto.profileUrl
         )
-        val user = userRegistrationService.execute(userRegistrationDto, authenticationId)
+        val user = generateUserUseCase.generateUser(userRegistrationDto, authenticationId)
         val mentor = Mentor(registered = true, user = user)
         val careerList = dto.career.map {
             Career(
@@ -124,7 +124,7 @@ class MentorService(
             mentorUpdateInfoDto.profileUrl
         )
 
-        modifyMyUserInfoService.execute(mentor.user.authenticationId, userSaveInfoDto)
+        modifyMyUserInfoUseCase.modifyMyUserInfo(mentor.user.authenticationId, userSaveInfoDto)
         careerRepository.saveAll(updateCareers)
     }
 }
