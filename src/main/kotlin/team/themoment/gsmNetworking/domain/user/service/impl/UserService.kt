@@ -6,8 +6,7 @@ import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.user.domain.User
 import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
-import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
-import team.themoment.gsmNetworking.domain.user.dto.UserUpdateInfoDto
+import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.domain.user.service.GenerateProfileUrlUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
@@ -21,7 +20,7 @@ class UserService(
     GenerateProfileUrlUseCase {
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun generateUser(dto: UserRegistrationDto, authenticationId: Long): User {
+    override fun generateUser(dto: UserSaveInfoDto, authenticationId: Long): User {
         validateExistUserByPhoneNumber(dto.phoneNumber)
         validateExistUserByEmail(dto.email)
         if (userRepository.existsByAuthenticationId(authenticationId))
@@ -39,7 +38,7 @@ class UserService(
     }
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun modifyMyUserInfo(authenticationId: Long, userUpdateInfoDto: UserUpdateInfoDto) {
+    override fun modifyMyUserInfo(authenticationId: Long, userUpdateInfoDto: UserSaveInfoDto) {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 

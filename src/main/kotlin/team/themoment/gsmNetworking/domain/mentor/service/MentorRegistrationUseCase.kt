@@ -1,8 +1,8 @@
 package team.themoment.gsmNetworking.domain.mentor.service
 
-import team.themoment.gsmNetworking.domain.mentor.dto.MentorRegistrationDto
+import team.themoment.gsmNetworking.domain.mentor.dto.MentorSaveInfoDto
 
 interface MentorRegistrationUseCase {
 
-    fun mentorRegistration(dto: MentorRegistrationDto, authenticationId: Long)
+    fun mentorRegistration(dto: MentorSaveInfoDto, authenticationId: Long)
 }

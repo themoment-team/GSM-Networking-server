@@ -11,8 +11,7 @@ import team.themoment.gsmNetworking.domain.mentor.dto.*
 import team.themoment.gsmNetworking.domain.mentor.repository.CareerRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.mentor.service.*
-import team.themoment.gsmNetworking.domain.user.dto.UserRegistrationDto
-import team.themoment.gsmNetworking.domain.user.dto.UserUpdateInfoDto
+import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
 import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoUseCase
@@ -58,8 +57,8 @@ class MentorService(
      * 현재 단계에서는 멘티의 정보를 저장하고 있지 않기 때문에 바로 이 메서드에서 user 정보와 멘티 정보를 저장한다.
      */
     @Transactional(rollbackFor = [Exception::class])
-    override fun mentorRegistration(dto: MentorRegistrationDto, authenticationId: Long) {
-        val userRegistrationDto = UserRegistrationDto(
+    override fun mentorRegistration(dto: MentorSaveInfoDto, authenticationId: Long) {
+        val userSaveInfoDto = UserSaveInfoDto(
             name = dto.name,
             generation = dto.generation,
             phoneNumber = dto.phoneNumber,
@@ -67,7 +66,7 @@ class MentorService(
             snsUrl = dto.snsUrl,
             profileUrl = dto.profileUrl
         )
-        val user = generateUserUseCase.generateUser(userRegistrationDto, authenticationId)
+        val user = generateUserUseCase.generateUser(userSaveInfoDto, authenticationId)
         val mentor = Mentor(registered = true, user = user)
         val careerList = dto.career.map {
             Career(
@@ -109,19 +108,21 @@ class MentorService(
     }
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun modifyMyMentorInfo(mentorUpdateInfoDto: MentorUpdateInfoDto) {
-        val mentor = mentorRepository.findByIdOrNull(mentorUpdateInfoDto.id)
+    override fun modifyMyMentorInfo(authenticationId: Long, mentorSaveInfoDto: MentorSaveInfoDto) {
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+        val mentor = mentorRepository.findByUser(user)
             ?: throw ExpectedException("mentor를 찾을 수 없습니다", HttpStatus.NOT_FOUND)
 
-        val updateCareers = Career.ofCareers(mentorUpdateInfoDto.career, mentor)
+        val updateCareers = Career.ofCareers(mentorSaveInfoDto.career, mentor)
 
-        val userSaveInfoDto = UserUpdateInfoDto(
-            name = mentorUpdateInfoDto.name,
-            generation = mentorUpdateInfoDto.generation,
-            phoneNumber = mentorUpdateInfoDto.phoneNumber,
-            email = mentorUpdateInfoDto.email,
-            snsUrl = mentorUpdateInfoDto.snsUrl,
-            profileUrl = mentorUpdateInfoDto.profileUrl
+        val userSaveInfoDto = UserSaveInfoDto(
+            name = mentorSaveInfoDto.name,
+            generation = mentorSaveInfoDto.generation,
+            phoneNumber = mentorSaveInfoDto.phoneNumber,
+            email = mentorSaveInfoDto.email,
+            snsUrl = mentorSaveInfoDto.snsUrl,
+            profileUrl = mentorSaveInfoDto.profileUrl
         )
 
         modifyMyUserInfoUseCase.modifyMyUserInfo(mentor.user.authenticationId, userSaveInfoDto)

@@ -40,14 +40,13 @@ class Career(
         fun ofCareers(mentorCareerDto: List<MentorCareerDto>, mentor: Mentor): List<Career>{
             return mentorCareerDto.map {
                 Career(
-                    it.id,
-                    mentor,
-                    it.companyName,
-                    it.companyUrl ?: "",
-                    it.position,
-                    it.startDate,
-                    it.endDate,
-                    it.isWorking ?: false
+                    mentor = mentor,
+                    companyName = it.companyName,
+                    companyUrl = it.companyUrl ?: "",
+                    position = it.position,
+                    startDate = it.startDate,
+                    endDate = it.endDate,
+                    isWorking = it.isWorking ?: false
                 )
             }
         }
