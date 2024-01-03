@@ -26,7 +26,7 @@ class UserRegistrationService(
         validateExistUserByPhoneNumber(dto.phoneNumber)
         validateExistUserByEmail(dto.email)
         if (userRepository.existsByAuthenticationId(authenticationId))
-            throw ExpectedException("이미 등록되어있는 user입니다.", HttpStatus.BAD_REQUEST)
+            throw ExpectedException("이미 등록되어있는 user입니다.", HttpStatus.CONFLICT)
         val user = User(
             authenticationId = authenticationId,
             name = dto.name,
