@@ -2,6 +2,7 @@ package team.themoment.gsmNetworking.domain.mentee.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -19,7 +20,7 @@ class MenteeController(
     private val authenticatedUserManager: AuthenticatedUserManager
 ) {
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     fun updateMentee(): ResponseEntity<Unit> {
         authenticatedUserManager.updateAuthority(Authority.TEMP_USER)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
