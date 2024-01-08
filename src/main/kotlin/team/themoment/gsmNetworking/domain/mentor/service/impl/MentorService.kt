@@ -63,8 +63,7 @@ class MentorService(
             generation = dto.generation,
             phoneNumber = dto.phoneNumber,
             email = dto.email,
-            snsUrl = dto.snsUrl,
-            profileUrl = dto.profileUrl
+            snsUrl = dto.snsUrl
         )
         val user = generateUserUseCase.generateUser(userSaveInfoDto, authenticationId)
         val mentor = Mentor(registered = true, user = user)
@@ -121,8 +120,7 @@ class MentorService(
             generation = mentorSaveInfoDto.generation,
             phoneNumber = mentorSaveInfoDto.phoneNumber,
             email = mentorSaveInfoDto.email,
-            snsUrl = mentorSaveInfoDto.snsUrl,
-            profileUrl = mentorSaveInfoDto.profileUrl
+            snsUrl = mentorSaveInfoDto.snsUrl
         )
 
         modifyMyUserInfoUseCase.modifyMyUserInfo(mentor.user.authenticationId, userSaveInfoDto)

@@ -22,8 +22,7 @@ class MenteeService(
             generation = menteeRegistrationDto.generation,
             phoneNumber = menteeRegistrationDto.phoneNumber,
             email = menteeRegistrationDto.email,
-            snsUrl = null,
-            profileUrl = menteeRegistrationDto.profileUrl
+            snsUrl = null
         )
         val user = generateUserUseCase.generateUser(userSaveInfoDto, authenticationId)
         val mentee = Mentee(user = user)

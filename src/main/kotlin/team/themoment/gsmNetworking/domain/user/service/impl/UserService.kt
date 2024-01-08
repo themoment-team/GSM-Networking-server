@@ -32,30 +32,30 @@ class UserService(
             email = dto.email,
             phoneNumber = dto.phoneNumber,
             snsUrl = dto.snsUrl,
-            profileUrl = dto.profileUrl
+            profileUrl = null
         )
         return userRepository.save(user)
     }
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun modifyMyUserInfo(authenticationId: Long, userUpdateInfoDto: UserSaveInfoDto) {
+    override fun modifyMyUserInfo(authenticationId: Long, userSaveInfoDto: UserSaveInfoDto) {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
-        if (userUpdateInfoDto.phoneNumber != user.phoneNumber)
-            validateExistUserByPhoneNumber(userUpdateInfoDto.phoneNumber)
-        else if (userUpdateInfoDto.email != user.email)
-            validateExistUserByEmail(userUpdateInfoDto.email)
+        if (userSaveInfoDto.phoneNumber != user.phoneNumber)
+            validateExistUserByPhoneNumber(userSaveInfoDto.phoneNumber)
+        else if (userSaveInfoDto.email != user.email)
+            validateExistUserByEmail(userSaveInfoDto.email)
 
         val updatedUser = User(
             id = user.id,
             authenticationId = authenticationId,
-            name = userUpdateInfoDto.name,
-            generation = userUpdateInfoDto.generation,
-            email = userUpdateInfoDto.email,
-            phoneNumber = userUpdateInfoDto.phoneNumber,
-            snsUrl = userUpdateInfoDto.snsUrl,
-            profileUrl = userUpdateInfoDto.profileUrl
+            name = userSaveInfoDto.name,
+            generation = userSaveInfoDto.generation,
+            email = userSaveInfoDto.email,
+            phoneNumber = userSaveInfoDto.phoneNumber,
+            snsUrl = userSaveInfoDto.snsUrl,
+            profileUrl = user.profileUrl
         )
 
         userRepository.save(updatedUser)
