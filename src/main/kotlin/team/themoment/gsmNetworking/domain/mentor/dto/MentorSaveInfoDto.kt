@@ -19,8 +19,6 @@ data class MentorSaveInfoDto(
 
     val snsUrl: String?,
 
-    val profileUrl: String?,
-
     @field:NotEmpty
     val career: List<MentorCareerDto>
 )

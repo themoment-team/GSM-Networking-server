@@ -16,26 +16,19 @@ import team.themoment.gsmNetworking.domain.gwangya.authentication.GwangyaAuthent
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostDto
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostRegistrationDto
 import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaTokenDto
-import team.themoment.gsmNetworking.domain.gwangya.service.DeleteGwangyaByIdService
-import team.themoment.gsmNetworking.domain.gwangya.service.GenerateGwangyaPostService
-import team.themoment.gsmNetworking.domain.gwangya.service.QueryGwangyaPostService
-import team.themoment.gsmNetworking.domain.gwangya.service.QueryGwangyaTokenService
+import team.themoment.gsmNetworking.domain.gwangya.service.DeleteGwangyaPostByIdUseCase
+import team.themoment.gsmNetworking.domain.gwangya.service.GenerateGwangyaPostUseCase
+import team.themoment.gsmNetworking.domain.gwangya.service.QueryGwangyaPostUseCase
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("api/v1/gwangya")
 class GwangyaController(
-    private val queryGwangyaTokenService: QueryGwangyaTokenService,
-    private val generateGwangyaPostService: GenerateGwangyaPostService,
-    private val queryGwangyaPostService: QueryGwangyaPostService,
-    private val deleteGwangyaByIdService: DeleteGwangyaByIdService,
+    private val generateGwangyaPostUseCase: GenerateGwangyaPostUseCase,
+    private val queryGwangyaPostUseCase: QueryGwangyaPostUseCase,
+    private val deleteGwangyaPostByIdUseCase: DeleteGwangyaPostByIdUseCase,
     private val gwangyaAuthenticationManager: GwangyaAuthenticationManager
 ) {
-    @GetMapping("/token")
-    fun queryGwangyaToken(): ResponseEntity<GwangyaTokenDto> {
-        val gwangyaToken = queryGwangyaTokenService.execute()
-        return ResponseEntity.ok(gwangyaToken)
-    }
 
     @GetMapping
     fun queryGwangya(
@@ -48,7 +41,7 @@ class GwangyaController(
             throw ExpectedException("0이상부터 가능합니다.", HttpStatus.BAD_REQUEST)
         else if (pageSize > 20L)
             throw ExpectedException("페이지 크기는 20이하까지 가능합니다.", HttpStatus.BAD_REQUEST)
-        val gwangyaPosts = queryGwangyaPostService.execute(cursorId, pageSize)
+        val gwangyaPosts = queryGwangyaPostUseCase.queryGwangyaPost(cursorId, pageSize)
         return ResponseEntity.ok(gwangyaPosts)
     }
 
@@ -58,7 +51,7 @@ class GwangyaController(
         @Valid @RequestBody gwangyaDto: GwangyaPostRegistrationDto
     ): ResponseEntity<GwangyaPostDto> {
         checkGwangyaAuthentication(gwangyaToken)
-        val savedGwangyaPost = generateGwangyaPostService.execute(gwangyaDto)
+        val savedGwangyaPost = generateGwangyaPostUseCase.generateGwangyaPost(gwangyaDto)
         return ResponseEntity.status(HttpStatus.CREATED).body(savedGwangyaPost)
     }
 
@@ -66,7 +59,7 @@ class GwangyaController(
     fun deleteGwangya(
         @PathVariable gwangyaId: Long
     ): ResponseEntity<Void> {
-        deleteGwangyaByIdService.execute(gwangyaId)
+        deleteGwangyaPostByIdUseCase.deleteGwangyaPostById(gwangyaId)
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 

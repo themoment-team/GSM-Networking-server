@@ -15,27 +15,27 @@ import team.themoment.gsmNetworking.domain.mentor.service.*
 @RestController
 @RequestMapping("/api/v1/temp-mentor")
 class TempMentorController(
-    private val queryTempMentorListService: QueryTempMentorListService,
-    private val queryTempMentorListByNameService: QueryTempMentorListByNameService,
-    private val deleteTempMentorService: DeleteTempMentorService,
-    private val queryTempMentorService: QueryTempMentorService
+    private val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase,
+    private val queryTempMentorsByNameUseCase: QueryTempMentorsByNameUseCase,
+    private val deleteTempMentorByIdUseCase: DeleteTempMentorByIdUseCase,
+    private val queryTempMentorByIdUseCase: QueryTempMentorByIdUseCase
 ) {
 
     @GetMapping
-    fun queryTempMentorList(): ResponseEntity<List<TempMentorInfoDto>> {
-        val tempMentorList = queryTempMentorListService.execute()
+    fun queryAllTempMentors(): ResponseEntity<List<TempMentorInfoDto>> {
+        val tempMentorList = queryAllTempMentorsUseCase.queryAllTempMentors()
         return ResponseEntity.ok(tempMentorList)
     }
 
     @GetMapping("/{id}")
-    fun findTempMentor(@PathVariable id: Long): ResponseEntity<TempMentorInfoDto> {
-        val tempMentor = queryTempMentorService.execute(id)
+    fun queryTempMentorById(@PathVariable id: Long): ResponseEntity<TempMentorInfoDto> {
+        val tempMentor = queryTempMentorByIdUseCase.queryTempMentorById(id)
         return ResponseEntity.ok(tempMentor)
     }
 
     @GetMapping("/search/{name}")
-    fun searchTempMentorListByName(@PathVariable name: String): ResponseEntity<List<SearchTempMentorInfoDto>> {
-        val searchTempMentorList = queryTempMentorListByNameService.execute(name)
+    fun queryTempMentorsByName(@PathVariable name: String): ResponseEntity<List<SearchTempMentorInfoDto>> {
+        val searchTempMentorList = queryTempMentorsByNameUseCase.queryTempMentorsByName(name)
 
         if (searchTempMentorList.isEmpty())
             throw ExpectedException("검색 결과가 없습니다.", HttpStatus.NO_CONTENT)
@@ -44,8 +44,8 @@ class TempMentorController(
     }
 
     @DeleteMapping("/{id}")
-    fun deleteTempMentor(@PathVariable id: Long): ResponseEntity<Void> {
-        deleteTempMentorService.execute(id)
+    fun deleteTempMentorById(@PathVariable id: Long): ResponseEntity<Void> {
+        deleteTempMentorByIdUseCase.deleteTempMentorById(id)
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
 

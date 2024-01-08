@@ -14,7 +14,5 @@ data class MenteeRegistrationDto(
     val phoneNumber: String,
 
     @field:NotNull
-    val generation: Int,
-
-    val profileUrl: String?
+    val generation: Int
 )
