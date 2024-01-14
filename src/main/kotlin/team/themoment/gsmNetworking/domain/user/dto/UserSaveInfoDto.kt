@@ -5,6 +5,5 @@ data class UserSaveInfoDto(
     val generation: Int,
     val phoneNumber: String,
     val email: String,
-    val snsUrl: String?,
-    val profileUrl: String?
+    val snsUrl: String?
 )

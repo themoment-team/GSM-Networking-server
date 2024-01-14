@@ -12,17 +12,34 @@ import org.springframework.boot.test.context.SpringBootTest
 import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
+import team.themoment.gsmNetworking.domain.mentor.repository.CareerRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorCustomRepository
-import team.themoment.gsmNetworking.domain.mentor.service.impl.QueryAllMentorsServiceImpl
+import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
+import team.themoment.gsmNetworking.domain.mentor.service.impl.MentorService
+import team.themoment.gsmNetworking.domain.user.repository.UserRepository
+import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
+import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoUseCase
 
-@SpringBootTest(classes = [QueryAllMentorsService::class])
-class QueryAllMentorsServiceTest : BehaviorSpec({
+@SpringBootTest(classes = [QueryAllMentorsUseCase::class])
+class QueryAllMentorsUseCaseTest : BehaviorSpec({
 
-    val mentorRepository: MentorCustomRepository = mockk()
-    val queryTempMentorListService: QueryTempMentorListService = mockk()
+    val mentorRepository: MentorRepository = mockk()
+    val careerRepository: CareerRepository = mockk()
+    val userRepository: UserRepository = mockk()
+    val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase = mockk()
+    val generateUserUseCase: GenerateUserUseCase = mockk()
+    val modifyMyUserInfoUseCase: ModifyMyUserInfoUseCase = mockk()
 
-    val queryAllMentorsService: QueryAllMentorsService =
-        QueryAllMentorsServiceImpl(mentorRepository, queryTempMentorListService)
+
+    val queryAllMentorsUseCase: QueryAllMentorsUseCase =
+        MentorService(
+            mentorRepository,
+            careerRepository,
+            userRepository,
+            queryAllTempMentorsUseCase,
+            generateUserUseCase,
+            modifyMyUserInfoUseCase
+        )
 
     //TODO 더미데이터가 코드를 너무 많이 차지하는데...
     val dummyMentorInfoDtos = listOf(
@@ -165,12 +182,12 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
 
     given("조회할 멘토, 임시 멘토 리스트와 예상 결과 리스트가 주어질 때") {
         every { mentorRepository.findAllMentorInfoDto() } returns dummyMentorInfoDtos
-        every { queryTempMentorListService.execute() } returns dummyTempMentorInfoDtos
+        every { queryAllTempMentorsUseCase.queryAllTempMentors() } returns dummyTempMentorInfoDtos
         val sortedMentorNames = listOf("김철수", "홍길동", "이영희", "박철호", "김유신", "임꺽정", "정도전", "유관순")
         val sortedMentorIds = listOf(1, 2, 3, 4, 5, 6, 7, 8)
 
         `when`("조회 요청 메서드 실행 시") {
-            val allMentors = queryAllMentorsService.execute()
+            val allMentors = queryAllMentorsUseCase.queryAllMentors()
 
             then("블루체크 된 멘토, 임시 멘토가 결과로 반환되어야 한다") {
                 val blueCheckedUsers = allMentors.filter { it.registered }
@@ -208,10 +225,10 @@ class QueryAllMentorsServiceTest : BehaviorSpec({
 
     given("같은 사용자 정보를 가지는 멘토, 임시 멘토가 주어질 때") {
         every { mentorRepository.findAllMentorInfoDto() } returns listOf(sameUserMentor)
-        every { queryTempMentorListService.execute() } returns listOf(sameUserTempMentor)
+        every { queryAllTempMentorsUseCase.queryAllTempMentors() } returns listOf(sameUserTempMentor)
 
         `when`("조회 요청 메서드 실행 시") {
-            val allMentors = queryAllMentorsService.execute()
+            val allMentors = queryAllMentorsUseCase.queryAllMentors()
 
             then("임시 사용자와 블루체크 된 사용자 정보가 중복된다면, 블루체크 된 사용자만 반환") {
                 val blueCheckedUsers = allMentors.filter { it.registered }

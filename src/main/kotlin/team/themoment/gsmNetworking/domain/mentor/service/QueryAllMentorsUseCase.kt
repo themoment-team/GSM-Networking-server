@@ -2,7 +2,7 @@ package team.themoment.gsmNetworking.domain.mentor.service
 
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 
+interface QueryAllMentorsUseCase {
 
-interface QueryAllMentorsService {
-    fun execute() : List<MentorInfoDto>
+    fun queryAllMentors() : List<MentorInfoDto>
 }
