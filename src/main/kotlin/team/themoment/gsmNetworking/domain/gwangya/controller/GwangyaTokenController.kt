@@ -13,7 +13,7 @@ class GwangyaTokenController(
     private val queryGwangyaTokenUseCase: QueryGwangyaTokenUseCase
 ) {
 
-    @GetMapping("/token")
+    @GetMapping
     fun queryGwangyaToken(): ResponseEntity<GwangyaTokenDto> {
         val gwangyaToken = queryGwangyaTokenUseCase.queryGwangyaToken()
         return ResponseEntity.ok(gwangyaToken)
