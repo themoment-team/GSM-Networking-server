@@ -17,6 +17,7 @@ import team.themoment.gsmNetworking.domain.mentor.repository.MentorCustomReposit
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.mentor.service.impl.MentorService
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
+import team.themoment.gsmNetworking.domain.user.service.DeleteMyUserInfoUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
 import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoUseCase
 
@@ -29,6 +30,7 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
     val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase = mockk()
     val generateUserUseCase: GenerateUserUseCase = mockk()
     val modifyMyUserInfoUseCase: ModifyMyUserInfoUseCase = mockk()
+    val deleteMyUserInfoUseCase: DeleteMyUserInfoUseCase = mockk()
 
 
     val queryAllMentorsUseCase: QueryAllMentorsUseCase =
@@ -38,7 +40,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             userRepository,
             queryAllTempMentorsUseCase,
             generateUserUseCase,
-            modifyMyUserInfoUseCase
+            modifyMyUserInfoUseCase,
+            deleteMyUserInfoUseCase
         )
 
     //TODO 더미데이터가 코드를 너무 많이 차지하는데...
