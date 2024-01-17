@@ -42,6 +42,6 @@ class MenteeService(
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
         menteeRepository.deleteByUser(user)
-        userRepository.deleteById(user.id)
+        userRepository.delete(user)
     }
 }
