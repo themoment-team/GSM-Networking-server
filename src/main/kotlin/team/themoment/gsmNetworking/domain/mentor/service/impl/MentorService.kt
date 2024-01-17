@@ -13,6 +13,7 @@ import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.mentor.service.*
 import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
+import team.themoment.gsmNetworking.domain.user.service.DeleteMyUserInfoUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
 import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoUseCase
 
@@ -26,7 +27,8 @@ class MentorService(
     private val userRepository: UserRepository,
     private val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase,
     private val generateUserUseCase: GenerateUserUseCase,
-    private val modifyMyUserInfoUseCase: ModifyMyUserInfoUseCase
+    private val modifyMyUserInfoUseCase: ModifyMyUserInfoUseCase,
+    private val deleteMyUserInfoUseCase: DeleteMyUserInfoUseCase
 ) : QueryAllMentorsUseCase,
     MentorRegistrationUseCase,
     QueryMyMentorInfoUseCase,
@@ -96,14 +98,12 @@ class MentorService(
 
     @Transactional(rollbackFor = [Exception::class])
     override fun deleteMyMentorInfo(authenticationId: Long) {
-        val user = userRepository.findByAuthenticationId(authenticationId)
-            ?: throw ExpectedException("존재하지 않는 user입니다.", HttpStatus.NOT_FOUND)
+        val user = deleteMyUserInfoUseCase.deleteMyUserInfoUseCase(authenticationId)
         val mentor = mentorRepository.findByUser(user)
             ?: throw ExpectedException("존재하지 않는 mentor입니다.", HttpStatus.NOT_FOUND)
 
         careerRepository.deleteByMentor(mentor)
-        mentorRepository.deleteByUser(user)
-        userRepository.deleteById(user.id)
+        mentorRepository.delete(mentor)
     }
 
     @Transactional(rollbackFor = [Exception::class])

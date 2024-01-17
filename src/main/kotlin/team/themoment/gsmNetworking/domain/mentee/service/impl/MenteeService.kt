@@ -11,6 +11,7 @@ import team.themoment.gsmNetworking.domain.mentee.service.DeleteMyMenteeInfoUseC
 import team.themoment.gsmNetworking.domain.mentee.service.GenerateMenteeUseCase
 import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
+import team.themoment.gsmNetworking.domain.user.service.DeleteMyUserInfoUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
 
 @Service
@@ -18,6 +19,7 @@ class MenteeService(
     private val menteeRepository: MenteeRepository,
     private val userRepository: UserRepository,
     private val generateUserUseCase: GenerateUserUseCase,
+    private val deleteMyUserInfoUseCase: DeleteMyUserInfoUseCase
 ) : GenerateMenteeUseCase,
     DeleteMyMenteeInfoUseCase {
 
@@ -38,10 +40,8 @@ class MenteeService(
 
     @Transactional(rollbackFor = [Exception::class])
     override fun deleteMyMenteeInfo(authenticationId: Long) {
-        val user = userRepository.findByAuthenticationId(authenticationId)
-            ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+        val user = deleteMyUserInfoUseCase.deleteMyUserInfoUseCase(authenticationId)
 
         menteeRepository.deleteByUser(user)
-        userRepository.delete(user)
     }
 }

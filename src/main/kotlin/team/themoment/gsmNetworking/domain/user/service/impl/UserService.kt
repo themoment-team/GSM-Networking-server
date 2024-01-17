@@ -4,10 +4,12 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
+import team.themoment.gsmNetworking.domain.mentee.service.DeleteMyMenteeInfoUseCase
 import team.themoment.gsmNetworking.domain.user.domain.User
 import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
 import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
+import team.themoment.gsmNetworking.domain.user.service.DeleteMyUserInfoUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateProfileUrlUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
 import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoUseCase
@@ -17,7 +19,8 @@ class UserService(
     private val userRepository: UserRepository,
 ) : GenerateUserUseCase,
     ModifyMyUserInfoUseCase,
-    GenerateProfileUrlUseCase {
+    GenerateProfileUrlUseCase,
+    DeleteMyUserInfoUseCase {
 
     @Transactional(rollbackFor = [Exception::class])
     override fun generateUser(dto: UserSaveInfoDto, authenticationId: Long): User {
@@ -93,4 +96,13 @@ class UserService(
 
         userRepository.save(userUpdatedProfileUrl)
     }
+
+    override fun deleteMyUserInfoUseCase(authenticationId: Long): User {
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+        userRepository.delete(user)
+        return user
+    }
+
 }
