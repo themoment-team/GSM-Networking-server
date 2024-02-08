@@ -124,6 +124,7 @@ class MentorService(
         )
 
         modifyMyUserInfoUseCase.modifyMyUserInfo(mentor.user.authenticationId, userSaveInfoDto)
+        careerRepository.deleteAllByMentor(mentor)
         careerRepository.saveAll(updateCareers)
     }
 }
