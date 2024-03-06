@@ -7,12 +7,10 @@ import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.mentee.service.DeleteMyMenteeInfoUseCase
 import team.themoment.gsmNetworking.domain.user.domain.User
 import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
+import team.themoment.gsmNetworking.domain.user.dto.UserInfoDto
 import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
-import team.themoment.gsmNetworking.domain.user.service.DeleteMyUserInfoUseCase
-import team.themoment.gsmNetworking.domain.user.service.GenerateProfileUrlUseCase
-import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
-import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoUseCase
+import team.themoment.gsmNetworking.domain.user.service.*
 
 @Service
 class UserService(
@@ -20,7 +18,8 @@ class UserService(
 ) : GenerateUserUseCase,
     ModifyMyUserInfoUseCase,
     GenerateProfileUrlUseCase,
-    DeleteMyUserInfoUseCase {
+    DeleteMyUserInfoUseCase,
+    QueryMyUserInfoUseCase {
 
     @Transactional(rollbackFor = [Exception::class])
     override fun generateUser(dto: UserSaveInfoDto, authenticationId: Long): User {
@@ -103,6 +102,20 @@ class UserService(
 
         userRepository.delete(user)
         return user
+    }
+
+    override fun queryMyUserInfo(authenticationId: Long): UserInfoDto {
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+        return UserInfoDto(
+            name = user.name,
+            generation = user.generation,
+            email = user.email,
+            phoneNumber = user.phoneNumber,
+            snsUrl = user.snsUrl,
+            profileUrl = user.profileUrl
+        )
     }
 
 }

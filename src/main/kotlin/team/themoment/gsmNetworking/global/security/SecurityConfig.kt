@@ -97,6 +97,9 @@ class SecurityConfig(
             .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(
                 Authority.TEMP_USER.name
             )
+            .mvcMatchers(HttpMethod.GET, "/api/v1/mentee/my").hasAnyRole(
+                Authority.TEMP_USER.name
+            )
             .mvcMatchers("api/v1/mentee/my").hasAnyRole(
                 Authority.TEMP_USER.name
             )
