@@ -13,13 +13,12 @@ import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.dto.TempMentorInfoDto
 import team.themoment.gsmNetworking.domain.mentor.repository.CareerRepository
-import team.themoment.gsmNetworking.domain.mentor.repository.MentorCustomRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.mentor.service.impl.MentorService
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
-import team.themoment.gsmNetworking.domain.user.service.DeleteMyUserInfoUseCase
+import team.themoment.gsmNetworking.domain.user.service.DeleteUserInfoByIdUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
-import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoUseCase
+import team.themoment.gsmNetworking.domain.user.service.ModifyUserInfoByIdUseCase
 
 @SpringBootTest(classes = [QueryAllMentorsUseCase::class])
 class QueryAllMentorsUseCaseTest : BehaviorSpec({
@@ -29,8 +28,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
     val userRepository: UserRepository = mockk()
     val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase = mockk()
     val generateUserUseCase: GenerateUserUseCase = mockk()
-    val modifyMyUserInfoUseCase: ModifyMyUserInfoUseCase = mockk()
-    val deleteMyUserInfoUseCase: DeleteMyUserInfoUseCase = mockk()
+    val modifyUserInfoByIdUseCase: ModifyUserInfoByIdUseCase = mockk()
+    val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase = mockk()
 
 
     val queryAllMentorsUseCase: QueryAllMentorsUseCase =
@@ -40,8 +39,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             userRepository,
             queryAllTempMentorsUseCase,
             generateUserUseCase,
-            modifyMyUserInfoUseCase,
-            deleteMyUserInfoUseCase
+            modifyUserInfoByIdUseCase,
+            deleteUserInfoByIdUseCase
         )
 
     //TODO 더미데이터가 코드를 너무 많이 차지하는데...

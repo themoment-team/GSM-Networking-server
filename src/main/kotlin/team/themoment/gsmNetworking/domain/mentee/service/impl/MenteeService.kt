@@ -1,33 +1,30 @@
 package team.themoment.gsmNetworking.domain.mentee.service.impl
 
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.mentee.domain.Mentee
 import team.themoment.gsmNetworking.domain.mentee.dto.MenteeInfoDto
 import team.themoment.gsmNetworking.domain.mentee.dto.MenteeRegistrationDto
 import team.themoment.gsmNetworking.domain.mentee.repository.MenteeRepository
-import team.themoment.gsmNetworking.domain.mentee.service.DeleteMyMenteeInfoUseCase
+import team.themoment.gsmNetworking.domain.mentee.service.DeleteMenteeInfoByIdUseCase
 import team.themoment.gsmNetworking.domain.mentee.service.GenerateMenteeUseCase
-import team.themoment.gsmNetworking.domain.mentee.service.QueryMyMenteeInfoUseCase
+import team.themoment.gsmNetworking.domain.mentee.service.QueryMenteeInfoByIdUseCase
 import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
-import team.themoment.gsmNetworking.domain.user.repository.UserRepository
-import team.themoment.gsmNetworking.domain.user.service.DeleteMyUserInfoUseCase
+import team.themoment.gsmNetworking.domain.user.service.DeleteUserInfoByIdUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
-import team.themoment.gsmNetworking.domain.user.service.QueryMyUserInfoUseCase
+import team.themoment.gsmNetworking.domain.user.service.QueryUserInfoByIdUseCase
 
 @Service
 class MenteeService(
     private val menteeRepository: MenteeRepository,
     private val generateUserUseCase: GenerateUserUseCase,
-    private val deleteMyUserInfoUseCase: DeleteMyUserInfoUseCase,
-    private val queryMyUserInfoUseCase: QueryMyUserInfoUseCase
+    private val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase,
+    private val queryUserInfoByIdUseCase: QueryUserInfoByIdUseCase
 ) : GenerateMenteeUseCase,
-    DeleteMyMenteeInfoUseCase,
-    QueryMyMenteeInfoUseCase {
+    DeleteMenteeInfoByIdUseCase,
+    QueryMenteeInfoByIdUseCase {
 
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional
     override fun generateMentee(menteeRegistrationDto: MenteeRegistrationDto, authenticationId: Long) {
         val userSaveInfoDto = UserSaveInfoDto(
             name = menteeRegistrationDto.name,
@@ -42,22 +39,22 @@ class MenteeService(
         menteeRepository.save(mentee)
     }
 
-    @Transactional(rollbackFor = [Exception::class])
-    override fun deleteMyMenteeInfo(authenticationId: Long) {
-        val user = deleteMyUserInfoUseCase.deleteMyUserInfoUseCase(authenticationId)
+    @Transactional
+    override fun deleteMenteeInfoById(authenticationId: Long) {
+        val user = deleteUserInfoByIdUseCase.deleteUserInfoByIdUseCase(authenticationId)
 
         menteeRepository.deleteByUser(user)
     }
 
     @Transactional(readOnly = true)
-    override fun queryMyMenteeInfo(authenticationId: Long): MenteeInfoDto {
-        val userInfoDto = queryMyUserInfoUseCase.queryMyUserInfo(authenticationId)
+    override fun queryMenteeInfoById(authenticationId: Long): MenteeInfoDto {
+        val userInfoDto = queryUserInfoByIdUseCase.queryUserInfoById(authenticationId)
 
         return MenteeInfoDto(
-            userInfoDto.name,
-            userInfoDto.email,
-            userInfoDto.phoneNumber,
-            userInfoDto.generation
+            name = userInfoDto.name,
+            email = userInfoDto.email,
+            phoneNumber = userInfoDto.phoneNumber,
+            generation = userInfoDto.generation
         )
     }
 }

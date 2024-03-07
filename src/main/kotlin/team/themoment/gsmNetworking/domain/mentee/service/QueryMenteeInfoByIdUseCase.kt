@@ -2,7 +2,7 @@ package team.themoment.gsmNetworking.domain.mentee.service
 
 import team.themoment.gsmNetworking.domain.mentee.dto.MenteeInfoDto
 
-interface QueryMyMenteeInfoUseCase {
+interface QueryMenteeInfoByIdUseCase {
 
-    fun queryMyMenteeInfo(authenticationId: Long): MenteeInfoDto
+    fun queryMenteeInfoById(authenticationId: Long): MenteeInfoDto
 }

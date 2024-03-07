@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
-import team.themoment.gsmNetworking.domain.mentee.service.DeleteMyMenteeInfoUseCase
 import team.themoment.gsmNetworking.domain.user.domain.User
 import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
 import team.themoment.gsmNetworking.domain.user.dto.UserInfoDto
@@ -16,12 +15,12 @@ import team.themoment.gsmNetworking.domain.user.service.*
 class UserService(
     private val userRepository: UserRepository,
 ) : GenerateUserUseCase,
-    ModifyMyUserInfoUseCase,
+    ModifyUserInfoByIdUseCase,
     GenerateProfileUrlUseCase,
-    DeleteMyUserInfoUseCase,
-    QueryMyUserInfoUseCase {
+    DeleteUserInfoByIdUseCase,
+    QueryUserInfoByIdUseCase {
 
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional
     override fun generateUser(dto: UserSaveInfoDto, authenticationId: Long): User {
         validateExistUserByPhoneNumber(dto.phoneNumber)
         validateExistUserByEmail(dto.email)
@@ -39,8 +38,8 @@ class UserService(
         return userRepository.save(user)
     }
 
-    @Transactional(rollbackFor = [Exception::class])
-    override fun modifyMyUserInfo(authenticationId: Long, userSaveInfoDto: UserSaveInfoDto) {
+    @Transactional
+    override fun modifyUserInfoById(authenticationId: Long, userSaveInfoDto: UserSaveInfoDto) {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
@@ -73,7 +72,7 @@ class UserService(
             throw ExpectedException("이미 사용중인 이메일입니다.", HttpStatus.BAD_REQUEST)
     }
 
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional
     override fun generateProfileUrl(authenticationId: Long, dto: ProfileUrlRegistrationDto) {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
@@ -96,8 +95,8 @@ class UserService(
         userRepository.save(userUpdatedProfileUrl)
     }
 
-    @Transactional(rollbackFor = [Exception::class])
-    override fun deleteMyUserInfoUseCase(authenticationId: Long): User {
+    @Transactional
+    override fun deleteUserInfoByIdUseCase(authenticationId: Long): User {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
@@ -106,7 +105,7 @@ class UserService(
     }
 
     @Transactional(readOnly = true)
-    override fun queryMyUserInfo(authenticationId: Long): UserInfoDto {
+    override fun queryUserInfoById(authenticationId: Long): UserInfoDto {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 

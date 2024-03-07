@@ -29,7 +29,7 @@ class GwangyaTokenService(
         )
     }
 
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional
     override fun generateGwangyaToken() {
         val gwangyaToken = RandomString.make(20);
         val nowTime = LocalDateTime.now()

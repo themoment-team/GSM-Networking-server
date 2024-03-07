@@ -13,24 +13,24 @@ import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.domain.mentee.dto.MenteeInfoDto
 import team.themoment.gsmNetworking.domain.mentee.dto.MenteeRegistrationDto
-import team.themoment.gsmNetworking.domain.mentee.service.DeleteMyMenteeInfoUseCase
+import team.themoment.gsmNetworking.domain.mentee.service.DeleteMenteeInfoByIdUseCase
 import team.themoment.gsmNetworking.domain.mentee.service.GenerateMenteeUseCase
-import team.themoment.gsmNetworking.domain.mentee.service.QueryMyMenteeInfoUseCase
+import team.themoment.gsmNetworking.domain.mentee.service.QueryMenteeInfoByIdUseCase
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("api/v1/mentee")
 class MenteeController(
     private val generateMenteeUseCase: GenerateMenteeUseCase,
-    private val deleteMyMenteeInfoUseCase: DeleteMyMenteeInfoUseCase,
-    private val queryMyMenteeInfoUseCase: QueryMyMenteeInfoUseCase,
+    private val deleteMenteeInfoByIdUseCase: DeleteMenteeInfoByIdUseCase,
+    private val queryMenteeInfoByIdUseCase: QueryMenteeInfoByIdUseCase,
     private val authenticatedUserManager: AuthenticatedUserManager
 ) {
 
     @GetMapping("/my")
     fun getMyMenteeInfo(): ResponseEntity<MenteeInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
-        val menteeInfoDto = queryMyMenteeInfoUseCase.queryMyMenteeInfo(authenticationId)
+        val menteeInfoDto = queryMenteeInfoByIdUseCase.queryMenteeInfoById(authenticationId)
         return ResponseEntity.ok(menteeInfoDto)
     }
 
@@ -52,7 +52,7 @@ class MenteeController(
     @DeleteMapping("/my")
     fun deleteMentee(): ResponseEntity<Void> {
         val authenticationId = authenticatedUserManager.getName()
-        deleteMyMenteeInfoUseCase.deleteMyMenteeInfo(authenticationId)
+        deleteMenteeInfoByIdUseCase.deleteMenteeInfoById(authenticationId)
         authenticatedUserManager.updateAuthority(Authority.UNAUTHENTICATED)
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }

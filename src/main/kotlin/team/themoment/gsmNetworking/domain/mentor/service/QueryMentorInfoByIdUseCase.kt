@@ -2,7 +2,7 @@ package team.themoment.gsmNetworking.domain.mentor.service
 
 import team.themoment.gsmNetworking.domain.mentor.dto.MyMentorInfoDto
 
-interface QueryMyMentorInfoUseCase {
+interface QueryMentorInfoByIdUseCase {
 
-    fun queryMyMentorInfo(authenticationId: Long): MyMentorInfoDto
+    fun queryMentorInfoById(authenticationId: Long): MyMentorInfoDto
 }
