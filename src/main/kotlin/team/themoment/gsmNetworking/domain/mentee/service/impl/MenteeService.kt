@@ -49,6 +49,7 @@ class MenteeService(
         menteeRepository.deleteByUser(user)
     }
 
+    @Transactional(readOnly = true)
     override fun queryMyMenteeInfo(authenticationId: Long): MenteeInfoDto {
         val userInfoDto = queryMyUserInfoUseCase.queryMyUserInfo(authenticationId)
 

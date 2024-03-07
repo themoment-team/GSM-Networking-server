@@ -96,6 +96,7 @@ class UserService(
         userRepository.save(userUpdatedProfileUrl)
     }
 
+    @Transactional(rollbackFor = [Exception::class])
     override fun deleteMyUserInfoUseCase(authenticationId: Long): User {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
@@ -104,6 +105,7 @@ class UserService(
         return user
     }
 
+    @Transactional(readOnly = true)
     override fun queryMyUserInfo(authenticationId: Long): UserInfoDto {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
