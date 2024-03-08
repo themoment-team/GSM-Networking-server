@@ -20,9 +20,9 @@ import javax.validation.Valid
 class MentorController(
     private val mentorRegistrationUseCase: MentorRegistrationUseCase,
     private val queryAllMentorsUseCase: QueryAllMentorsUseCase,
-    private val queryMyMentorInfoUseCase: QueryMyMentorInfoUseCase,
-    private val deleteMyMentorInfoUseCase: DeleteMyMentorInfoUseCase,
-    private val modifyMyMentorInfoUseCase: ModifyMyMentorInfoUseCase,
+    private val queryMentorInfoByIdUseCase: QueryMentorInfoByIdUseCase,
+    private val deleteMentorInfoByIdUseCase: DeleteMentorInfoByIdUseCase,
+    private val modifyMentorInfoByIdUseCase: ModifyMentorInfoByIdUseCase,
     private val authenticatedUserManager: AuthenticatedUserManager,
 ) {
 
@@ -42,13 +42,13 @@ class MentorController(
 
     @GetMapping("/my")
     fun queryMyMentorInfo(): ResponseEntity<MyMentorInfoDto> {
-        val myMentorInfo = queryMyMentorInfoUseCase.queryMyMentorInfo(authenticatedUserManager.getName())
+        val myMentorInfo = queryMentorInfoByIdUseCase.queryMentorInfoById(authenticatedUserManager.getName())
         return ResponseEntity.ok(myMentorInfo)
     }
 
     @DeleteMapping("/my")
     fun deleteMyMentorInfo(): ResponseEntity<Void> {
-        deleteMyMentorInfoUseCase.deleteMyMentorInfo(authenticatedUserManager.getName())
+        deleteMentorInfoByIdUseCase.deleteMentorInfoById(authenticatedUserManager.getName())
         authenticatedUserManager.updateAuthority(Authority.TEMP_USER)
         return ResponseEntity.status(HttpStatus.RESET_CONTENT).build()
     }
@@ -56,7 +56,7 @@ class MentorController(
     @PutMapping("/my")
     fun modifyMyMentorInfo(@RequestBody @Valid dto: MentorSaveInfoDto): ResponseEntity<Void> {
         val authenticationId = authenticatedUserManager.getName()
-        modifyMyMentorInfoUseCase.modifyMyMentorInfo(authenticationId, dto)
+        modifyMentorInfoByIdUseCase.modifyMentorInfoById(authenticationId, dto)
         return ResponseEntity.noContent().build()
     }
 

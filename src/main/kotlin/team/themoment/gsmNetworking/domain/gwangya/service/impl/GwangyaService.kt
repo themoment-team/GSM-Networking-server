@@ -27,7 +27,7 @@ class GwangyaService(
         else
             gwangyaRepository.findPagebyCursorId(cursorId, pageSize)
 
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional
     override fun generateGwangyaPost(gwangyaPostDto: GwangyaPostRegistrationDto): GwangyaPostDto {
         val gwangyaPost = Gwangya(
             content = gwangyaPostDto.content,
@@ -42,7 +42,7 @@ class GwangyaService(
         )
     }
 
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional
     override fun deleteGwangyaPostById(gwangyaId: Long) {
         val gwangya = gwangyaRepository.findByIdOrNull(gwangyaId)
             ?: throw ExpectedException("광야 게시물을 찾을 수 없습니다. 요청한 gwnagyaId: $gwangyaId", HttpStatus.NOT_FOUND)

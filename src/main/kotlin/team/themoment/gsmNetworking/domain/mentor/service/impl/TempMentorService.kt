@@ -103,7 +103,7 @@ class TempMentorService(
      *
      * @param id 임시멘토의 식별자
      */
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional
     override fun deleteTempMentorById(id: Long) {
         val tempMentor = tempMentorRepository.findByIdOrNull(id)
             ?: throw ExpectedException("존재하지 않는 id 입니다.", HttpStatus.NOT_FOUND)

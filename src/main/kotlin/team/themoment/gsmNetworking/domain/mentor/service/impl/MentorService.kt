@@ -1,6 +1,5 @@
 package team.themoment.gsmNetworking.domain.mentor.service.impl
 
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,9 +12,9 @@ import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.mentor.service.*
 import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
-import team.themoment.gsmNetworking.domain.user.service.DeleteMyUserInfoUseCase
+import team.themoment.gsmNetworking.domain.user.service.DeleteUserInfoByIdUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
-import team.themoment.gsmNetworking.domain.user.service.ModifyMyUserInfoUseCase
+import team.themoment.gsmNetworking.domain.user.service.ModifyUserInfoByIdUseCase
 
 /**
  * 멘토 관련 로직이 담긴 클래스 입니다.
@@ -27,13 +26,13 @@ class MentorService(
     private val userRepository: UserRepository,
     private val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase,
     private val generateUserUseCase: GenerateUserUseCase,
-    private val modifyMyUserInfoUseCase: ModifyMyUserInfoUseCase,
-    private val deleteMyUserInfoUseCase: DeleteMyUserInfoUseCase
+    private val modifyUserInfoByIdUseCase: ModifyUserInfoByIdUseCase,
+    private val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase
 ) : QueryAllMentorsUseCase,
     MentorRegistrationUseCase,
-    QueryMyMentorInfoUseCase,
-    DeleteMyMentorInfoUseCase,
-    ModifyMyMentorInfoUseCase {
+    QueryMentorInfoByIdUseCase,
+    DeleteMentorInfoByIdUseCase,
+    ModifyMentorInfoByIdUseCase {
 
     /**
      * 모든 멘토 리스트를 가져와서 리턴해주는 메서드 입니다.
@@ -58,7 +57,7 @@ class MentorService(
      * 멘토의 정보를 저장한다.
      * 현재 단계에서는 멘티의 정보를 저장하고 있지 않기 때문에 바로 이 메서드에서 user 정보와 멘티 정보를 저장한다.
      */
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional
     override fun mentorRegistration(dto: MentorSaveInfoDto, authenticationId: Long) {
         val userSaveInfoDto = UserSaveInfoDto(
             name = dto.name,
@@ -92,13 +91,13 @@ class MentorService(
      * @throws ExpectedException 식별자로 내 멘토 정보를 찾을 수 없는 경우
      */
     @Transactional(readOnly = true)
-    override fun queryMyMentorInfo(authenticationId: Long): MyMentorInfoDto =
+    override fun queryMentorInfoById(authenticationId: Long): MyMentorInfoDto =
         mentorRepository.findMyMentorInfoDto(authenticationId)
             ?: throw ExpectedException("내 멘토 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
-    @Transactional(rollbackFor = [Exception::class])
-    override fun deleteMyMentorInfo(authenticationId: Long) {
-        val user = deleteMyUserInfoUseCase.deleteMyUserInfoUseCase(authenticationId)
+    @Transactional
+    override fun deleteMentorInfoById(authenticationId: Long) {
+        val user = deleteUserInfoByIdUseCase.deleteUserInfoByIdUseCase(authenticationId)
         val mentor = mentorRepository.findByUser(user)
             ?: throw ExpectedException("존재하지 않는 mentor입니다.", HttpStatus.NOT_FOUND)
 
@@ -106,8 +105,8 @@ class MentorService(
         mentorRepository.delete(mentor)
     }
 
-    @Transactional(rollbackFor = [Exception::class])
-    override fun modifyMyMentorInfo(authenticationId: Long, mentorSaveInfoDto: MentorSaveInfoDto) {
+    @Transactional
+    override fun modifyMentorInfoById(authenticationId: Long, mentorSaveInfoDto: MentorSaveInfoDto) {
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
         val mentor = mentorRepository.findByUser(user)
@@ -123,7 +122,7 @@ class MentorService(
             snsUrl = mentorSaveInfoDto.snsUrl
         )
 
-        modifyMyUserInfoUseCase.modifyMyUserInfo(mentor.user.authenticationId, userSaveInfoDto)
+        modifyUserInfoByIdUseCase.modifyUserInfoById(mentor.user.authenticationId, userSaveInfoDto)
         careerRepository.deleteAllByMentor(mentor)
         careerRepository.saveAll(updateCareers)
     }
