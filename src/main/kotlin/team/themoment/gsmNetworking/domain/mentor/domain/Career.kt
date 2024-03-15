@@ -1,7 +1,7 @@
 package team.themoment.gsmNetworking.domain.mentor.domain
 
-import org.hibernate.annotations.Cascade
-import org.hibernate.annotations.CascadeType
+import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
+import team.themoment.gsmNetworking.domain.mentor.dto.MentorCareerDto
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -11,8 +11,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "career")
 class Career(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val careerId: Long = 0,
+    override val id: Long = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
@@ -35,4 +34,21 @@ class Career(
 
     @Column(nullable = false)
     val isWorking: Boolean
-)
+) : BaseIdTimestampEntity() {
+
+    companion object{
+        fun ofCareers(mentorCareerDto: List<MentorCareerDto>, mentor: Mentor): List<Career>{
+            return mentorCareerDto.map {
+                Career(
+                    mentor = mentor,
+                    companyName = it.companyName,
+                    companyUrl = it.companyUrl ?: "",
+                    position = it.position,
+                    startDate = it.startDate,
+                    endDate = it.endDate,
+                    isWorking = it.isWorking ?: false
+                )
+            }
+        }
+    }
+}

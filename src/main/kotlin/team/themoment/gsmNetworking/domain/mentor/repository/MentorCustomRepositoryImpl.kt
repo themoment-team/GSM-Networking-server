@@ -29,7 +29,7 @@ class MentorCustomRepositoryImpl(
         queryFactory.select(
             Projections.constructor(
                 MentorInfoDto::class.java,
-                mentor.mentorId,
+                mentor.id,
                 mentor.user.name,
                 mentor.user.email,
                 mentor.user.generation,
@@ -46,7 +46,7 @@ class MentorCustomRepositoryImpl(
         )
             .from(mentor, career)
             .join(mentor.user, user)
-            .where(mentor.mentorId.eq(career.mentor.mentorId))
+            .where(mentor.id.eq(career.mentor.id))
             .fetch()
 
     /**
@@ -60,15 +60,16 @@ class MentorCustomRepositoryImpl(
             .selectFrom(mentor)
             .join(mentor.user)
             .leftJoin(career)
-            .on(mentor.mentorId.eq(career.mentor.mentorId))
+            .on(mentor.id.eq(career.mentor.id))
             .where(mentor.user.authenticationId.eq(authenticationId))
             .transform(
-                groupBy(career.mentor.mentorId).list(
+                groupBy(career.mentor.id).list(
                     Projections.constructor(
                         MyMentorInfoDto::class.java,
-                        mentor.mentorId,
+                        mentor.id,
                         mentor.user.name,
                         mentor.user.email,
+                        mentor.user.phoneNumber,
                         mentor.user.generation,
                         mentor.user.snsUrl,
                         mentor.user.profileUrl,
@@ -76,7 +77,7 @@ class MentorCustomRepositoryImpl(
                         list(
                             Projections.constructor(
                                 MyCareerInfoDto::class.java,
-                                career.careerId,
+                                career.id,
                                 career.position,
                                 career.companyName,
                                 career.companyUrl,

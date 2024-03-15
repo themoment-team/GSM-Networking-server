@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.message.domain
 
+import team.themoment.gsmNetworking.common.domain.BaseTimestampEntity
 import team.themoment.gsmNetworking.common.util.UUIDUtils
 import java.util.UUID
 import javax.persistence.*
@@ -28,8 +29,8 @@ class Message private constructor(
     val direction: MessageDirection,
 
     @Column(name = "content", nullable = false)
-    val content: String
-) {
+    val content: String,
+) : BaseTimestampEntity() {
 
     init {
         require(user1Id != user2Id) { "user1Id and user2Id must be different" }

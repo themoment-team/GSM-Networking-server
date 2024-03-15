@@ -1,16 +1,14 @@
 package team.themoment.gsmNetworking.domain.message.domain
 
+import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import javax.persistence.*
 
 @Entity
-@Table(
-    name = "user_message_info",
-    indexes = [Index(name = "idx_user_id_opponent_user_id", columnList = "user_id, opponent_user_id", unique = true)]
-)
+@Table
 class UserMessageInfo(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_message_info_id")
-    val userMessageInfoId: Long = 0,
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "header_id", nullable = false)
+    val header: Header,
 
     @Column(name = "user_id", nullable = false)
     val userId: Long,
@@ -20,10 +18,10 @@ class UserMessageInfo(
 
     @Column(name = "last_viewed_time")
     val lastViewedEpochMilli: Long = 0
-) {
+) : BaseIdTimestampEntity() {
     fun updateLastViewedEpochMilli(newLastViewedEpochMilli: Long): UserMessageInfo {
         return UserMessageInfo(
-            userMessageInfoId = this.userMessageInfoId,
+            header = this.header,
             userId = this.userId,
             opponentUserId = this.opponentUserId,
             lastViewedEpochMilli = newLastViewedEpochMilli

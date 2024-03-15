@@ -9,7 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.security.web.authentication.logout.LogoutHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
@@ -27,8 +29,10 @@ import team.themoment.gsmNetworking.global.security.jwt.properties.JwtProperties
 @EnableWebSecurity
 class SecurityConfig(
     private val customOauth2UserService: CustomOauth2UserService,
+    private val logoutHandler: LogoutHandler,
     private val logoutSuccessHandler: LogoutSuccessHandler,
     private val authenticationSuccessHandler: AuthenticationSuccessHandler,
+    private val authenticationFailureHandler: AuthenticationFailureHandler,
     private val tokenRequestFilter: TokenRequestFilter,
     private val exceptionHandlerFilter: ExceptionHandlerFilter,
     private val loggingFilter: LoggingFilter,
@@ -75,22 +79,33 @@ class SecurityConfig(
             // /tempMentor
             .mvcMatchers(HttpMethod.GET, "api/v1/temp-mentor/search/*").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
-                Authority.TEMP_USER.name
+                Authority.TEMP_USER.name,
+                Authority.ADMIN.name
             )
             .mvcMatchers(HttpMethod.GET, "/api/v1/temp-mentor/**").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
-                Authority.TEMP_USER.name
+                Authority.TEMP_USER.name,
+                Authority.ADMIN.name
             )
             .mvcMatchers(HttpMethod.DELETE, "/api/v1/temp-mentor/*").hasAnyRole(
                 Authority.USER.name
             )
             // /mentee
+            .mvcMatchers(HttpMethod.PATCH, "/api/v1/mentee/update").hasAnyRole(
+                Authority.UNAUTHENTICATED.name
+            )
+            .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(
+                Authority.TEMP_USER.name
+            )
+            .mvcMatchers(HttpMethod.GET, "/api/v1/mentee/my").hasAnyRole(
+                Authority.TEMP_USER.name
+            )
+            .mvcMatchers("api/v1/mentee/my").hasAnyRole(
+                Authority.TEMP_USER.name
+            )
             .mvcMatchers("/api/v1/mentee/*").hasAnyRole(
                 Authority.USER.name,
                 Authority.TEMP_USER.name
-            )
-            .mvcMatchers(HttpMethod.POST, "/api/v1/mentee").hasAnyRole(
-                Authority.UNAUTHENTICATED.name
             )
             // /user
             .mvcMatchers("/api/v1/user/**").hasAnyRole(
@@ -105,6 +120,9 @@ class SecurityConfig(
                 Authority.UNAUTHENTICATED.name,
                 Authority.TEMP_USER.name,
                 Authority.USER.name,
+                Authority.ADMIN.name
+            )
+            .mvcMatchers(HttpMethod.DELETE, "/api/v1/gwangya/*").hasAnyRole(
                 Authority.ADMIN.name
             )
             .anyRequest().permitAll()
@@ -123,11 +141,13 @@ class SecurityConfig(
             .and()
             .authorizationEndpoint().baseUri(Oauth2Properties.OAUTH2_LOGIN_END_POINT_BASE_URI).and()
             .successHandler(authenticationSuccessHandler)
+            .failureHandler(authenticationFailureHandler)
     }
 
     private fun logout(http: HttpSecurity) {
         http.logout()
             .logoutUrl(Oauth2Properties.LOGOUT_URI)
+            .addLogoutHandler(logoutHandler)
             .logoutSuccessHandler(logoutSuccessHandler)
             .deleteCookies(JwtProperties.ACCESS, JwtProperties.REFRESH)
     }

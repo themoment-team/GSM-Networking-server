@@ -4,18 +4,18 @@ import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import team.themoment.gsmNetworking.domain.gwangya.domain.QGwangya.gwangya
-import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostsDto
+import team.themoment.gsmNetworking.domain.gwangya.dto.GwangyaPostDto
 
 class GwangyaCustomRepositoryImpl(
     private val queryFactory: JPAQueryFactory
 ) : GwangyaCustomRepository {
 
-    override fun findPagebyCursorId(cursorId: Long, pageSize: Long): List<GwangyaPostsDto> {
+    override fun findPagebyCursorId(cursorId: Long, pageSize: Long): List<GwangyaPostDto> {
         return queryFactory
             .select(
                 Projections.constructor(
-                    GwangyaPostsDto::class.java,
-                    gwangya.gwangyaId,
+                    GwangyaPostDto::class.java,
+                    gwangya.id,
                     gwangya.content,
                     gwangya.createdAt
                 )
@@ -24,26 +24,26 @@ class GwangyaCustomRepositoryImpl(
             .where(
                 ltCursorId(cursorId),
             )
-            .orderBy(gwangya.gwangyaId.desc())
+            .orderBy(gwangya.id.desc())
             .limit(pageSize)
             .fetch().reversed()
     }
 
     private fun ltCursorId(cursorId: Long): BooleanExpression =
-        gwangya.gwangyaId.lt(cursorId)
+        gwangya.id.lt(cursorId)
 
-    override fun findPageWithRecentPosts(pageSize: Long): List<GwangyaPostsDto> {
+    override fun findPageWithRecentPosts(pageSize: Long): List<GwangyaPostDto> {
         return queryFactory
             .select(
                 Projections.constructor(
-                    GwangyaPostsDto::class.java,
-                    gwangya.gwangyaId,
+                    GwangyaPostDto::class.java,
+                    gwangya.id,
                     gwangya.content,
                     gwangya.createdAt
                 )
             )
             .from(gwangya)
-            .orderBy(gwangya.gwangyaId.desc())
+            .orderBy(gwangya.id.desc())
             .limit(pageSize)
             .fetch().reversed()
     }

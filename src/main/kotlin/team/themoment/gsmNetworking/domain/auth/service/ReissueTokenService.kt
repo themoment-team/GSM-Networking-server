@@ -30,7 +30,7 @@ class ReissueTokenService(
      *      3. 유효하지 않은 Token Prefix로 요청 한 경우
      * @return 재발급된 토큰을 담고 있는 dto
      */
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional
     fun execute(token: String?): TokenDto {
         if (token == null) throw ExpectedException("refresh token 쿠키를 가지고 있지 않은 사용자 입니다.", HttpStatus.NOT_FOUND)
         val refreshToken = refreshTokenRepository.findByToken(token)

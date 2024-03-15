@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.auth.domain
 
+import team.themoment.gsmNetworking.common.domain.BaseIdEntity
 import javax.persistence.*
 
 /**
@@ -7,8 +8,7 @@ import javax.persistence.*
  */
 @Entity
 class Authentication(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val authenticationId: Long = 0,
+    override val id: Long = 0,
 
     @Column(nullable = false, unique = true)
     val email: String,
@@ -18,4 +18,4 @@ class Authentication(
 
     @Enumerated(EnumType.STRING)
     val authority: Authority
-)
+) : BaseIdEntity()
