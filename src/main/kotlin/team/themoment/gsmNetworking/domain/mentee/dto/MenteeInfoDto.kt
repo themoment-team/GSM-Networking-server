@@ -1,6 +1,8 @@
 package team.themoment.gsmNetworking.domain.mentee.dto
 
 data class MenteeInfoDto (
+    val id: Long,
+
     val name: String,
 
     val email: String,

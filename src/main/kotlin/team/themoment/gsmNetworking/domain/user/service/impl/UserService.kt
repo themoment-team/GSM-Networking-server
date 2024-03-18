@@ -110,6 +110,7 @@ class UserService(
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
         return UserInfoDto(
+            id = user.id,
             name = user.name,
             generation = user.generation,
             email = user.email,
