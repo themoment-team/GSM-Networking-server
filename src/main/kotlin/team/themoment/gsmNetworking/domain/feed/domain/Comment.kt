@@ -5,18 +5,22 @@ import team.themoment.gsmNetworking.domain.user.domain.User
 import javax.persistence.*
 
 @Entity
-@Table(name = "feed")
-class Feed (
-    @Column(name = "title", length = 50)
-    val title: String,
+@Table(name = "comment")
+class Comment(
+    @Column(name = "comment")
+    val comment: String,
 
-    @Column(name = "content", length = 1000)
-    val content: String,
+    @OneToOne
+    @JoinColumn(name = "feed_id")
+    val feed: Feed,
 
-    @Enumerated(EnumType.STRING)
-    val category: Category,
+    @OneToOne
+    @JoinColumn(name = "reply_comment_id")
+    val replyComment: Comment,
 
     @OneToOne
     @JoinColumn(name = "author_id")
-    val user: User
+    val user: User,
+
+    val order: Int
 ): BaseIdTimestampEntity();
