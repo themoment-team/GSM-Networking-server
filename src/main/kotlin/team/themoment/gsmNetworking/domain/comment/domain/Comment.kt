@@ -1,6 +1,7 @@
-package team.themoment.gsmNetworking.domain.feed.domain
+package team.themoment.gsmNetworking.domain.comment.domain
 
 import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
+import team.themoment.gsmNetworking.domain.feed.domain.Feed
 import team.themoment.gsmNetworking.domain.user.domain.User
 import javax.persistence.*
 
