@@ -4,6 +4,7 @@ import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import team.themoment.gsmNetworking.domain.user.domain.User
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.JoinColumn
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
@@ -16,7 +17,7 @@ class Feed (
     @Column(name = "content")
     val content: String,
 
-    @OneToOne(mappedBy = "id")
-    @Column(name = "user_id")
+    @OneToOne
+    @JoinColumn(name = "user_id")
     val user: User
 ): BaseIdTimestampEntity();
