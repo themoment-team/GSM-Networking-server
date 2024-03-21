@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
+import team.themoment.gsmNetworking.domain.feed.domain.Category
 import team.themoment.gsmNetworking.domain.feed.domain.Feed
 import team.themoment.gsmNetworking.domain.feed.dto.FeedInfoDto
 import team.themoment.gsmNetworking.domain.feed.dto.FeedSaveDto
@@ -37,10 +38,10 @@ class FeedService (
 
     }
 
-    override fun queryFeedList(cursorId: Long, pageSize: Long): List<FeedInfoDto> =
+    override fun queryFeedList(cursorId: Long, pageSize: Long, category: Category?): List<FeedInfoDto> =
         if (cursorId == 0L)
-            feedRepository.findPageWithRecentFeed(pageSize)
+            feedRepository.findPageWithRecentFeed(pageSize, category)
         else
-            feedRepository.findPageByCursorId(cursorId, pageSize)
+            feedRepository.findPageByCursorId(cursorId, pageSize, category)
 
 }
