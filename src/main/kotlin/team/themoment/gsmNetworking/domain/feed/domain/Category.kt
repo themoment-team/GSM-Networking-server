@@ -9,7 +9,6 @@ enum class Category(
     QNA("QNA"),
     CHAT("CHAT"),
     STUDY("STUDY"),
-    QnA("QnA"),
     HOSTEL("HOSTEL"),
     MEET("MEET"),
     SPORT("SPORT");
