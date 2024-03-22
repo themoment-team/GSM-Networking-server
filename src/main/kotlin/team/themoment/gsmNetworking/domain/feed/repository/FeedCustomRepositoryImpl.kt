@@ -19,7 +19,7 @@ class FeedCustomRepositoryImpl (
                     feed.id,
                     feed.title,
                     feed.category,
-                    feed.user.name,
+                    feed.author.name,
                     feed.createdAt
                 )
             )
@@ -35,7 +35,7 @@ class FeedCustomRepositoryImpl (
                     feed.id,
                     feed.title,
                     feed.category,
-                    feed.user.name,
+                    feed.author.name,
                     feed.createdAt
                 )
             )
@@ -56,7 +56,7 @@ class FeedCustomRepositoryImpl (
                     feed.id,
                     feed.title,
                     feed.category,
-                    feed.user.name,
+                    feed.author.name,
                     feed.createdAt
                 )
             )
@@ -71,7 +71,7 @@ class FeedCustomRepositoryImpl (
                     feed.id,
                     feed.title,
                     feed.category,
-                    feed.user.name,
+                    feed.author.name,
                     feed.createdAt
                 )
             )
