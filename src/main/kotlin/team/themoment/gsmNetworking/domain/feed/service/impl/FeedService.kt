@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
-import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.feed.domain.Category
 import team.themoment.gsmNetworking.domain.feed.domain.Feed
 import team.themoment.gsmNetworking.domain.feed.dto.FeedInfoDto
@@ -18,12 +17,10 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 class FeedService (
     private val feedRepository: FeedRepository,
     private val userRepository: UserRepository,
-    private val authenticatedUserManager: AuthenticatedUserManager
 ) : GenerateFeedUseCase, QueryFeedListUseCase {
 
     @Transactional
-    override fun generateFeed(feedSaveDto: FeedSaveDto) {
-        val authenticationId = authenticatedUserManager.getName()
+    override fun generateFeed(feedSaveDto: FeedSaveDto, authenticationId: Long) {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 

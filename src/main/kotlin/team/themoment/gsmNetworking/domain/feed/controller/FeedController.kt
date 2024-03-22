@@ -9,24 +9,25 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.exception.ExpectedException
+import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.feed.domain.Category
 import team.themoment.gsmNetworking.domain.feed.dto.FeedInfoDto
 import team.themoment.gsmNetworking.domain.feed.dto.FeedSaveDto
 import team.themoment.gsmNetworking.domain.feed.service.GenerateFeedUseCase
 import team.themoment.gsmNetworking.domain.feed.service.QueryFeedListUseCase
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
 
 @RestController
 @RequestMapping("/api/v1/feed")
-class FeedController(
+class FeedController (
     private val generateFeedUseCase: GenerateFeedUseCase,
-    private val queryFeedListUseCase: QueryFeedListUseCase
+    private val queryFeedListUseCase: QueryFeedListUseCase,
+    private val authenticatedUserManager: AuthenticatedUserManager
 ) {
 
     @PostMapping
     fun generateFeed(@RequestBody feedSaveDto: FeedSaveDto): ResponseEntity<Void> {
-        generateFeedUseCase.generateFeed(feedSaveDto)
+        val authenticationId = authenticatedUserManager.getName()
+        generateFeedUseCase.generateFeed(feedSaveDto, authenticationId)
         return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
