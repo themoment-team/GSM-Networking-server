@@ -26,10 +26,9 @@ class FeedController (
 ) {
 
     @PostMapping
-    fun generateFeed(@Valid @RequestBody feedSaveDto: FeedSaveDto): ResponseEntity<Void> {
+    fun generateFeed(@Valid @RequestBody feedSaveDto: FeedSaveDto): ResponseEntity<FeedInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
-        generateFeedUseCase.generateFeed(feedSaveDto, authenticationId)
-        return ResponseEntity.status(HttpStatus.CREATED).build()
+        return ResponseEntity.status(HttpStatus.CREATED).body(generateFeedUseCase.generateFeed(feedSaveDto, authenticationId))
     }
 
     @GetMapping

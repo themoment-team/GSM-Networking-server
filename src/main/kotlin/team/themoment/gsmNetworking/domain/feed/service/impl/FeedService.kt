@@ -20,7 +20,7 @@ class FeedService (
 ) : GenerateFeedUseCase, QueryFeedListUseCase {
 
     @Transactional
-    override fun generateFeed(feedSaveDto: FeedSaveDto, authenticationId: Long) {
+    override fun generateFeed(feedSaveDto: FeedSaveDto, authenticationId: Long): FeedInfoDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
@@ -31,7 +31,15 @@ class FeedService (
             author = currentUser
         )
 
-        feedRepository.save(newFeed)
+        val savedFeed = feedRepository.save(newFeed)
+
+        return FeedInfoDto(
+            id = savedFeed.id,
+            title = savedFeed.title,
+            category = savedFeed.category,
+            authorName = savedFeed.author.name,
+            createdAt = savedFeed.createdAt
+        )
 
     }
 

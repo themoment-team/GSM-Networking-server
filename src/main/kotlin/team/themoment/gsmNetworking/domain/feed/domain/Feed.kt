@@ -22,7 +22,6 @@ class Feed (
     @JoinColumn(name = "author_id")
     val author: User,
 
-    @OneToMany(mappedBy = "feed", fetch = LAZY)
-    @JoinColumn(name = "comment_id")
+    @OneToMany(mappedBy = "feed", fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val comments: List<Comment> = ArrayList()
 ): BaseIdTimestampEntity();
