@@ -28,7 +28,7 @@ class FeedService (
             title = feedSaveDto.title,
             content = feedSaveDto.content,
             category = feedSaveDto.category,
-            user = currentUser
+            author = currentUser
         )
 
         feedRepository.save(newFeed)
