@@ -15,6 +15,7 @@ import team.themoment.gsmNetworking.domain.feed.dto.FeedInfoDto
 import team.themoment.gsmNetworking.domain.feed.dto.FeedSaveDto
 import team.themoment.gsmNetworking.domain.feed.service.GenerateFeedUseCase
 import team.themoment.gsmNetworking.domain.feed.service.QueryFeedListUseCase
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/v1/feed")
@@ -25,7 +26,7 @@ class FeedController (
 ) {
 
     @PostMapping
-    fun generateFeed(@RequestBody feedSaveDto: FeedSaveDto): ResponseEntity<Void> {
+    fun generateFeed(@Valid @RequestBody feedSaveDto: FeedSaveDto): ResponseEntity<Void> {
         val authenticationId = authenticatedUserManager.getName()
         generateFeedUseCase.generateFeed(feedSaveDto, authenticationId)
         return ResponseEntity.status(HttpStatus.CREATED).build()
