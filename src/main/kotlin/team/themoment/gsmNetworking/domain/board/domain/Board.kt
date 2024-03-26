@@ -1,4 +1,4 @@
-package team.themoment.gsmNetworking.domain.feed.domain
+package team.themoment.gsmNetworking.domain.board.domain
 
 import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
@@ -7,8 +7,8 @@ import javax.persistence.*
 import javax.persistence.FetchType.*
 
 @Entity
-@Table(name = "feed")
-class Feed (
+@Table(name = "board")
+class Board (
     @Column(name = "title", length = 50)
     val title: String,
 
@@ -22,6 +22,6 @@ class Feed (
     @JoinColumn(name = "author_id")
     val author: User,
 
-    @OneToMany(mappedBy = "feed", fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "board", fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val comments: List<Comment> = ArrayList()
 ): BaseIdTimestampEntity();

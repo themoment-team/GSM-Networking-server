@@ -1,13 +1,13 @@
-package team.themoment.gsmNetworking.domain.feed.dto
+package team.themoment.gsmNetworking.domain.board.dto
 
-import team.themoment.gsmNetworking.domain.feed.domain.Category
+import team.themoment.gsmNetworking.domain.board.domain.Category
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
-data class FeedSaveDto (
+data class BoardSaveDto (
     @field:NotBlank
     @field:Size(max = 50)
     val title: String,

@@ -1,10 +1,10 @@
-package team.themoment.gsmNetworking.domain.feed.dto
+package team.themoment.gsmNetworking.domain.board.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import team.themoment.gsmNetworking.domain.feed.domain.Category
+import team.themoment.gsmNetworking.domain.board.domain.Category
 import java.time.LocalDateTime
 
-data class FeedInfoDto (
+data class BoardInfoDto (
     val id: Long,
     val title: String,
     val category: Category,

@@ -1,4 +1,4 @@
-package team.themoment.gsmNetworking.domain.feed.domain
+package team.themoment.gsmNetworking.domain.board.domain
 
 enum class Category(
     val category: String

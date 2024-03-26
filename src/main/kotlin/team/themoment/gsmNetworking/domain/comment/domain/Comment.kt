@@ -2,7 +2,7 @@ package team.themoment.gsmNetworking.domain.comment.domain
 
 import io.micrometer.core.lang.Nullable
 import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
-import team.themoment.gsmNetworking.domain.feed.domain.Feed
+import team.themoment.gsmNetworking.domain.board.domain.Board
 import team.themoment.gsmNetworking.domain.user.domain.User
 import javax.persistence.*
 
@@ -13,8 +13,8 @@ class Comment(
     val comment: String,
 
     @ManyToOne
-    @JoinColumn(name = "feed_id")
-    val feed: Feed,
+    @JoinColumn(name = "board_id")
+    val board: Board,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "top_comment_id")
