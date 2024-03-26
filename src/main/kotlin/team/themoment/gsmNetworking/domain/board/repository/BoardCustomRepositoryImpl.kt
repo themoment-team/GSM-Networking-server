@@ -47,12 +47,7 @@ class BoardCustomRepositoryImpl (
             .fetch()
         }
 
-    private fun eqCategory(category: Category?): BooleanExpression? {
-        if (category == null) {
-            return null
-        }
-
-        return board.category.eq(category)
-    }
+    private fun eqCategory(category: Category?): BooleanExpression? =
+        category?.let { board.category.eq(it) }
 
 }
