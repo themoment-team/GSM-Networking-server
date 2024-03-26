@@ -1,7 +1,7 @@
 package team.themoment.gsmNetworking.domain.board.domain
 
-enum class Category(
-    val category: String
+enum class BoardCategory(
+    val boardCategory: String
 ) {
 
     TEACHER("TEACHER"),

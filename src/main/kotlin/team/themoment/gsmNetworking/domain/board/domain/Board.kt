@@ -16,7 +16,8 @@ class Board (
     val content: String,
 
     @Enumerated(EnumType.STRING)
-    val category: Category,
+    @Column(name = "board_category")
+    val boardCategory: BoardCategory,
 
     @OneToOne
     @JoinColumn(name = "author_id")

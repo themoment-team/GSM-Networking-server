@@ -1,6 +1,6 @@
 package team.themoment.gsmNetworking.domain.board.dto
 
-import team.themoment.gsmNetworking.domain.board.domain.Category
+import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.validation.constraints.NotBlank
@@ -16,5 +16,5 @@ data class BoardSaveDto (
     val content: String,
     @field:NotNull
     @Enumerated(EnumType.STRING)
-    val category: Category
+    val boardCategory: BoardCategory
 )

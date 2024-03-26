@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
-import team.themoment.gsmNetworking.domain.board.domain.Category
+import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.domain.Board
 import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
@@ -27,7 +27,7 @@ class BoardService (
         val newBoard = Board(
             title = boardSaveDto.title,
             content = boardSaveDto.content,
-            category = boardSaveDto.category,
+            boardCategory = boardSaveDto.boardCategory,
             author = currentUser
         )
 
@@ -36,17 +36,17 @@ class BoardService (
         return BoardInfoDto(
             id = savedBoard.id,
             title = savedBoard.title,
-            category = savedBoard.category,
+            boardCategory = savedBoard.boardCategory,
             authorName = savedBoard.author.name,
             createdAt = savedBoard.createdAt
         )
 
     }
 
-    override fun queryBoardList(cursorId: Long, pageSize: Long, category: Category?): List<BoardInfoDto> =
+    override fun queryBoardList(cursorId: Long, pageSize: Long, boardCategory: BoardCategory?): List<BoardInfoDto> =
         if (cursorId == 0L)
-            boardRepository.findPageWithRecentBoard(pageSize, category)
+            boardRepository.findPageWithRecentBoard(pageSize, boardCategory)
         else
-            boardRepository.findPageByCursorId(cursorId, pageSize, category)
+            boardRepository.findPageByCursorId(cursorId, pageSize, boardCategory)
 
 }

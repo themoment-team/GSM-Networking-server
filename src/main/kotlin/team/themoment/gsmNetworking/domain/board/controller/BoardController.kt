@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
-import team.themoment.gsmNetworking.domain.board.domain.Category
+import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
 import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
@@ -34,14 +34,14 @@ class BoardController (
     @GetMapping
     fun queryBoardList(@RequestParam cursorId: Long,
                       @RequestParam pageSize: Long,
-                      @RequestParam(required = false) category: Category?) : ResponseEntity<List<BoardInfoDto>> {
+                      @RequestParam(required = false) boardCategory: BoardCategory?) : ResponseEntity<List<BoardInfoDto>> {
 
         if (cursorId < 0L || pageSize < 0L)
             throw ExpectedException("0이상부터 가능합니다.", HttpStatus.BAD_REQUEST)
         if (pageSize > 20L)
             throw ExpectedException("페이지 크기는 20이하까지 가능합니다.", HttpStatus.BAD_REQUEST)
 
-        return ResponseEntity.ok(queryBoardListUseCase.queryBoardList(cursorId, pageSize, category))
+        return ResponseEntity.ok(queryBoardListUseCase.queryBoardList(cursorId, pageSize, boardCategory))
     }
 
 }
