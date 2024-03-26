@@ -16,6 +16,8 @@ import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
 import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
 import team.themoment.gsmNetworking.domain.board.service.QueryBoardListUseCase
 import javax.validation.Valid
+import javax.validation.constraints.Max
+import javax.validation.constraints.Min
 
 @RestController
 @RequestMapping("/api/v1/board")
@@ -26,15 +28,17 @@ class BoardController (
 ) {
 
     @PostMapping
-    fun saveBoard(@Valid @RequestBody boardSaveDto: BoardSaveDto): ResponseEntity<BoardInfoDto> {
+    fun saveBoard(@Valid @RequestBody boardSaveDto: BoardSaveDto): ResponseEntityg<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
         return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardUseCase.saveBoard(boardSaveDto, authenticationId))
     }
 
     @GetMapping
-    fun queryBoardList(@RequestParam cursorId: Long,
-                      @RequestParam pageSize: Long,
-                      @RequestParam(required = false) boardCategory: BoardCategory?) : ResponseEntity<List<BoardInfoDto>> {
+    fun queryBoardList(
+        @Min(value = 0, message = "cursorId는 0 이상이어야 합니다.") @RequestParam cursorId: Long,
+        @Min(value = 0, message = "pageSize는 0 이상이어야 합니다.") @Max(value = 20, message = "pageSize는 20 이하여야 합니다.") @RequestParam pageSize: Long,
+        @RequestParam(required = false) boardCategory: BoardCategory?
+    ) : ResponseEntity<List<BoardInfoDto>> {
 
         if (cursorId < 0L || pageSize < 0L)
             throw ExpectedException("0이상부터 가능합니다.", HttpStatus.BAD_REQUEST)
