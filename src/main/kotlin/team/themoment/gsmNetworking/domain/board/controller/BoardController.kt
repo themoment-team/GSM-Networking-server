@@ -28,7 +28,7 @@ class BoardController (
 ) {
 
     @PostMapping
-    fun saveBoard(@Valid @RequestBody boardSaveDto: BoardSaveDto): ResponseEntityg<BoardInfoDto> {
+    fun saveBoard(@Valid @RequestBody boardSaveDto: BoardSaveDto): ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
         return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardUseCase.saveBoard(boardSaveDto, authenticationId))
     }
