@@ -9,7 +9,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "comment")
 class Comment(
-    @Column(name = "comment")
+    @Column(name = "comment", columnDefinition = "TEXT", nullable = false)
     val comment: String,
 
     @ManyToOne
