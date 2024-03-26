@@ -1,16 +1,14 @@
 package team.themoment.gsmNetworking.domain.board.domain
 
-enum class BoardCategory(
-    val boardCategory: String
-) {
+enum class BoardCategory {
 
-    TEACHER("TEACHER"),
-    NOTICE("NOTICE"),
-    QNA("QNA"),
-    CHAT("CHAT"),
-    STUDY("STUDY"),
-    HOSTEL("HOSTEL"),
-    MEET("MEET"),
-    SPORT("SPORT");
+    TEACHER,
+    NOTICE,
+    QNA,
+    CHAT,
+    STUDY,
+    HOSTEL,
+    MEET,
+    SPORT;
 
 }
