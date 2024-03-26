@@ -24,5 +24,5 @@ class Board (
     val author: User,
 
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val comments: List<Comment> = ArrayList()
+    val comments: MutableList<Comment> = ArrayList()
 ): BaseIdTimestampEntity();
