@@ -2,6 +2,7 @@ package team.themoment.gsmNetworking.domain.board.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -18,7 +19,9 @@ import team.themoment.gsmNetworking.domain.board.service.QueryBoardListUseCase
 import javax.validation.Valid
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
+import javax.validation.constraints.Size
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/board")
 class BoardController (
@@ -39,12 +42,6 @@ class BoardController (
         @Min(value = 0, message = "pageSize는 0 이상이어야 합니다.") @Max(value = 20, message = "pageSize는 20 이하여야 합니다.") @RequestParam pageSize: Long,
         @RequestParam(required = false) boardCategory: BoardCategory?
     ) : ResponseEntity<List<BoardInfoDto>> {
-
-        if (cursorId < 0L || pageSize < 0L)
-            throw ExpectedException("0이상부터 가능합니다.", HttpStatus.BAD_REQUEST)
-        if (pageSize > 20L)
-            throw ExpectedException("페이지 크기는 20이하까지 가능합니다.", HttpStatus.BAD_REQUEST)
-
         return ResponseEntity.ok(queryBoardListUseCase.queryBoardList(cursorId, pageSize, boardCategory))
     }
 
