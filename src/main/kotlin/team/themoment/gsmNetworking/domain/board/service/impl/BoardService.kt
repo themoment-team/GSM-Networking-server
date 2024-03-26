@@ -9,7 +9,7 @@ import team.themoment.gsmNetworking.domain.board.domain.Board
 import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
 import team.themoment.gsmNetworking.domain.board.repository.BoardRepository
-import team.themoment.gsmNetworking.domain.board.service.GenerateBoardUseCase
+import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
 import team.themoment.gsmNetworking.domain.board.service.QueryBoardListUseCase
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 
@@ -17,10 +17,10 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 class BoardService (
     private val boardRepository: BoardRepository,
     private val userRepository: UserRepository,
-) : GenerateBoardUseCase, QueryBoardListUseCase {
+) : SaveBoardUseCase, QueryBoardListUseCase {
 
     @Transactional
-    override fun generateBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardInfoDto {
+    override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardInfoDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 

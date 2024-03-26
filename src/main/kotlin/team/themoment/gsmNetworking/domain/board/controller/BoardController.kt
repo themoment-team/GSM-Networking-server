@@ -13,22 +13,22 @@ import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.board.domain.Category
 import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
-import team.themoment.gsmNetworking.domain.board.service.GenerateBoardUseCase
+import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
 import team.themoment.gsmNetworking.domain.board.service.QueryBoardListUseCase
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/v1/board")
 class BoardController (
-    private val generateBoardUseCase: GenerateBoardUseCase,
+    private val saveBoardUseCase: SaveBoardUseCase,
     private val queryBoardListUseCase: QueryBoardListUseCase,
     private val authenticatedUserManager: AuthenticatedUserManager
 ) {
 
     @PostMapping
-    fun generateBoard(@Valid @RequestBody boardSaveDto: BoardSaveDto): ResponseEntity<BoardInfoDto> {
+    fun saveBoard(@Valid @RequestBody boardSaveDto: BoardSaveDto): ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
-        return ResponseEntity.status(HttpStatus.CREATED).body(generateBoardUseCase.generateBoard(boardSaveDto, authenticationId))
+        return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardUseCase.saveBoard(boardSaveDto, authenticationId))
     }
 
     @GetMapping
