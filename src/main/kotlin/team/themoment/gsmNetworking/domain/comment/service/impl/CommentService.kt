@@ -24,6 +24,10 @@ class CommentService (
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
+        if (commentSaveDto.replyCommentId != null && commentSaveDto.topCommentId == null) {
+            throw ExpectedException("최상위 댓글 없이 댓글의 답장을 작성할 수 없습니다.", HttpStatus.BAD_REQUEST)
+        }
+
         val currentBoard = boardRepository.findById(commentSaveDto.boardId)
             .orElseThrow { throw ExpectedException("게시판을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
@@ -43,7 +47,6 @@ class CommentService (
             val replyComment = commentRepository.findById(commentSaveDto.replyCommentId)
                 .orElseThrow { throw ExpectedException("대댓글을 작성할 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
-            replyComment.addReplyComment(newComment)
             newComment.addRepliedComment(replyComment)
 
             commentRepository.save(replyComment)
@@ -65,7 +68,7 @@ class CommentService (
         val comment = commentRepository.findById(commentId)
             .orElseThrow { throw ExpectedException("댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
-        val newReplies = comment.replyComment.map { Reply(
+        val newReplies = commentRepository.findAllByTopComment(comment).map { Reply(
             comment = ReplyCommentInfo(
                 commentId = it.id,
                 comment = it.comment,
@@ -77,6 +80,7 @@ class CommentService (
                 replyCommentId = it.repliedComment?.id
             )
         ) }
+
 
         return CommentListDto(
             commentId = comment.id,

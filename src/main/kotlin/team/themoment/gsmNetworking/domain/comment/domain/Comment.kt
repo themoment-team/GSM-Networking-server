@@ -33,11 +33,6 @@ class Comment(
     @JoinColumn(name = "author_id")
     val author: User
 ): BaseIdTimestampEntity() {
-
-    fun addReplyComment(repliedComment: Comment) {
-        this.replyComment.add(repliedComment);
-    }
-
     fun addRepliedComment(repliedComment: Comment) {
         this.repliedComment = repliedComment;
     }
