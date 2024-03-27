@@ -6,10 +6,9 @@ import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.board.repository.BoardRepository
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
-import team.themoment.gsmNetworking.domain.comment.dto.Author
-import team.themoment.gsmNetworking.domain.comment.dto.CommentInfoDto
-import team.themoment.gsmNetworking.domain.comment.dto.CommentSaveDto
+import team.themoment.gsmNetworking.domain.comment.dto.*
 import team.themoment.gsmNetworking.domain.comment.repository.CommentRepository
+import team.themoment.gsmNetworking.domain.comment.service.QueryCommentInfoUseCase
 import team.themoment.gsmNetworking.domain.comment.service.SaveCommentUseCase
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 
@@ -18,7 +17,7 @@ class CommentService (
     private val commentRepository: CommentRepository,
     private val boardRepository: BoardRepository,
     private val userRepository: UserRepository
-) : SaveCommentUseCase {
+) : SaveCommentUseCase, QueryCommentInfoUseCase {
 
     @Transactional
     override fun saveComment(commentSaveDto: CommentSaveDto, authenticationId: Long): CommentInfoDto {
@@ -44,7 +43,10 @@ class CommentService (
             val replyComment = commentRepository.findById(commentSaveDto.replyCommentId)
                 .orElseThrow { throw ExpectedException("대댓글을 작성할 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
-            replyComment.addReply(savedComment)
+            replyComment.addReplyComment(newComment)
+            newComment.addRepliedComment(replyComment)
+
+            commentRepository.save(replyComment)
         }
 
         return CommentInfoDto(
@@ -56,5 +58,36 @@ class CommentService (
                 profileUrl = savedComment.author.profileUrl
             )
         )
+    }
+
+    @Transactional(readOnly = true)
+    override fun queryCommentInfo(commentId: Long): CommentListDto {
+        val comment = commentRepository.findById(commentId)
+            .orElseThrow { throw ExpectedException("댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+
+        val newReplies = comment.replyComment.map { Reply(
+            comment = ReplyCommentInfo(
+                commentId = it.id,
+                comment = it.comment,
+                author = Author(
+                    name = it.author.name,
+                    generation = it.author.generation,
+                    profileUrl = it.author.profileUrl
+                ),
+                replyCommentId = it.repliedComment?.id
+            )
+        ) }
+
+        return CommentListDto(
+            commentId = comment.id,
+            comment = comment.comment,
+            author = Author(
+                name = comment.author.name,
+                generation = comment.author.generation,
+                profileUrl = comment.author.profileUrl
+            ),
+            replies = newReplies
+        )
+
     }
 }

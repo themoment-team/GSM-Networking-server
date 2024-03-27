@@ -16,20 +16,29 @@ class Comment(
     @JoinColumn(name = "board_id")
     val board: Board,
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "top_comment_id")
-    @Nullable
     val topComment: Comment?,
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reply_comment_id")
+    // 해당 댓글의 대댓글 List
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "repliedComment")
     val replyComment: MutableList<Comment> = ArrayList(),
+
+    // 해당 댓글이 대댓글을 작성한 댓글
+    @ManyToOne
+    @JoinColumn(name = "replied_comment_id")
+    var repliedComment: Comment? = null,
 
     @OneToOne
     @JoinColumn(name = "author_id")
     val author: User
 ): BaseIdTimestampEntity() {
-    fun addReply(reply: Comment) {
-        this.replyComment.add(reply)
+
+    fun addReplyComment(repliedComment: Comment) {
+        this.replyComment.add(repliedComment);
+    }
+
+    fun addRepliedComment(repliedComment: Comment) {
+        this.repliedComment = repliedComment;
     }
 }
