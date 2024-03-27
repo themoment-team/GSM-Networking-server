@@ -2,6 +2,7 @@ package team.themoment.gsmNetworking.domain.user.repository
 
 import team.themoment.gsmNetworking.domain.user.domain.User
 import org.springframework.data.repository.CrudRepository
+import java.util.*
 
 /**
  * User Entity를 위한 Repository 인터페이스 입니다.
