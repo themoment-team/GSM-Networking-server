@@ -25,7 +25,7 @@ class Comment(
     @JoinColumn(name = "reply_comment_id")
     val replyComment: List<Comment> = ArrayList(),
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "author_id")
     val author: User
 ): BaseIdTimestampEntity();
