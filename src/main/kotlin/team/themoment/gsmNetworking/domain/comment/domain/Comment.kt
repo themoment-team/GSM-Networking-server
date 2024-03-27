@@ -23,9 +23,13 @@ class Comment(
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "reply_comment_id")
-    val replyComment: List<Comment> = ArrayList(),
+    val replyComment: MutableList<Comment> = ArrayList(),
 
     @OneToOne
     @JoinColumn(name = "author_id")
     val author: User
-): BaseIdTimestampEntity();
+): BaseIdTimestampEntity() {
+    fun addReply(reply: Comment) {
+        this.replyComment.add(reply)
+    }
+}
