@@ -133,7 +133,5 @@ class UserService(
             generation = user.generation,
             profileUrl = user.profileUrl
         )
-
     }
-
 }

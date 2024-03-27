@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
+import team.themoment.gsmNetworking.domain.user.dto.UserSimpleInfoDto
 import team.themoment.gsmNetworking.domain.user.service.GenerateProfileUrlUseCase
+import team.themoment.gsmNetworking.domain.user.service.QueryUserInfoByUserIdUseCase
 
 @RestController
 @RequestMapping("/api/v1/user")
 class UserController(
     private val authenticatedUserManager: AuthenticatedUserManager,
-    private val generateProfileUrlUseCase: GenerateProfileUrlUseCase
+    private val generateProfileUrlUseCase: GenerateProfileUrlUseCase,
+    private val queryUserInfoByUserIdUseCase: QueryUserInfoByUserIdUseCase
 ) {
 
     @PostMapping("/profile-url")
@@ -24,6 +27,11 @@ class UserController(
         val authenticationId = authenticatedUserManager.getName()
         generateProfileUrlUseCase.generateProfileUrl(authenticationId, dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
+
+    @GetMapping
+    fun queryUserInfo(@RequestParam userId: Long): ResponseEntity<UserSimpleInfoDto> {
+        return ResponseEntity.ok(queryUserInfoByUserIdUseCase.queryUserInfoByUserId(userId))
     }
 
 }
