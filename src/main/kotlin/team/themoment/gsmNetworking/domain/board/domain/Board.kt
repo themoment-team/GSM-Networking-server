@@ -19,7 +19,7 @@ class Board (
     @Column(name = "board_category")
     val boardCategory: BoardCategory,
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "author_id")
     val author: User,
 
