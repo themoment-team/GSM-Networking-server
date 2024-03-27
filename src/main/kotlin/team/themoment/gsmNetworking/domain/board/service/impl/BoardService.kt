@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.domain.Board
-import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
+import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
 import team.themoment.gsmNetworking.domain.board.repository.BoardRepository
 import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
@@ -20,7 +20,7 @@ class BoardService (
 ) : SaveBoardUseCase, QueryBoardListUseCase {
 
     @Transactional
-    override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardInfoDto {
+    override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardListDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
@@ -33,7 +33,7 @@ class BoardService (
 
         val savedBoard = boardRepository.save(newBoard)
 
-        return BoardInfoDto(
+        return BoardListDto(
             id = savedBoard.id,
             title = savedBoard.title,
             boardCategory = savedBoard.boardCategory,
@@ -43,7 +43,7 @@ class BoardService (
 
     }
 
-    override fun queryBoardList(cursorId: Long, pageSize: Long, boardCategory: BoardCategory?): List<BoardInfoDto> =
+    override fun queryBoardList(cursorId: Long, pageSize: Long, boardCategory: BoardCategory?): List<BoardListDto> =
         if (cursorId == 0L)
             boardRepository.findPageWithRecentBoard(pageSize, boardCategory)
         else
