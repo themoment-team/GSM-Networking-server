@@ -28,7 +28,6 @@ class CommentService (
         val currentBoard = boardRepository.findById(commentSaveDto.boardId)
             .orElseThrow { throw ExpectedException("게시판을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
-
         val newComment = Comment(
             comment = commentSaveDto.comment,
             board = currentBoard,
@@ -40,7 +39,6 @@ class CommentService (
         )
 
         val savedComment = commentRepository.save(newComment)
-
 
         if (commentSaveDto.replyCommentId != null) {
             val replyComment = commentRepository.findById(commentSaveDto.replyCommentId)
