@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.common.exception.model.ExceptionResponse
 import team.themoment.gsmNetworking.global.filter.LoggingFilter
+import javax.validation.ConstraintViolationException
 
 private val log = LoggerFactory.getLogger(LoggingFilter::class.java)!!
 
@@ -66,6 +67,16 @@ class GlobalExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(ExceptionResponse(message = methodArgumentNotValidExceptionToJson(e)))
+    }
+
+    @ExceptionHandler(ConstraintViolationException::class)
+    fun constraintViolationHandler(e: ConstraintViolationException): ResponseEntity<ExceptionResponse> {
+        log.warn("ConstraintViolationException : ${e.message}")
+        log.trace("ConstraintViolationException Details : $e")
+
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ExceptionResponse(message = "유효성 검사에 실패했습니다."))
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
