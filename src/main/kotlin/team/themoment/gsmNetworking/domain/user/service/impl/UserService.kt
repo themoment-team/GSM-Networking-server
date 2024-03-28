@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.user.domain.User
-import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
-import team.themoment.gsmNetworking.domain.user.dto.UserInfoDto
-import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
+import team.themoment.gsmNetworking.domain.user.dto.*
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.domain.user.service.*
 
@@ -18,7 +16,9 @@ class UserService(
     ModifyUserInfoByIdUseCase,
     GenerateProfileUrlUseCase,
     DeleteUserInfoByIdUseCase,
-    QueryUserInfoByIdUseCase {
+    QueryUserInfoByIdUseCase,
+    QueryUserInfoByUserIdUseCase,
+    QueryEmailByUserIdUseCase {
 
     @Transactional
     override fun generateUser(dto: UserSaveInfoDto, authenticationId: Long): User {
@@ -120,4 +120,26 @@ class UserService(
         )
     }
 
+    @Transactional(readOnly = true)
+    override fun queryUserInfoByUserId(userId: Long): UserSimpleInfoDto {
+        val user = userRepository.findById(userId)
+            .orElseThrow { ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+
+        return UserSimpleInfoDto(
+            id = user.id,
+            name = user.name,
+            generation = user.generation,
+            profileUrl = user.profileUrl
+        )
+    }
+
+    @Transactional(readOnly = true)
+    override fun queryEmailByUserId(email: String): UserIdDto {
+        val user = userRepository.findByEmail(email)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+        return UserIdDto(
+            userId = user.id
+        )
+    }
 }
