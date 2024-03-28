@@ -68,7 +68,22 @@ class CommentService (
         val comment = commentRepository.findById(commentId)
             .orElseThrow { throw ExpectedException("댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
-        val finReplies = commentRepository.findAllByTopComment(comment).map { Reply(
+        val findReplies = commentRepository.findAllByTopComment(comment)
+
+        return CommentListDto(
+            commentId = comment.id,
+            comment = comment.comment,
+            author = Author(
+                name = comment.author.name,
+                generation = comment.author.generation,
+                profileUrl = comment.author.profileUrl
+            ),
+            replies = getReplies(findReplies)
+        )
+    }
+
+    private fun getReplies(findReplies: List<Comment>): List<Reply> {
+        return findReplies.map { Reply(
             comment = ReplyCommentInfo(
                 commentId = it.id,
                 comment = it.comment,
@@ -80,17 +95,5 @@ class CommentService (
                 replyCommentId = it.repliedComment?.id
             )
         ) }
-
-        return CommentListDto(
-            commentId = comment.id,
-            comment = comment.comment,
-            author = Author(
-                name = comment.author.name,
-                generation = comment.author.generation,
-                profileUrl = comment.author.profileUrl
-            ),
-            replies = finReplies
-        )
-
     }
 }
