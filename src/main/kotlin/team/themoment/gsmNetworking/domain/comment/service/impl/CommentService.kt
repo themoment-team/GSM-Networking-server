@@ -81,7 +81,6 @@ class CommentService (
             )
         ) }
 
-
         return CommentListDto(
             commentId = comment.id,
             comment = comment.comment,
