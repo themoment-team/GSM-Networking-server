@@ -4,5 +4,5 @@ data class CommentListDto (
     val commentId: Long,
     val comment: String,
     val author: Author,
-    val replies: List<Reply>
+    val replies: List<Reply>?
 )

@@ -29,7 +29,7 @@ class CommentService (
         }
 
         val currentBoard = boardRepository.findById(commentSaveDto.boardId)
-            .orElseThrow { throw ExpectedException("게시판을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+            .orElseThrow { throw ExpectedException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
         val newComment = Comment(
             comment = commentSaveDto.comment,
