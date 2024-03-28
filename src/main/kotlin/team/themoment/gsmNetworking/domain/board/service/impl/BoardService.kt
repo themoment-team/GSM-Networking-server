@@ -66,7 +66,7 @@ class BoardService (
         val currentBoard = boardRepository.findById(boardId)
             .orElseThrow { ExpectedException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
-        val findComments = commentRepository.findAllByBoardAndTopCommentIsNull(currentBoard)
+        val findComments = commentRepository.findAllByBoardAndParentCommentIsNull(currentBoard)
 
         return BoardInfoDto(
             id = currentBoard.id,
@@ -97,7 +97,7 @@ class BoardService (
     }
 
     private fun getFindReplies(topComment: Comment): List<ReplyDto> {
-        return commentRepository.findAllByTopComment(topComment).map { reply ->
+        return commentRepository.findAllByParentComment(topComment).map { reply ->
             ReplyDto(
                 comment = ReplyCommentInfo(
                     commentId = reply.id,

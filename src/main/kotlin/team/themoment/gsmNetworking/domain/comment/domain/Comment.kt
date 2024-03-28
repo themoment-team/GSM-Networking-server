@@ -17,8 +17,8 @@ class Comment(
     val board: Board,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "top_comment_id")
-    val topComment: Comment?,
+    @JoinColumn(name = "parent_comment_id")
+    val parentComment: Comment?,
 
     // 해당 댓글의 대댓글 List
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "repliedComment")

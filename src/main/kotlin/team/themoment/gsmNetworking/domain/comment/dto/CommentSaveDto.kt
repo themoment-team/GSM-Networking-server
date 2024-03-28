@@ -9,7 +9,7 @@ data class CommentSaveDto (
     @field:NotNull
     val boardId: Long,
     @field:Nullable
-    val topCommentId: Long?,
+    val parentCommentId: Long?,
     @field:Nullable
     val replyCommentId: Long?,
     @field:NotBlank
