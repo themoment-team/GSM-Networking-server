@@ -5,16 +5,16 @@ import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.domain.QBoard.board
-import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
+import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
 
 class BoardCustomRepositoryImpl (
     private val queryFactory: JPAQueryFactory
 ) : BoardCustomRepository {
 
-    override fun findPageByCursorId(cursorId: Long, pageSize: Long, boardCategory: BoardCategory?): List<BoardInfoDto> {
+    override fun findPageByCursorId(cursorId: Long, pageSize: Long, boardCategory: BoardCategory?): List<BoardListDto> {
         return queryFactory.select(
             Projections.constructor(
-                BoardInfoDto::class.java,
+                BoardListDto::class.java,
                 board.id,
                 board.title,
                 board.boardCategory,
@@ -29,10 +29,10 @@ class BoardCustomRepositoryImpl (
             .fetch()
     }
 
-    override fun findPageWithRecentBoard(pageSize: Long, boardCategory: BoardCategory?): List<BoardInfoDto> {
+    override fun findPageWithRecentBoard(pageSize: Long, boardCategory: BoardCategory?): List<BoardListDto> {
         return queryFactory.select(
             Projections.constructor(
-                BoardInfoDto::class.java,
+                BoardListDto::class.java,
                 board.id,
                 board.title,
                 board.boardCategory,
