@@ -12,7 +12,7 @@ data class BoardSaveDto (
     @field:Size(max = 50)
     val title: String,
     @field:NotBlank
-    @field:Size(max = 100)
+    @field:Size(max = 1000)
     val content: String,
     @field:NotNull
     @Enumerated(EnumType.STRING)
