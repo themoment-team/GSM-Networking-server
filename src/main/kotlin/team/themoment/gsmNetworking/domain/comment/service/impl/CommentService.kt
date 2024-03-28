@@ -55,7 +55,7 @@ class CommentService (
         return CommentInfoDto(
             commentId = savedComment.id,
             comment = savedComment.comment,
-            author = Author (
+            author = AuthorDto (
                 name = savedComment.author.name,
                 generation = savedComment.author.generation,
                 profileUrl = savedComment.author.profileUrl
@@ -73,7 +73,7 @@ class CommentService (
         return CommentListDto(
             commentId = comment.id,
             comment = comment.comment,
-            author = Author(
+            author = AuthorDto(
                 name = comment.author.name,
                 generation = comment.author.generation,
                 profileUrl = comment.author.profileUrl
@@ -82,12 +82,12 @@ class CommentService (
         )
     }
 
-    private fun getReplies(findReplies: List<Comment>): List<Reply> {
-        return findReplies.map { Reply(
+    private fun getReplies(findReplies: List<Comment>): List<ReplyDto> {
+        return findReplies.map { ReplyDto(
             comment = ReplyCommentInfo(
                 commentId = it.id,
                 comment = it.comment,
-                author = Author(
+                author = AuthorDto(
                     name = it.author.name,
                     generation = it.author.generation,
                     profileUrl = it.author.profileUrl

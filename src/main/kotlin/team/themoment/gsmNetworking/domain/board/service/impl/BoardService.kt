@@ -14,9 +14,9 @@ import team.themoment.gsmNetworking.domain.board.service.QueryBoardInfoUseCase
 import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
 import team.themoment.gsmNetworking.domain.board.service.QueryBoardListUseCase
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
-import team.themoment.gsmNetworking.domain.comment.dto.Author
+import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
 import team.themoment.gsmNetworking.domain.comment.dto.CommentListDto
-import team.themoment.gsmNetworking.domain.comment.dto.Reply
+import team.themoment.gsmNetworking.domain.comment.dto.ReplyDto
 import team.themoment.gsmNetworking.domain.comment.dto.ReplyCommentInfo
 import team.themoment.gsmNetworking.domain.comment.repository.CommentRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
@@ -73,7 +73,7 @@ class BoardService (
             title = currentBoard.title,
             content = currentBoard.content,
             boardCategory = currentBoard.boardCategory,
-            author = Author(
+            author = AuthorDto(
                 name = currentBoard.author.name,
                 generation = currentBoard.author.generation,
                 profileUrl = currentBoard.author.profileUrl
@@ -87,7 +87,7 @@ class BoardService (
         return findComments.map { CommentListDto(
             commentId = it.id,
             comment = it.comment,
-            author = Author(
+            author = AuthorDto(
                 name = it.author.name,
                 generation = it.author.generation,
                 profileUrl = it.author.profileUrl
@@ -96,13 +96,13 @@ class BoardService (
         ) }
     }
 
-    private fun getFindReplies(topComment: Comment): List<Reply> {
+    private fun getFindReplies(topComment: Comment): List<ReplyDto> {
         return commentRepository.findAllByTopComment(topComment).map { reply ->
-            Reply(
+            ReplyDto(
                 comment = ReplyCommentInfo(
                     commentId = reply.id,
                     comment = reply.comment,
-                    author = Author(
+                    author = AuthorDto(
                         name = reply.author.name,
                         generation = reply.author.generation,
                         profileUrl = reply.author.profileUrl

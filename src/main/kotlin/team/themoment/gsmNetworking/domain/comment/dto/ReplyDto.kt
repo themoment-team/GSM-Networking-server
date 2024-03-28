@@ -1,5 +1,5 @@
 package team.themoment.gsmNetworking.domain.comment.dto
 
-data class Reply (
+data class ReplyDto (
     val comment: ReplyCommentInfo,
 )
