@@ -13,6 +13,6 @@ data class CommentSaveDto (
     @field:Nullable
     val replyCommentId: Long?,
     @field:NotBlank
-    @Max(100)
+    @Max(300)
     val comment: String
 )
