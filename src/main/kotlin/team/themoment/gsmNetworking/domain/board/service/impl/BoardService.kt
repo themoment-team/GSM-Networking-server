@@ -65,7 +65,7 @@ class BoardService (
         val currentBoard = boardRepository.findById(boardId)
             .orElseThrow { ExpectedException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
-        val currentComments = commentRepository.findAllByBoard(currentBoard)
+        val currentComments = commentRepository.findAllByBoardAndTopCommentIsNull(currentBoard)
 
         return BoardInfoDto(
             id = currentBoard.id,
@@ -87,23 +87,22 @@ class BoardService (
                         generation = it.author.generation,
                         profileUrl = it.author.profileUrl
                     ),
-                    replies = it.repliedComment?.replyComment?.map { reply ->
-                        Reply(
-                            comment = ReplyCommentInfo(
-                                commentId = reply.id,
-                                comment = reply.comment,
-                                author = Author(
-                                    name = reply.author.name,
-                                    generation = reply.author.generation,
-                                    profileUrl = reply.author.profileUrl
-                                ),
-                                replyCommentId = reply.repliedComment?.id
+                    replies = commentRepository.findAllByTopComment(it).map { reply ->
+                            Reply(
+                                comment = ReplyCommentInfo(
+                                    commentId = reply.id,
+                                    comment = reply.comment,
+                                    author = Author(
+                                        name = reply.author.name,
+                                        generation = reply.author.generation,
+                                        profileUrl = reply.author.profileUrl
+                                    ),
+                                    replyCommentId = reply.repliedComment?.id
+                                )
                             )
-                        )
                     }
                 )
             }
         )
     }
-
 }

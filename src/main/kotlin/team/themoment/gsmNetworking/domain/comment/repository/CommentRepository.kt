@@ -7,5 +7,5 @@ import team.themoment.gsmNetworking.domain.comment.domain.Comment
 interface CommentRepository: JpaRepository<Comment, Long> {
     fun findByTopCommentAndReplyComment(topComment: Comment, replyComment: Comment): Comment
     fun findAllByTopComment(topComment: Comment): List<Comment>
-    fun findAllByBoard(board: Board): List<Comment>
+    fun findAllByBoardAndTopCommentIsNull(board: Board): List<Comment>
 }
