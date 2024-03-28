@@ -13,6 +13,7 @@ import team.themoment.gsmNetworking.domain.board.repository.BoardRepository
 import team.themoment.gsmNetworking.domain.board.service.QueryBoardInfoUseCase
 import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
 import team.themoment.gsmNetworking.domain.board.service.QueryBoardListUseCase
+import team.themoment.gsmNetworking.domain.comment.domain.Comment
 import team.themoment.gsmNetworking.domain.comment.dto.Author
 import team.themoment.gsmNetworking.domain.comment.dto.CommentListDto
 import team.themoment.gsmNetworking.domain.comment.dto.Reply
@@ -78,31 +79,37 @@ class BoardService (
                 profileUrl = currentBoard.author.profileUrl
             ),
             createdAt = currentBoard.createdAt,
-            comments = currentComments.map {
-                CommentListDto(
-                    commentId = it.id,
-                    comment = it.comment,
-                    author = Author(
-                        name = it.author.name,
-                        generation = it.author.generation,
-                        profileUrl = it.author.profileUrl
-                    ),
-                    replies = commentRepository.findAllByTopComment(it).map { reply ->
-                            Reply(
-                                comment = ReplyCommentInfo(
-                                    commentId = reply.id,
-                                    comment = reply.comment,
-                                    author = Author(
-                                        name = reply.author.name,
-                                        generation = reply.author.generation,
-                                        profileUrl = reply.author.profileUrl
-                                    ),
-                                    replyCommentId = reply.repliedComment?.id
-                                )
-                            )
-                    }
-                )
-            }
+            comments = getFindComments(currentComments)
         )
     }
+
+    private fun getFindComments(currentComments: List<Comment>): List<CommentListDto> {
+        return currentComments.map { CommentListDto(
+            commentId = it.id,
+            comment = it.comment,
+            author = Author(
+                name = it.author.name,
+                generation = it.author.generation,
+                profileUrl = it.author.profileUrl
+            ),
+            replies = getFindReplies(it)
+        ) }
+    }
+
+    private fun getFindReplies(topComment: Comment): List<Reply> {
+        return commentRepository.findAllByTopComment(topComment).map { reply ->
+            Reply(
+                comment = ReplyCommentInfo(
+                    commentId = reply.id,
+                    comment = reply.comment,
+                    author = Author(
+                        name = reply.author.name,
+                        generation = reply.author.generation,
+                        profileUrl = reply.author.profileUrl
+                    ),
+                    replyCommentId = reply.repliedComment?.id
+                )
+            ) }
+    }
+
 }

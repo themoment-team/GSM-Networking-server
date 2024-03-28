@@ -45,7 +45,7 @@ class CommentService (
 
         if (commentSaveDto.replyCommentId != null) {
             val replyComment = commentRepository.findById(commentSaveDto.replyCommentId)
-                .orElseThrow { throw ExpectedException("대댓글을 작성할 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+                .orElseThrow { throw ExpectedException("댓글의 답장을 작성할 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
             newComment.addRepliedComment(replyComment)
 
@@ -68,7 +68,7 @@ class CommentService (
         val comment = commentRepository.findById(commentId)
             .orElseThrow { throw ExpectedException("댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
-        val newReplies = commentRepository.findAllByTopComment(comment).map { Reply(
+        val finReplies = commentRepository.findAllByTopComment(comment).map { Reply(
             comment = ReplyCommentInfo(
                 commentId = it.id,
                 comment = it.comment,
@@ -89,7 +89,7 @@ class CommentService (
                 generation = comment.author.generation,
                 profileUrl = comment.author.profileUrl
             ),
-            replies = newReplies
+            replies = finReplies
         )
 
     }
