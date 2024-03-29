@@ -96,8 +96,8 @@ class BoardService (
         ) }
     }
 
-    private fun getFindReplies(topComment: Comment): List<ReplyDto> {
-        return commentRepository.findAllByParentComment(topComment).map { reply ->
+    private fun getFindReplies(parentComment: Comment): List<ReplyDto> {
+        return commentRepository.findAllByParentComment(parentComment).map { reply ->
             ReplyDto(
                 comment = ReplyCommentInfo(
                     commentId = reply.id,
