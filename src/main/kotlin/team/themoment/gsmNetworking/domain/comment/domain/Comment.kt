@@ -9,23 +9,31 @@ import javax.persistence.*
 @Entity
 @Table(name = "comment")
 class Comment(
-    @Column(name = "comment", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "comment", columnDefinition = "TEXT", nullable = false, length = 300)
     val comment: String,
 
     @ManyToOne
     @JoinColumn(name = "board_id")
     val board: Board,
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "top_comment_id")
-    @Nullable
-    val topComment: Comment?,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_comment_id")
+    val parentComment: Comment?,
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reply_comment_id")
-    val replyComment: List<Comment> = ArrayList(),
+    // 해당 댓글의 대댓글 List
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "repliedComment")
+    val replyComment: MutableList<Comment> = ArrayList(),
+
+    // 해당 댓글이 대댓글을 작성한 댓글
+    @ManyToOne
+    @JoinColumn(name = "replied_comment_id")
+    var repliedComment: Comment? = null,
 
     @ManyToOne
     @JoinColumn(name = "author_id")
     val author: User
-): BaseIdTimestampEntity();
+): BaseIdTimestampEntity() {
+    fun addRepliedComment(repliedComment: Comment) {
+        this.repliedComment = repliedComment;
+    }
+}
