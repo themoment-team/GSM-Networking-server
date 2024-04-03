@@ -12,5 +12,6 @@ data class MentorInfoDto(
     @field:JsonProperty("SNS")
     val sns: String?,
     val profileUrl: String?,
-    val registered: Boolean
+    val registered: Boolean,
+    val temporaryImgNumber: Int
 )

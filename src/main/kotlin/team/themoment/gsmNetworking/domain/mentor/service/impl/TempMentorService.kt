@@ -40,7 +40,8 @@ class TempMentorService(
                     name = tempMentor.companyName,
                     url = tempMentor.companyUrl
                 ),
-                snsUrl = tempMentor.sns
+                snsUrl = tempMentor.sns,
+                temporaryImgNumber = tempMentor.temporaryImgNumber
             )
         }
 
@@ -68,7 +69,8 @@ class TempMentorService(
                 name = tempMentor.companyName,
                 url = tempMentor.companyUrl
             ),
-            snsUrl = tempMentor.sns
+            snsUrl = tempMentor.sns,
+            temporaryImgNumber = tempMentor.temporaryImgNumber
         )
     }
 
