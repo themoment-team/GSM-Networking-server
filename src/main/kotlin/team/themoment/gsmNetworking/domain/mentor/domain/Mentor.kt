@@ -13,6 +13,10 @@ class Mentor(
     @Column(nullable = false, name = "registered")
     val registered: Boolean,
 
+    @Column(name = "temporary_img_number")
+    val temporaryImgNumber: Int,
+
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User

@@ -37,5 +37,8 @@ class TempMentor(
     val position: String,
 
     @Column(nullable = false, name = "deleted")
-    var deleted: Boolean = false
+    var deleted: Boolean = false,
+
+    @Column(name = "temporary_img_number")
+    val temporaryImgNumber: Int
 )
