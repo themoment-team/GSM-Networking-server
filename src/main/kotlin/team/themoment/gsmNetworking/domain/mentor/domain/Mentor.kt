@@ -19,15 +19,11 @@ class Mentor(
     val user: User,
 
     @Column(name = "temporary_img_number")
-    val temporaryImgNumber: Int
+    val temporaryImgNumber: Int = generateRandomNumber()
 ) : BaseIdTimestampEntity() {
-
-    constructor(registered: Boolean, user: User) : this(registered, user, generateRandomNumber())
-
     companion object {
         private fun generateRandomNumber(): Int {
-            return Random.nextInt(0, 9)
+            return Random.nextInt(1, 7)
         }
     }
-
 }
