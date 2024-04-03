@@ -76,7 +76,8 @@ class BoardService (
             author = AuthorDto(
                 name = currentBoard.author.name,
                 generation = currentBoard.author.generation,
-                profileUrl = currentBoard.author.profileUrl
+                profileUrl = currentBoard.author.profileUrl,
+                temporaryImgNumber = currentBoard.author.temporaryImgNumber
             ),
             createdAt = currentBoard.createdAt,
             comments = getFindComments(findComments)
@@ -90,7 +91,8 @@ class BoardService (
             author = AuthorDto(
                 name = it.author.name,
                 generation = it.author.generation,
-                profileUrl = it.author.profileUrl
+                profileUrl = it.author.profileUrl,
+                temporaryImgNumber = it.author.temporaryImgNumber
             ),
             replies = getFindReplies(it)
         ) }
@@ -105,7 +107,8 @@ class BoardService (
                     author = AuthorDto(
                         name = reply.author.name,
                         generation = reply.author.generation,
-                        profileUrl = reply.author.profileUrl
+                        profileUrl = reply.author.profileUrl,
+                        temporaryImgNumber = reply.author.temporaryImgNumber
                     ),
                     replyCommentId = reply.repliedComment?.id
                 )

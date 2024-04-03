@@ -58,7 +58,8 @@ class CommentService (
             author = AuthorDto (
                 name = savedComment.author.name,
                 generation = savedComment.author.generation,
-                profileUrl = savedComment.author.profileUrl
+                profileUrl = savedComment.author.profileUrl,
+                temporaryImgNumber = savedComment.author.temporaryImgNumber
             )
         )
     }
@@ -76,7 +77,8 @@ class CommentService (
             author = AuthorDto(
                 name = comment.author.name,
                 generation = comment.author.generation,
-                profileUrl = comment.author.profileUrl
+                profileUrl = comment.author.profileUrl,
+                temporaryImgNumber = comment.author.temporaryImgNumber
             ),
             replies = getReplies(findReplies)
         )
@@ -90,7 +92,8 @@ class CommentService (
                 author = AuthorDto(
                     name = it.author.name,
                     generation = it.author.generation,
-                    profileUrl = it.author.profileUrl
+                    profileUrl = it.author.profileUrl,
+                    temporaryImgNumber = it.author.temporaryImgNumber
                 ),
                 replyCommentId = it.repliedComment?.id
             )
