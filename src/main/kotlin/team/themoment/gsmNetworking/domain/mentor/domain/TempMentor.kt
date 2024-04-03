@@ -42,11 +42,5 @@ class TempMentor(
     var deleted: Boolean = false,
 
     @Column(name = "temporary_img_number")
-    val temporaryImgNumber: Int = generateRandomNumber()
-) {
-    companion object {
-        private fun generateRandomNumber(): Int {
-            return Random.nextInt(1, 7)
-        }
-    }
-}
+    val temporaryImgNumber: Int
+)
