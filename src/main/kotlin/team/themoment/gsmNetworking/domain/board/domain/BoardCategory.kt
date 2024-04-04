@@ -7,6 +7,7 @@ enum class BoardCategory {
     QNA,
     CHAT,
     STUDY,
+    SHARE,
     HOSTEL,
     MEET,
     SPORT;
