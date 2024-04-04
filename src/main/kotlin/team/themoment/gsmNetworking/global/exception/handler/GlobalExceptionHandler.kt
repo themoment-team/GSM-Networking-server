@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -69,14 +70,14 @@ class GlobalExceptionHandler {
             .body(ExceptionResponse(message = methodArgumentNotValidExceptionToJson(e)))
     }
 
-    @ExceptionHandler(ConstraintViolationException::class)
-    fun constraintViolationHandler(e: ConstraintViolationException): ResponseEntity<ExceptionResponse> {
+    @ExceptionHandler(HttpMessageNotReadableException::class)
+    fun constraintViolationHandler(e: HttpMessageNotReadableException): ResponseEntity<ExceptionResponse> {
         log.warn("ConstraintViolationException : ${e.message}")
         log.trace("ConstraintViolationException Details : $e")
 
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(ExceptionResponse(message = "유효성 검사에 실패했습니다."))
+            .body(ExceptionResponse(message = "요청 body의 값이 유효하지 않습니다."))
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
