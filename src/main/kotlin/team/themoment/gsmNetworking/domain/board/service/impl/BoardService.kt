@@ -77,7 +77,7 @@ class BoardService (
                 name = currentBoard.author.name,
                 generation = currentBoard.author.generation,
                 profileUrl = currentBoard.author.profileUrl,
-                temporaryImgNumber = currentBoard.author.temporaryImgNumber
+                defaultImgNumber = currentBoard.author.defaultImgNumber
             ),
             createdAt = currentBoard.createdAt,
             comments = getFindComments(findComments)
@@ -92,7 +92,7 @@ class BoardService (
                 name = it.author.name,
                 generation = it.author.generation,
                 profileUrl = it.author.profileUrl,
-                temporaryImgNumber = it.author.temporaryImgNumber
+                defaultImgNumber = it.author.defaultImgNumber
             ),
             replies = getFindReplies(it)
         ) }
@@ -108,7 +108,7 @@ class BoardService (
                         name = reply.author.name,
                         generation = reply.author.generation,
                         profileUrl = reply.author.profileUrl,
-                        temporaryImgNumber = reply.author.temporaryImgNumber
+                        defaultImgNumber = reply.author.defaultImgNumber
                     ),
                     replyCommentId = reply.repliedComment?.id
                 )

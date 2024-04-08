@@ -42,7 +42,7 @@ class MentorCustomRepositoryImpl(
                 mentor.user.snsUrl,
                 mentor.user.profileUrl,
                 mentor.registered,
-                mentor.user.temporaryImgNumber
+                mentor.user.defaultImgNumber
             )
         )
             .from(mentor, career)
@@ -75,7 +75,7 @@ class MentorCustomRepositoryImpl(
                         mentor.user.snsUrl,
                         mentor.user.profileUrl,
                         mentor.registered,
-                        mentor.user.temporaryImgNumber,
+                        mentor.user.defaultImgNumber,
                         list(
                             Projections.constructor(
                                 MyCareerInfoDto::class.java,

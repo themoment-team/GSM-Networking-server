@@ -4,5 +4,5 @@ data class AuthorDto (
     val name: String,
     val generation: Int,
     val profileUrl: String?,
-    val temporaryImgNumber: Int
+    val defaultImgNumber: Int
 )

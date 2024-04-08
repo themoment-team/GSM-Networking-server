@@ -59,7 +59,7 @@ class CommentService (
                 name = savedComment.author.name,
                 generation = savedComment.author.generation,
                 profileUrl = savedComment.author.profileUrl,
-                temporaryImgNumber = savedComment.author.temporaryImgNumber
+                defaultImgNumber = savedComment.author.defaultImgNumber
             )
         )
     }
@@ -78,7 +78,7 @@ class CommentService (
                 name = comment.author.name,
                 generation = comment.author.generation,
                 profileUrl = comment.author.profileUrl,
-                temporaryImgNumber = comment.author.temporaryImgNumber
+                defaultImgNumber = comment.author.defaultImgNumber
             ),
             replies = getReplies(findReplies)
         )
@@ -93,7 +93,7 @@ class CommentService (
                     name = it.author.name,
                     generation = it.author.generation,
                     profileUrl = it.author.profileUrl,
-                    temporaryImgNumber = it.author.temporaryImgNumber
+                    defaultImgNumber = it.author.defaultImgNumber
                 ),
                 replyCommentId = it.repliedComment?.id
             )
