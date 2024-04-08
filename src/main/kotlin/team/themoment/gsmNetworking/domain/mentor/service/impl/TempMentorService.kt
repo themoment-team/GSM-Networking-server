@@ -40,7 +40,8 @@ class TempMentorService(
                     name = tempMentor.companyName,
                     url = tempMentor.companyUrl
                 ),
-                snsUrl = tempMentor.sns
+                snsUrl = tempMentor.sns,
+                defaultImgNumber = tempMentor.defaultImgNumber
             )
         }
 
@@ -68,7 +69,8 @@ class TempMentorService(
                 name = tempMentor.companyName,
                 url = tempMentor.companyUrl
             ),
-            snsUrl = tempMentor.sns
+            snsUrl = tempMentor.sns,
+            defaultImgNumber = tempMentor.defaultImgNumber
         )
     }
 
@@ -91,7 +93,8 @@ class TempMentorService(
                     name = tempMentor.companyName,
                     url = tempMentor.companyUrl
                 ),
-                snsUrl = tempMentor.sns
+                snsUrl = tempMentor.sns,
+                defaultImgNumber = tempMentor.defaultImgNumber
             )
         }
 

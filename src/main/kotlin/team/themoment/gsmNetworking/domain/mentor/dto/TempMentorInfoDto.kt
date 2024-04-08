@@ -10,7 +10,8 @@ data class TempMentorInfoDto(
     val position: String,
     val company: CompanyInfoDto,
     @field:JsonProperty("SNS")
-    val snsUrl: String?
+    val snsUrl: String?,
+    val defaultImgNumber: Int
 ) {
     fun toMentorInfoDto() = MentorInfoDto(
         id = id,
@@ -21,6 +22,7 @@ data class TempMentorInfoDto(
         company = company,
         sns = snsUrl,
         profileUrl = null,
-        registered = false
+        registered = false,
+        defaultImgNumber = defaultImgNumber
     )
 }

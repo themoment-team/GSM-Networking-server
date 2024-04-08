@@ -12,5 +12,6 @@ data class MyMentorInfoDto(
     val sns: String?,
     val profileUrl: String?,
     val registered: Boolean,
+    val defaultImgNumber: Int,
     val career: List<MyCareerInfoDto>
 )
