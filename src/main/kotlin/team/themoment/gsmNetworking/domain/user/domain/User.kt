@@ -41,7 +41,7 @@ class User(
 ) : BaseIdTimestampEntity() {
     companion object {
         private fun generateRandomNumber(): Int {
-            return Random.nextInt(1, 7)
+            return Random.nextInt(0, 5)
         }
     }
 }
