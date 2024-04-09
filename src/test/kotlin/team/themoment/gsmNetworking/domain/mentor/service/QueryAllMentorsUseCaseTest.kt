@@ -132,7 +132,7 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
                 url = "https://www.jkl-company.com"
             ),
             snsUrl = "https://www.instagram.com/d",
-            defaultImgNumber = 5
+            defaultImgNumber = 0
         ),
         TempMentorInfoDto(
             id = 12L,
@@ -145,7 +145,7 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
                 url = "https://www.mno-company.com"
             ),
             snsUrl = "https://www.instagram.com/e",
-            defaultImgNumber = 6
+            defaultImgNumber = 1
         ),
         TempMentorInfoDto(
             id = 13L,
@@ -158,7 +158,7 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
                 url = "https://www.pqr-company.com"
             ),
             snsUrl = "https://www.instagram.com/f",
-            defaultImgNumber = 1
+            defaultImgNumber = 2
         )
     )
 
@@ -175,7 +175,7 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
         sns = "https://www.instagram.com/a",
         profileUrl = "https://www.instagram.com/img/a",
         registered = true,
-        defaultImgNumber = 2
+        defaultImgNumber = 3
     )
 
     val sameUserTempMentor = TempMentorInfoDto(
@@ -189,7 +189,7 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             url = "https://www.abc-company.com"
         ),
         snsUrl = "https://www.instagram.com/a",
-        defaultImgNumber = 3
+        defaultImgNumber = 4
     )
 
     given("조회할 멘토, 임시 멘토 리스트와 예상 결과 리스트가 주어질 때") {
