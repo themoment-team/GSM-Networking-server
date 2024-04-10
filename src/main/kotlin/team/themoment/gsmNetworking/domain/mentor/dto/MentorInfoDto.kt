@@ -13,5 +13,5 @@ data class MentorInfoDto(
     val sns: String?,
     val profileUrl: String?,
     val registered: Boolean,
-    val defaultImgNumber: Int
+    val defaultImgNumber: Int?
 )
