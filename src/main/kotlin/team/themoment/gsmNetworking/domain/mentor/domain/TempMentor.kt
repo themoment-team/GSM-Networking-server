@@ -39,5 +39,5 @@ class TempMentor(
     var deleted: Boolean = false,
 
     @Column(name = "default_img_number")
-    val defaultImgNumber: Int = 0
+    val defaultImgNumber: Int
 )
