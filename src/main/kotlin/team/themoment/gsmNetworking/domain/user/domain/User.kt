@@ -37,8 +37,13 @@ class User(
     val profileUrl: String?,
 
     @Column(name = "default_img_number")
-    val defaultImgNumber: Int = generateRandomNumber()
+    var defaultImgNumber: Int = 0
 ) : BaseIdTimestampEntity() {
+
+    init {
+        defaultImgNumber = generateRandomNumber()
+    }
+
     companion object {
         private fun generateRandomNumber(): Int {
             return Random.nextInt(0, 5)
