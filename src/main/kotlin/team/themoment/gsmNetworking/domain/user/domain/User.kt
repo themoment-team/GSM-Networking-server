@@ -37,7 +37,7 @@ class User(
     val profileUrl: String?,
 
     @Column(name = "default_img_number")
-    var defaultImgNumber: Int? = 0
+    var defaultImgNumber: Int = 0
 ) : BaseIdTimestampEntity() {
 
     init {
