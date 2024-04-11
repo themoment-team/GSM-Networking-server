@@ -43,6 +43,10 @@ class UserService(
             menteeRepository.deleteByUser(user)
             return userRepository.save(userToUpdate)
         }
+
+        validateExistUserByPhoneNumber(userSaveInfoDto.phoneNumber);
+        validateExistUserByEmail(userSaveInfoDto.email)
+
         val userToSave = User(
             authenticationId = authenticationId,
             name = userSaveInfoDto.name,
