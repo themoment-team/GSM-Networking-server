@@ -21,7 +21,7 @@ class Comment(
     val parentComment: Comment?,
 
     // 해당 댓글의 대댓글 List
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "repliedComment")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "repliedComment", cascade = [CascadeType.ALL], orphanRemoval = true)
     val replyComment: MutableList<Comment> = ArrayList(),
 
     // 해당 댓글이 대댓글을 작성한 댓글

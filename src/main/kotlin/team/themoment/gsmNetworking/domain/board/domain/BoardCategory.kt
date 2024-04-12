@@ -10,6 +10,7 @@ enum class BoardCategory {
     SHARE,
     HOSTEL,
     MEET,
-    SPORT;
+    SPORT,
+    EMPLOYMENT;
 
 }

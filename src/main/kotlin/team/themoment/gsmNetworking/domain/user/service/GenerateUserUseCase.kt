@@ -5,5 +5,5 @@ import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
 
 interface GenerateUserUseCase {
 
-    fun generateUser(dto: UserSaveInfoDto, authenticationId: Long): User
+    fun generateUser(userSaveInfoDto: UserSaveInfoDto, authenticationId: Long): User
 }
