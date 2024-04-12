@@ -38,7 +38,7 @@ class User(
     val profileUrl: String?,
 
     @Column(name = "default_img_number")
-    var defaultImgNumber: Int? = 0,
+    var defaultImgNumber: Int = 0,
 
     @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL], orphanRemoval = true)
     val boards: MutableList<Board> = ArrayList()
