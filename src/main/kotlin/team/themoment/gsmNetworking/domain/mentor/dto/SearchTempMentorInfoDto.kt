@@ -10,5 +10,6 @@ data class SearchTempMentorInfoDto(
     val position: String,
     val company: CompanyInfoDto,
     @field:JsonProperty("SNS")
-    val snsUrl: String?
+    val snsUrl: String?,
+    val defaultImgNumber: Int
 )

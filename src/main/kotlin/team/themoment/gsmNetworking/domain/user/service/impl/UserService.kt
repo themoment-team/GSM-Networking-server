@@ -4,38 +4,59 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
+import team.themoment.gsmNetworking.domain.mentee.repository.MenteeRepository
 import team.themoment.gsmNetworking.domain.user.domain.User
-import team.themoment.gsmNetworking.domain.user.dto.ProfileUrlRegistrationDto
-import team.themoment.gsmNetworking.domain.user.dto.UserInfoDto
-import team.themoment.gsmNetworking.domain.user.dto.UserSaveInfoDto
+import team.themoment.gsmNetworking.domain.user.dto.*
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.domain.user.service.*
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
+    private val menteeRepository: MenteeRepository
 ) : GenerateUserUseCase,
     ModifyUserInfoByIdUseCase,
     GenerateProfileUrlUseCase,
     DeleteUserInfoByIdUseCase,
-    QueryUserInfoByIdUseCase {
+    QueryUserInfoByIdUseCase,
+    QueryUserInfoByUserIdUseCase,
+    QueryEmailByUserIdUseCase {
 
     @Transactional
-    override fun generateUser(dto: UserSaveInfoDto, authenticationId: Long): User {
-        validateExistUserByPhoneNumber(dto.phoneNumber)
-        validateExistUserByEmail(dto.email)
-        if (userRepository.existsByAuthenticationId(authenticationId))
-            throw ExpectedException("이미 등록되어있는 user입니다.", HttpStatus.BAD_REQUEST)
-        val user = User(
+    override fun generateUser(userSaveInfoDto: UserSaveInfoDto, authenticationId: Long): User {
+        if(userRepository.existsByAuthenticationId(authenticationId)){
+            val user = userRepository.findByAuthenticationId(authenticationId)
+                ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+            checkExistUserByInfo(userSaveInfoDto, user)
+
+            val userToUpdate = User(
+                user.id,
+                authenticationId = authenticationId,
+                name = userSaveInfoDto.name,
+                generation = userSaveInfoDto.generation,
+                email = userSaveInfoDto.email,
+                phoneNumber = userSaveInfoDto.phoneNumber,
+                snsUrl = userSaveInfoDto.snsUrl,
+                profileUrl = null
+            )
+            menteeRepository.deleteByUser(user)
+            return userRepository.save(userToUpdate)
+        }
+
+        validateExistUserByPhoneNumber(userSaveInfoDto.phoneNumber);
+        validateExistUserByEmail(userSaveInfoDto.email)
+
+        val userToSave = User(
             authenticationId = authenticationId,
-            name = dto.name,
-            generation = dto.generation,
-            email = dto.email,
-            phoneNumber = dto.phoneNumber,
-            snsUrl = dto.snsUrl,
+            name = userSaveInfoDto.name,
+            generation = userSaveInfoDto.generation,
+            email = userSaveInfoDto.email,
+            phoneNumber = userSaveInfoDto.phoneNumber,
+            snsUrl = userSaveInfoDto.snsUrl,
             profileUrl = null
         )
-        return userRepository.save(user)
+        return userRepository.save(userToSave)
     }
 
     @Transactional
@@ -43,10 +64,7 @@ class UserService(
         val user = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
-        if (userSaveInfoDto.phoneNumber != user.phoneNumber)
-            validateExistUserByPhoneNumber(userSaveInfoDto.phoneNumber)
-        else if (userSaveInfoDto.email != user.email)
-            validateExistUserByEmail(userSaveInfoDto.email)
+        checkExistUserByInfo(userSaveInfoDto, user)
 
         val updatedUser = User(
             id = user.id,
@@ -60,6 +78,13 @@ class UserService(
         )
 
         userRepository.save(updatedUser)
+    }
+
+    private fun checkExistUserByInfo(userSaveInfoDto: UserSaveInfoDto, user: User) {
+        if (userSaveInfoDto.phoneNumber != user.phoneNumber)
+            validateExistUserByPhoneNumber(userSaveInfoDto.phoneNumber)
+        else if (userSaveInfoDto.email != user.email)
+            validateExistUserByEmail(userSaveInfoDto.email)
     }
 
     private fun validateExistUserByPhoneNumber(phoneNumber: String) {
@@ -110,6 +135,7 @@ class UserService(
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
         return UserInfoDto(
+            id = user.id,
             name = user.name,
             generation = user.generation,
             email = user.email,
@@ -119,4 +145,26 @@ class UserService(
         )
     }
 
+    @Transactional(readOnly = true)
+    override fun queryUserInfoByUserId(userId: Long): UserSimpleInfoDto {
+        val user = userRepository.findById(userId)
+            .orElseThrow { ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+
+        return UserSimpleInfoDto(
+            id = user.id,
+            name = user.name,
+            generation = user.generation,
+            profileUrl = user.profileUrl
+        )
+    }
+
+    @Transactional(readOnly = true)
+    override fun queryEmailByUserId(email: String): UserIdDto {
+        val user = userRepository.findByEmail(email)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+        return UserIdDto(
+            userId = user.id
+        )
+    }
 }

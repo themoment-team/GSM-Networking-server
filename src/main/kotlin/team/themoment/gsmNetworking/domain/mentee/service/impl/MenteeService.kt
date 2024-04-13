@@ -51,6 +51,7 @@ class MenteeService(
         val userInfoDto = queryUserInfoByIdUseCase.queryUserInfoById(authenticationId)
 
         return MenteeInfoDto(
+            id = userInfoDto.id,
             name = userInfoDto.name,
             email = userInfoDto.email,
             phoneNumber = userInfoDto.phoneNumber,

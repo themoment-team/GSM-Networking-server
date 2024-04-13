@@ -1,6 +1,5 @@
 package team.themoment.gsmNetworking.domain.mentor.domain
 
-import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
 import javax.persistence.*
 
@@ -37,5 +36,8 @@ class TempMentor(
     val position: String,
 
     @Column(nullable = false, name = "deleted")
-    var deleted: Boolean = false
+    var deleted: Boolean = false,
+
+    @Column(name = "default_img_number")
+    val defaultImgNumber: Int = 0
 )
