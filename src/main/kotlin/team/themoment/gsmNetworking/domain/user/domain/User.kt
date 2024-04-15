@@ -2,6 +2,7 @@ package team.themoment.gsmNetworking.domain.user.domain
 
 import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import team.themoment.gsmNetworking.domain.board.domain.Board
+import team.themoment.gsmNetworking.domain.comment.domain.Comment
 import team.themoment.gsmNetworking.domain.mentor.domain.Mentor
 import team.themoment.gsmNetworking.domain.user.converter.EncryptConverter
 import javax.persistence.*
@@ -41,7 +42,10 @@ class User(
     var defaultImgNumber: Int = 0,
 
     @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val boards: MutableList<Board> = ArrayList()
+    val boards: MutableList<Board> = ArrayList(),
+
+    @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val comments: MutableList<Comment> = ArrayList()
 
 ) : BaseIdTimestampEntity() {
 
