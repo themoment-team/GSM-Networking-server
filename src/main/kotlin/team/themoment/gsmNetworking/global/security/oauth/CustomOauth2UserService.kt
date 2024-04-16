@@ -50,6 +50,9 @@ class CustomOauth2UserService(
      */
     private fun validateEmailDomain(email: String): String {
         val regex = Regex("^[A-Za-z0-9._%+-]+@gsm\\.hs\\.kr$")
+
+        if (email == "gsmnetworking@gsm.hs.kr") return email
+
         if (!regex.matches(email)) {
             throw OAuth2AuthenticationException(
                 OAuth2Error(
@@ -58,6 +61,7 @@ class CustomOauth2UserService(
                 "요청한 이메일이 GSM 학생용 이메일이 아닙니다."
             )
         }
+
         return email
     }
 
