@@ -176,7 +176,7 @@ class UserService(
     override fun queryUserIsTeacher(authenticationId: Long): UserIsTeacherDto {
 
         val authentication = authenticationRepository.findById(authenticationId)
-            .orElseThrow() { throw ExpectedException("유저의 권한 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+            .orElseThrow { throw ExpectedException("유저의 권한 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
         return UserIsTeacherDto(isTeacher = authentication.authority == Authority.TEACHER)
 
