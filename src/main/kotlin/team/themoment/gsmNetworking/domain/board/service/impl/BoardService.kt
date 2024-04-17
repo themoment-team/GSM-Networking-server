@@ -59,8 +59,14 @@ class BoardService (
             id = savedBoard.id,
             title = savedBoard.title,
             boardCategory = savedBoard.boardCategory,
-            authorName = savedBoard.author.name,
-            createdAt = savedBoard.createdAt
+            author = AuthorDto(
+                name = savedBoard.author.name,
+                generation = savedBoard.author.generation,
+                profileUrl = savedBoard.author.profileUrl,
+                defaultImgNumber = savedBoard.author.defaultImgNumber
+            ),
+            createdAt = savedBoard.createdAt,
+            commentCount = 0
         )
 
     }
