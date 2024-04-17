@@ -24,7 +24,8 @@ class UserService(
     QueryUserInfoByIdUseCase,
     QueryUserInfoByUserIdUseCase,
     QueryEmailByUserIdUseCase,
-    QueryUserIsTeacherUsecase {
+    QueryUserIsTeacherUsecase,
+    UpdateUserProfileNumberUseCase {
 
     @Transactional
     override fun generateUser(userSaveInfoDto: UserSaveInfoDto, authenticationId: Long): User {
@@ -174,11 +175,19 @@ class UserService(
 
     @Transactional(readOnly = true)
     override fun queryUserIsTeacher(authenticationId: Long): UserIsTeacherDto {
-
         val authentication = authenticationRepository.findById(authenticationId)
             .orElseThrow { throw ExpectedException("유저의 권한 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
         return UserIsTeacherDto(isTeacher = authentication.authority == Authority.TEACHER)
 
+    }
+
+    @Transactional
+    override fun updateUserProfileNumber(userProfileNumberDto: UserProfileNumberDto, authenticationId: Long) {
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+        user.updateProfileNumber(userProfileNumberDto.profileNumber)
+        userRepository.save(user)
     }
 }

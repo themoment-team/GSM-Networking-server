@@ -58,4 +58,9 @@ class User(
             return Random.nextInt(0, 6)
         }
     }
+
+    fun updateProfileNumber(defaultImgNumber: Int) {
+        this.defaultImgNumber = defaultImgNumber
+    }
+
 }
