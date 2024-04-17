@@ -109,3 +109,5 @@ gsm:
   student:
     account:
       otherwise-redirect: http://localhost:8080/signup
+  teacher:
+    email: gsmnetworking@gsm.hs.kr

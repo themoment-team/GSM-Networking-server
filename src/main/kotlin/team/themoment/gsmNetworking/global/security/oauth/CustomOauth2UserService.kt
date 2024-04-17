@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.global.security.oauth
 
+import org.springframework.beans.factory.annotation.Value
 import team.themoment.gsmNetworking.domain.auth.domain.Authentication
 import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.domain.auth.repository.AuthenticationRepository
@@ -20,6 +21,9 @@ import java.time.LocalDateTime
 class CustomOauth2UserService(
     private val authenticationRepository: AuthenticationRepository,
 ) : OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+
+    @Value("\${gsm.teacher.email}")
+    private val GSM_TEACHER_EMAIL: String = ""
 
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val delegateOauth2UserService = DefaultOAuth2UserService()
@@ -51,7 +55,8 @@ class CustomOauth2UserService(
     private fun validateEmailDomain(email: String): String {
         val regex = Regex("^[A-Za-z0-9._%+-]+@gsm\\.hs\\.kr$")
 
-        if (email == "gsmnetworking@gsm.hs.kr") return email
+
+        if (email == GSM_TEACHER_EMAIL) return email
 
         if (!regex.matches(email)) {
             throw OAuth2AuthenticationException(
