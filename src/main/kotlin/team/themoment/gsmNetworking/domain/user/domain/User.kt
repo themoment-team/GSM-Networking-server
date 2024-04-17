@@ -55,7 +55,12 @@ class User(
 
     companion object {
         private fun generateRandomNumber(): Int {
-            return Random.nextInt(0, 5)
+            return Random.nextInt(0, 6)
         }
     }
+
+    fun updateProfileNumber(defaultImgNumber: Int) {
+        this.defaultImgNumber = defaultImgNumber
+    }
+
 }
