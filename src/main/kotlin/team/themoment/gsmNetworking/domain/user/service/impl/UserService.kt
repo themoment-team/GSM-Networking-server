@@ -145,7 +145,8 @@ class UserService(
             email = user.email,
             phoneNumber = user.phoneNumber,
             snsUrl = user.snsUrl,
-            profileUrl = user.profileUrl
+            profileUrl = user.profileUrl,
+            defaultImgNumber = user.defaultImgNumber
         )
     }
 
