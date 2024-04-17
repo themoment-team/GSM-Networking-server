@@ -55,7 +55,8 @@ class MenteeService(
             name = userInfoDto.name,
             email = userInfoDto.email,
             phoneNumber = userInfoDto.phoneNumber,
-            generation = userInfoDto.generation
+            generation = userInfoDto.generation,
+            defaultImgNumber = userInfoDto.defaultImgNumber
         )
     }
 }

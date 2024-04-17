@@ -9,5 +9,7 @@ data class MenteeInfoDto (
 
     val phoneNumber: String,
 
-    val generation: Int
+    val generation: Int,
+
+    val defaultImgNumber: Int
 )
