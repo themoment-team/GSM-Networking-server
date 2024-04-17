@@ -105,3 +105,5 @@ gsm:
   student:
     account:
       otherwise-redirect: ${REDIRECT_FOR_NON_GSM_STUDENT_ACCOUNT}
+  teacher:
+    email: gsmnetworking@gsm.hs.kr
