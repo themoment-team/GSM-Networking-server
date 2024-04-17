@@ -45,7 +45,7 @@ class UserController(
         return ResponseEntity.ok(queryEmailByUserIdUseCase.queryEmailByUserId(email))
     }
 
-    @GetMapping("/user-is-teacher")
+    @GetMapping("/is-teacher")
     fun queryIsTeacher(): ResponseEntity<UserIsTeacherDto> {
         val authenticationId = authenticatedUserManager.getName()
         return ResponseEntity.ok(queryUserIsTeacherUsecase.queryUserIsTeacher(authenticationId))
