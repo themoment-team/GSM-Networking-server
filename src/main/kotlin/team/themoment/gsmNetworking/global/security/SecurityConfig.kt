@@ -113,7 +113,8 @@ class SecurityConfig(
             )
             // /file
             .mvcMatchers("/api/v1/file").hasAnyRole(
-                Authority.USER.name
+                Authority.USER.name,
+                Authority.TEMP_USER.name
             )
             // /gwangya
             .mvcMatchers(HttpMethod.GET, "/api/v1/gwangya/token").hasAnyRole(
