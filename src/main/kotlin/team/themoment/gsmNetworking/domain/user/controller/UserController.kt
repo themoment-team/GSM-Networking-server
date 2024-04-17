@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.user.dto.*
 import team.themoment.gsmNetworking.domain.user.service.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -48,7 +49,7 @@ class UserController(
     }
 
     @PatchMapping("/profile-number")
-    fun updateProfileNumber(@RequestBody userProfileNumberDto: UserProfileNumberDto): ResponseEntity<Void> {
+    fun updateProfileNumber(@RequestBody @Valid userProfileNumberDto: UserProfileNumberDto): ResponseEntity<Void> {
         val authenticationId = authenticatedUserManager.getName()
         updateUserProfileNumberUseCase.updateUserProfileNumber(userProfileNumberDto, authenticationId)
         return ResponseEntity.ok().build()
