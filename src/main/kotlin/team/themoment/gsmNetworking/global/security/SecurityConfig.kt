@@ -111,6 +111,11 @@ class SecurityConfig(
             .mvcMatchers("/api/v1/user/**").hasAnyRole(
                 Authority.USER.name
             )
+            .mvcMatchers("/api/v1/user/is-teacher").hasAnyRole(
+                Authority.USER.name,
+                Authority.TEMP_USER.name,
+                Authority.TEACHER.name
+            )
             // /file
             .mvcMatchers("/api/v1/file").hasAnyRole(
                 Authority.USER.name
