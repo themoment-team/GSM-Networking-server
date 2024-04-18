@@ -14,5 +14,7 @@ data class UserInfoDto(
 
     val snsUrl: String?,
 
-    val profileUrl: String?
+    val profileUrl: String?,
+
+    val defaultImgNumber: Int
 )
