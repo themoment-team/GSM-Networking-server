@@ -11,7 +11,7 @@ enum class Authority(
     TEMP_USER("ROLE_TEMP_USER"),
     USER("ROLE_USER"),
     ADMIN("ROLE_ADMIN"),
-    TEACHER("TEACHER")
+    TEACHER("ROLE_TEACHER")
     ;
 
 }
