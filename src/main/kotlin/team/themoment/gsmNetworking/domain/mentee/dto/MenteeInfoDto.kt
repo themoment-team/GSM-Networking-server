@@ -11,5 +11,7 @@ data class MenteeInfoDto (
 
     val generation: Int,
 
-    val defaultImgNumber: Int
+    val defaultImgNumber: Int,
+
+    val profileUrl: String?
 )
