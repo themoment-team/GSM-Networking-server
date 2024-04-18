@@ -107,14 +107,14 @@ class SecurityConfig(
                 Authority.USER.name,
                 Authority.TEMP_USER.name
             )
-            // /user
-            .mvcMatchers("/api/v1/user/**").hasAnyRole(
-                Authority.USER.name
-            )
             // /user/profile-url
             .mvcMatchers("/api/v1/user/profile-url").hasAnyRole(
                 Authority.USER.name,
                 Authority.TEMP_USER.name
+            )
+            // /user
+            .mvcMatchers("/api/v1/user/**").hasAnyRole(
+                Authority.USER.name
             )
             // /file
             .mvcMatchers("/api/v1/file").hasAnyRole(
