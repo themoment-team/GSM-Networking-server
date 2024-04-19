@@ -62,19 +62,22 @@ class SecurityConfig(
         http.authorizeHttpRequests()
             // /mentor
             .mvcMatchers("/api/v1/mentor/*").hasAnyRole(
-                Authority.USER.name
+                Authority.USER.name,
+                Authority.TEACHER.name
             )
             .mvcMatchers(HttpMethod.GET, "/api/v1/mentor").hasAnyRole(
                 Authority.TEMP_USER.name,
                 Authority.USER.name,
-                Authority.ADMIN.name
+                Authority.ADMIN.name,
+                Authority.TEACHER.name
             )
             .mvcMatchers(HttpMethod.POST, "/api/v1/mentor").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
                 Authority.TEMP_USER.name
             )
             .mvcMatchers("/api/v1/mentor/my").hasAnyRole(
-                Authority.USER.name
+                Authority.USER.name,
+                Authority.TEACHER.name
             )
             // /tempMentor
             .mvcMatchers(HttpMethod.GET, "api/v1/temp-mentor/search/*").hasAnyRole(
@@ -116,16 +119,19 @@ class SecurityConfig(
             // /user/profile-url
             .mvcMatchers("/api/v1/user/profile-url").hasAnyRole(
                 Authority.TEMP_USER.name,
-                Authority.USER.name
+                Authority.USER.name,
+                Authority.TEACHER.name
             )
             // /user
             .mvcMatchers("/api/v1/user/**").hasAnyRole(
-                Authority.USER.name
+                Authority.USER.name,
+                Authority.TEACHER.name
             )
             // /file
             .mvcMatchers("/api/v1/file").hasAnyRole(
                 Authority.USER.name,
-                Authority.TEMP_USER.name
+                Authority.TEMP_USER.name,
+                Authority.TEACHER.name
             )
             // /gwangya
             .mvcMatchers(HttpMethod.GET, "/api/v1/gwangya/token").hasAnyRole(
