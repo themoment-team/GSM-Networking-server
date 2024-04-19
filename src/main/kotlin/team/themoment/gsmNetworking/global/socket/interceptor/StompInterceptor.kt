@@ -31,17 +31,15 @@ class StompInterceptor(
 
     override fun preSend(message: Message<*>, channel: MessageChannel): Message<*>? {
         val accessor: StompHeaderAccessor = StompHeaderAccessor.wrap(message)
-        if (StompCommand.CONNECT == accessor.command) {
-            handleConnect(accessor)
-        } else if (StompCommand.DISCONNECT == accessor.command) {
-            handleDisconnect(accessor)
-        } else if (StompCommand.SUBSCRIBE == accessor.command) {
-            handleSubscribe(accessor)
-        } else if (StompCommand.UNSUBSCRIBE == accessor.command) {
-            handleUnsubscribe(accessor)
-        } else if (StompCommand.SEND == accessor.command) {
-            handleSend(accessor)
+        when (accessor.command) {
+            StompCommand.CONNECT -> handleConnect(accessor)
+            StompCommand.DISCONNECT -> handleDisconnect(accessor)
+            StompCommand.SUBSCRIBE -> handleSubscribe(accessor)
+            StompCommand.UNSUBSCRIBE -> handleUnsubscribe(accessor)
+            StompCommand.SEND -> handleSend(accessor)
+            else -> {}
         }
+
         return MessageBuilder.createMessage(message.payload, accessor.messageHeaders)
     }
 
