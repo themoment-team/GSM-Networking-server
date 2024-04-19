@@ -132,7 +132,8 @@ class SecurityConfig(
                 Authority.UNAUTHENTICATED.name,
                 Authority.TEMP_USER.name,
                 Authority.USER.name,
-                Authority.ADMIN.name
+                Authority.ADMIN.name,
+                Authority.TEACHER.name,
             )
             .mvcMatchers(HttpMethod.DELETE, "/api/v1/gwangya/*").hasAnyRole(
                 Authority.ADMIN.name
