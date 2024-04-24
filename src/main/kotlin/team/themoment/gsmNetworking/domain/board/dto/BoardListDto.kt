@@ -12,5 +12,6 @@ data class BoardListDto (
     val author: AuthorDto,
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val createdAt: LocalDateTime,
-    val commentCount: Int
+    val commentCount: Int,
+    val likeCount: Int
 )
