@@ -3,6 +3,7 @@ package team.themoment.gsmNetworking.domain.user.domain
 import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import team.themoment.gsmNetworking.domain.board.domain.Board
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
+import team.themoment.gsmNetworking.domain.like.domain.Like
 import team.themoment.gsmNetworking.domain.mentor.domain.Mentor
 import team.themoment.gsmNetworking.domain.user.converter.EncryptConverter
 import javax.persistence.*
@@ -45,7 +46,10 @@ class User(
     val boards: MutableList<Board> = ArrayList(),
 
     @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val comments: MutableList<Comment> = ArrayList()
+    val comments: MutableList<Comment> = ArrayList(),
+
+    @OneToMany(mappedBy = "likeUser", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val likes: MutableList<Like> = ArrayList()
 
 ) : BaseIdTimestampEntity() {
 
