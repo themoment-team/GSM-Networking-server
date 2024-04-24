@@ -27,7 +27,8 @@ class BoardCustomRepositoryImpl (
                         board.author.defaultImgNumber
                     ),
                     board.createdAt,
-                    board.comments.size()
+                    board.comments.size(),
+                    board.likes.size()
                 )
             )
             .from(board)
@@ -52,7 +53,8 @@ class BoardCustomRepositoryImpl (
                         board.author.defaultImgNumber
                     ),
                     board.createdAt,
-                    board.comments.size()
+                    board.comments.size(),
+                    board.likes.size()
                 )
             )
             .from(board)

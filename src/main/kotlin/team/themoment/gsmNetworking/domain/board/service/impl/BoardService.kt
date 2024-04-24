@@ -66,7 +66,8 @@ class BoardService (
                 defaultImgNumber = savedBoard.author.defaultImgNumber
             ),
             createdAt = savedBoard.createdAt,
-            commentCount = 0
+            commentCount = 0,
+            likeCount = 0
         )
 
     }
@@ -97,7 +98,8 @@ class BoardService (
                 defaultImgNumber = currentBoard.author.defaultImgNumber
             ),
             createdAt = currentBoard.createdAt,
-            comments = getFindComments(findComments)
+            comments = getFindComments(findComments),
+            likeCount = currentBoard.likes.size
         )
     }
 
