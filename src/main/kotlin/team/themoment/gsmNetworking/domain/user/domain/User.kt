@@ -48,7 +48,7 @@ class User(
     @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL], orphanRemoval = true)
     val comments: MutableList<Comment> = ArrayList(),
 
-    @OneToMany(mappedBy = "likeUser", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     val likes: MutableList<Like> = ArrayList()
 
 ) : BaseIdTimestampEntity() {

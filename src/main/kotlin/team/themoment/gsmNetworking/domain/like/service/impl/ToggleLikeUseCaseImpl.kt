@@ -33,12 +33,10 @@ class ToggleLikeUseCaseImpl (
 
         if (like != null) {
             likeRepository.delete(like)
+            return LikeStatusDto(currentStatus = false)
         } else {
-            likeRepository.save(
-                Like(user = currentUser, board = board)
-            )
+            likeRepository.save(Like(user = currentUser, board = board))
+            return LikeStatusDto(currentStatus = true)
         }
-
-        return LikeStatusDto(like != null)
     }
 }
