@@ -7,7 +7,7 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "likes")
+@Table(name = "board_like")
 class Like (
     @ManyToOne
     @JoinColumn(name = "user_id")
