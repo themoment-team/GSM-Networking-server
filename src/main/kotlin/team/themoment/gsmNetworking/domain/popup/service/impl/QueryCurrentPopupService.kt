@@ -1,7 +1,6 @@
 package team.themoment.gsmNetworking.domain.popup.service.impl
 
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.domain.popup.dto.PopupListDto
 import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.popup.service.QueryCurrentPopupUasCase
@@ -9,6 +8,8 @@ import team.themoment.gsmNetworking.domain.popup.service.QueryCurrentPopupUasCas
 @Service
 class QueryCurrentPopupService (
     private val popupRepository: PopupRepository
-) {
-
+) : QueryCurrentPopupUasCase {
+    override fun queryPopup(): List<PopupListDto> {
+        return popupRepository.findByCurrentPopup();
+    }
 }
