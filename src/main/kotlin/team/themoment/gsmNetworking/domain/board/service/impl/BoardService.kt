@@ -59,10 +59,10 @@ class BoardService (
 
         val savedBoard = boardRepository.save(newBoard)
 
-        val popUpExp = boardSaveDto.popUpExp
-        if (popUpExp != null) {
+        val popupExp = boardSaveDto.popupExp
+        if (popupExp != null) {
             val currentDateTime = LocalDateTime.now()
-            val newPopupExpTime = currentDateTime.plusDays(popUpExp.toLong())
+            val newPopupExpTime = currentDateTime.plusDays(popupExp.toLong())
 
             val newPopup = Popup(
                 board = savedBoard,

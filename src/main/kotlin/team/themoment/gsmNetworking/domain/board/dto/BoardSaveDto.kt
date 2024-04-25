@@ -20,5 +20,5 @@ data class BoardSaveDto (
     val boardCategory: BoardCategory,
     @field:Nullable
     @field:Size(min = 1, max = 30)
-    val popUpExp: Int?
+    val popupExp: Int?
 )
