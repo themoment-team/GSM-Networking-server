@@ -1,5 +1,6 @@
 package team.themoment.gsmNetworking.domain.board.dto
 
+import io.micrometer.core.lang.Nullable
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -16,5 +17,7 @@ data class BoardSaveDto (
     val content: String,
     @field:NotNull
     @Enumerated(EnumType.STRING)
-    val boardCategory: BoardCategory
+    val boardCategory: BoardCategory,
+    @field:Nullable
+    val popUpExp: Int?
 )
