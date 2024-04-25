@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
+import team.themoment.gsmNetworking.domain.auth.domain.Authority
+import team.themoment.gsmNetworking.domain.auth.repository.AuthenticationRepository
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.domain.Board
 import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
@@ -25,7 +27,8 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 class BoardService (
     private val boardRepository: BoardRepository,
     private val userRepository: UserRepository,
-    private val commentRepository: CommentRepository
+    private val commentRepository: CommentRepository,
+    private val authenticationRepository: AuthenticationRepository
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
     QueryBoardInfoUseCase {
@@ -34,6 +37,14 @@ class BoardService (
     override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardListDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+        val authentication = authenticationRepository.findById(authenticationId)
+            .orElseThrow { throw ExpectedException("유저의 권한 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+
+        if (boardSaveDto.boardCategory == BoardCategory.TEACHER
+            && authentication.authority != Authority.TEACHER) {
+            throw ExpectedException("선생님이 아닌 유저는 선생님 카테고리를 이용할 수 없습니다.", HttpStatus.NOT_FOUND)
+        }
 
         val newBoard = Board(
             title = boardSaveDto.title,
@@ -48,8 +59,15 @@ class BoardService (
             id = savedBoard.id,
             title = savedBoard.title,
             boardCategory = savedBoard.boardCategory,
-            authorName = savedBoard.author.name,
-            createdAt = savedBoard.createdAt
+            author = AuthorDto(
+                name = savedBoard.author.name,
+                generation = savedBoard.author.generation,
+                profileUrl = savedBoard.author.profileUrl,
+                defaultImgNumber = savedBoard.author.defaultImgNumber
+            ),
+            createdAt = savedBoard.createdAt,
+            commentCount = 0,
+            likeCount = 0
         )
 
     }
@@ -80,7 +98,8 @@ class BoardService (
                 defaultImgNumber = currentBoard.author.defaultImgNumber
             ),
             createdAt = currentBoard.createdAt,
-            comments = getFindComments(findComments)
+            comments = getFindComments(findComments),
+            likeCount = currentBoard.likes.size
         )
     }
 

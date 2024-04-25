@@ -2,6 +2,7 @@ package team.themoment.gsmNetworking.domain.board.domain
 
 import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
+import team.themoment.gsmNetworking.domain.like.domain.Like
 import team.themoment.gsmNetworking.domain.user.domain.User
 import javax.persistence.*
 import javax.persistence.FetchType.*
@@ -24,5 +25,8 @@ class Board (
     val author: User,
 
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val comments: MutableList<Comment> = ArrayList()
+    val comments: MutableList<Comment> = ArrayList(),
+
+    @OneToMany(mappedBy = "board", fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val likes: MutableList<Like> = ArrayList()
 ): BaseIdTimestampEntity();

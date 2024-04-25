@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import team.themoment.gsmNetworking.common.exception.ExpectedException
+import team.themoment.gsmNetworking.domain.auth.domain.Authority
+import team.themoment.gsmNetworking.domain.auth.repository.AuthenticationRepository
 import team.themoment.gsmNetworking.domain.mentee.repository.MenteeRepository
 import team.themoment.gsmNetworking.domain.user.domain.User
 import team.themoment.gsmNetworking.domain.user.dto.*
@@ -13,14 +15,17 @@ import team.themoment.gsmNetworking.domain.user.service.*
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val menteeRepository: MenteeRepository
+    private val menteeRepository: MenteeRepository,
+    private val authenticationRepository: AuthenticationRepository
 ) : GenerateUserUseCase,
     ModifyUserInfoByIdUseCase,
     GenerateProfileUrlUseCase,
     DeleteUserInfoByIdUseCase,
     QueryUserInfoByIdUseCase,
     QueryUserInfoByUserIdUseCase,
-    QueryEmailByUserIdUseCase {
+    QueryEmailByUserIdUseCase,
+    QueryUserIsTeacherUsecase,
+    UpdateUserProfileNumberUseCase {
 
     @Transactional
     override fun generateUser(userSaveInfoDto: UserSaveInfoDto, authenticationId: Long): User {
@@ -141,7 +146,8 @@ class UserService(
             email = user.email,
             phoneNumber = user.phoneNumber,
             snsUrl = user.snsUrl,
-            profileUrl = user.profileUrl
+            profileUrl = user.profileUrl,
+            defaultImgNumber = user.defaultImgNumber
         )
     }
 
@@ -166,5 +172,23 @@ class UserService(
         return UserIdDto(
             userId = user.id
         )
+    }
+
+    @Transactional(readOnly = true)
+    override fun queryUserIsTeacher(authenticationId: Long): UserIsTeacherDto {
+        val authentication = authenticationRepository.findById(authenticationId)
+            .orElseThrow { throw ExpectedException("유저의 권한 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+
+        return UserIsTeacherDto(isTeacher = authentication.authority == Authority.TEACHER)
+
+    }
+
+    @Transactional
+    override fun updateUserProfileNumber(userProfileNumberDto: UserProfileNumberDto, authenticationId: Long) {
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+        user.updateProfileNumber(userProfileNumberDto.profileNumber)
+        userRepository.save(user)
     }
 }
