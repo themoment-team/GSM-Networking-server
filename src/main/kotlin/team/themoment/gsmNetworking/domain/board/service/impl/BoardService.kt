@@ -60,7 +60,7 @@ class BoardService (
         val savedBoard = boardRepository.save(newBoard)
 
         val popupExp = boardSaveDto.popupExp
-        if (popupExp != null) {
+        if (popupExp != null && boardSaveDto.boardCategory == BoardCategory.TEACHER) {
             val currentDateTime = LocalDateTime.now()
             val newPopupExpTime = currentDateTime.plusDays(popupExp.toLong())
 
