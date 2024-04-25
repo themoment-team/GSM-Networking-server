@@ -21,13 +21,17 @@ import team.themoment.gsmNetworking.domain.comment.dto.CommentListDto
 import team.themoment.gsmNetworking.domain.comment.dto.ReplyDto
 import team.themoment.gsmNetworking.domain.comment.dto.ReplyCommentInfo
 import team.themoment.gsmNetworking.domain.comment.repository.CommentRepository
+import team.themoment.gsmNetworking.domain.popup.domain.Popup
+import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
+import java.time.LocalDateTime
 
 @Service
 class BoardService (
     private val boardRepository: BoardRepository,
     private val userRepository: UserRepository,
     private val commentRepository: CommentRepository,
+    private val popupRepository: PopupRepository,
     private val authenticationRepository: AuthenticationRepository
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
@@ -54,6 +58,19 @@ class BoardService (
         )
 
         val savedBoard = boardRepository.save(newBoard)
+
+        val popUpExp = boardSaveDto.popUpExp
+        if (popUpExp != null) {
+            val currentDateTime = LocalDateTime.now()
+            val newPopupExpTime = currentDateTime.plusDays(popUpExp.toLong())
+
+            val newPopup = Popup(
+                board = savedBoard,
+                expTime = newPopupExpTime
+            )
+
+            popupRepository.save(newPopup)
+        }
 
         return BoardListDto(
             id = savedBoard.id,

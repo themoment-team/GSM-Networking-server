@@ -19,5 +19,6 @@ data class BoardSaveDto (
     @Enumerated(EnumType.STRING)
     val boardCategory: BoardCategory,
     @field:Nullable
+    @field:Size(min = 1, max = 30)
     val popUpExp: Int?
 )
