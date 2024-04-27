@@ -119,7 +119,11 @@ class UserService(
             email = user.email,
             phoneNumber = user.phoneNumber,
             snsUrl = user.snsUrl,
-            profileUrl = profileUrl
+            profileUrl = profileUrl,
+            defaultImgNumber = user.defaultImgNumber,
+            boards = user.boards,
+            comments = user.comments,
+            likes = user.likes
         )
 
         userRepository.save(userUpdatedProfileUrl)
