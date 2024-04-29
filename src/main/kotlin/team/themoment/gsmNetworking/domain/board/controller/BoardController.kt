@@ -49,7 +49,8 @@ class BoardController (
 
     @GetMapping("/{boardId}")
     fun queryBoardInfo(@PathVariable boardId: Long): ResponseEntity<BoardInfoDto> {
-        return ResponseEntity.ok(queryBoardInfoUseCase.queryBoardInfo(boardId))
+        val authenticationId = authenticatedUserManager.getName()
+        return ResponseEntity.ok(queryBoardInfoUseCase.queryBoardInfo(boardId, authenticationId))
     }
 
 }
