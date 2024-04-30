@@ -97,7 +97,10 @@ class BoardService (
             boardRepository.findPageByCursorId(cursorId, pageSize, boardCategory)
 
     @Transactional(readOnly = true)
-    override fun queryBoardInfo(boardId: Long): BoardInfoDto {
+    override fun queryBoardInfo(boardId: Long, authenticationId: Long): BoardInfoDto {
+        val currentUser = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
         val currentBoard = boardRepository.findById(boardId)
             .orElseThrow { ExpectedException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
@@ -116,7 +119,10 @@ class BoardService (
             ),
             createdAt = currentBoard.createdAt,
             comments = getFindComments(findComments),
-            likeCount = currentBoard.likes.size
+            likeCount = currentBoard.likes.size,
+            isLike = currentBoard.likes.stream().anyMatch {
+                like -> like.user == currentUser
+            }
         )
     }
 

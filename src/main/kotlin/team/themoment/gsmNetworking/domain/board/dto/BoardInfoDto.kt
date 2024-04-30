@@ -15,5 +15,6 @@ data class BoardInfoDto (
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val createdAt: LocalDateTime,
     val comments: List<CommentListDto>,
-    val likeCount: Int
+    val likeCount: Int,
+    val isLike: Boolean
 )
