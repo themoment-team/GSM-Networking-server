@@ -2,6 +2,6 @@ package team.themoment.gsmNetworking.domain.popup.service
 
 import team.themoment.gsmNetworking.domain.popup.dto.PopupListDto
 
-interface QueryCurrentPopupUasCase {
+interface QueryCurrentPopupUseCase {
     fun queryPopup(): List<PopupListDto>
 }
