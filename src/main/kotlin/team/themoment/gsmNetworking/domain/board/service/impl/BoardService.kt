@@ -84,17 +84,27 @@ class BoardService (
             ),
             createdAt = savedBoard.createdAt,
             commentCount = 0,
-            likeCount = 0
+            likeCount = 0,
+            isLike = false
         )
 
     }
 
     @Transactional(readOnly = true)
-    override fun queryBoardList(cursorId: Long, pageSize: Long, boardCategory: BoardCategory?): List<BoardListDto> =
-        if (cursorId == 0L)
-            boardRepository.findPageWithRecentBoard(pageSize, boardCategory)
-        else
-            boardRepository.findPageByCursorId(cursorId, pageSize, boardCategory)
+    override fun queryBoardList(cursorId: Long,
+                                pageSize: Long,
+                                boardCategory: BoardCategory?,
+                                authenticationId: Long): List<BoardListDto> {
+
+        val currentUser = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+
+        return if (cursorId == 0L)
+                boardRepository.findPageWithRecentBoard(pageSize, boardCategory, currentUser)
+            else
+                boardRepository.findPageByCursorId(cursorId, pageSize, boardCategory, currentUser)
+    }
 
     @Transactional(readOnly = true)
     override fun queryBoardInfo(boardId: Long, authenticationId: Long): BoardInfoDto {
