@@ -65,6 +65,22 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
+  mail:
+    host: ${EMAILHOST}
+    port: ${EMAILPORT}
+    username: ${EMAILUSERNAME}
+    password: ${EMAILPASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
 encrypt:
   secret-key: test_encrypt_gsm_networking12345
 
