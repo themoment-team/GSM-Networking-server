@@ -1,0 +1,111 @@
+<!doctype html>
+<html
+        lang="ko"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>새로운 게시글 알림</title>
+</head>
+<body style="margin: 0; padding: 0; box-sizing: border-box">
+<div
+        style="
+        width: 100%;
+        min-height: 100vh;
+        background: #ffffff;
+        padding: 31px 42px;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+      "
+>
+  <div
+          style="width: 100%; height: 346px; display: block; text-align: center"
+  >
+    <div style="width: auto; height: auto">
+      <hr
+              style="
+              width: 100%;
+              height: 5px;
+              background: #148eff;
+              margin-bottom: 8rem;
+            "
+      />
+      <svg
+              width="262"
+              height="250"
+              viewBox="0 0 262 250"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M100 0C44.7715 0 0 44.7716 0 100V110.836C0 166.064 44.7714 210.836 99.9999 210.836H161.949C165.836 210.836 169.67 210.614 173.441 210.182V250C215.908 238.477 259.844 183.729 261.081 145.326C262.293 107.718 261.963 106.94 261.949 106.924V100C261.949 44.7715 217.178 0 161.949 0H100Z"
+                fill="#148EFF"
+        />
+        <ellipse
+                cx="99.0402"
+                cy="81.1627"
+                rx="10.004"
+                ry="11.022"
+                fill="white"
+        />
+        <ellipse
+                cx="161.065"
+                cy="81.1627"
+                rx="10.004"
+                ry="11.022"
+                fill="white"
+        />
+        <path
+                d="M133.792 138.557C133.473 138.819 133.028 138.86 132.67 138.66L90.5291 115.113C89.6735 114.635 89.9587 113.332 90.9385 113.242L170.689 105.911C171.669 105.821 172.165 107.053 171.401 107.679L133.792 138.557Z"
+                fill="white"
+        />
+      </svg>
+
+      <h1
+              style="
+              font-size: 24px;
+              font-weight: 700;
+              color: #000000;
+              margin: 20px 0;
+            "
+      >
+        <span style="color: #148eff">GSM-Networking에</span> 에 새로운
+        게시글이 등록되었습니다!
+      </h1>
+      <p
+              style="
+              font-weight: 600;
+              font-size: 16px;
+              color: #929292;
+              text-align: center;
+            "
+      >
+        새로운 게시글 "<span th:text="${teacherPostTitle}"></span>" 이(가)
+        등록되었습니다. 지금 확인해보세요!<br /><br />
+        즐거운 서비스 이용 되세요!
+      </p>
+      <a
+              style="
+              text-decoration: none;
+              color: #929292;
+              border-bottom: #148eff solid 1px;
+              transition: ease-in-out 0.2s;
+            "
+              onmouseover="this.style.color='#148EFF'"
+              onmouseout="this.style.color='#929292';"
+              th:href="@{'http://gsm-networking.com/board/' + ${teacherBoardId}}"
+      >
+        새로운 선생님 게시글로 이동하기
+      </a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
