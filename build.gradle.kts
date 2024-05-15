@@ -65,6 +65,9 @@ dependencies {
 	/* aws */
 	implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.1")
 
+	/* emali */
+	implementation("javax.mail:javax.mail-api:1.6.2")
+
 	/* security */
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	testImplementation("org.springframework.security:spring-security-test")
