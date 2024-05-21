@@ -76,6 +76,8 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
+    default-encoding: utf-8
+    protocol: smtp
 
 encrypt:
   secret-key: ${ENCRYPT_SECRET_KEY}

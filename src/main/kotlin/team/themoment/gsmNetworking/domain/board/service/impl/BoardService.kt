@@ -1,8 +1,12 @@
 package team.themoment.gsmNetworking.domain.board.service.impl
 
 import org.springframework.http.HttpStatus
+import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.thymeleaf.context.Context
+import org.thymeleaf.spring5.ISpringTemplateEngine
 import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.domain.auth.repository.AuthenticationRepository
@@ -25,6 +29,7 @@ import team.themoment.gsmNetworking.domain.popup.domain.Popup
 import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import java.time.LocalDateTime
+import javax.mail.internet.MimeMessage
 
 @Service
 class BoardService (
@@ -32,7 +37,9 @@ class BoardService (
     private val userRepository: UserRepository,
     private val commentRepository: CommentRepository,
     private val popupRepository: PopupRepository,
-    private val authenticationRepository: AuthenticationRepository
+    private val authenticationRepository: AuthenticationRepository,
+    private val mailSender: JavaMailSender,
+    private val templateEngine: ISpringTemplateEngine
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
     QueryBoardInfoUseCase {
@@ -166,4 +173,29 @@ class BoardService (
                 )
             ) }
     }
+
+    private fun teacherBoardEmailSend(teacherBoardId: Long, teacherPostTitle: String) {
+        mailSender.send(getMessage(teacherBoardId, teacherPostTitle))
+    }
+
+    private fun getMessage(teacherBoardId: Long, teacherPostTitle: String): MimeMessage {
+        val message = mailSender.createMimeMessage()
+        val messageHelper = MimeMessageHelper(message, "UTF-8")
+
+        messageHelper.setSubject("GSM-Networking에 새로운 게시글이 등록되었습니다!")
+        messageHelper.setText(createMailTemplate(teacherBoardId, teacherPostTitle), true)
+        messageHelper.setTo("s23012@gsm.hs.kr")
+
+        return message
+    }
+
+    private fun createMailTemplate(teacherBoardId: Long, teacherPostTitle: String): String {
+        val context = Context()
+
+        context.setVariable("teacherBoardId", teacherBoardId)
+        context.setVariable("teacherPostTitle", teacherPostTitle)
+
+        return templateEngine.process("email-template", context)
+    }
+
 }
