@@ -12,6 +12,7 @@ import team.themoment.gsmNetworking.domain.auth.domain.Authority
 import team.themoment.gsmNetworking.domain.auth.repository.AuthenticationRepository
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.domain.Board
+import team.themoment.gsmNetworking.domain.board.domain.BoardCategory.*
 import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
@@ -25,6 +26,7 @@ import team.themoment.gsmNetworking.domain.comment.dto.CommentListDto
 import team.themoment.gsmNetworking.domain.comment.dto.ReplyDto
 import team.themoment.gsmNetworking.domain.comment.dto.ReplyCommentInfo
 import team.themoment.gsmNetworking.domain.comment.repository.CommentRepository
+import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.popup.domain.Popup
 import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
@@ -35,6 +37,7 @@ import javax.mail.internet.MimeMessage
 class BoardService (
     private val boardRepository: BoardRepository,
     private val userRepository: UserRepository,
+    private val mentorRepository: MentorRepository,
     private val commentRepository: CommentRepository,
     private val popupRepository: PopupRepository,
     private val authenticationRepository: AuthenticationRepository,
@@ -52,7 +55,7 @@ class BoardService (
         val authentication = authenticationRepository.findById(authenticationId)
             .orElseThrow { throw ExpectedException("유저의 권한 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
-        if (boardSaveDto.boardCategory == BoardCategory.TEACHER
+        if (boardSaveDto.boardCategory == TEACHER
             && authentication.authority != Authority.TEACHER) {
             throw ExpectedException("선생님이 아닌 유저는 선생님 카테고리를 이용할 수 없습니다.", HttpStatus.NOT_FOUND)
         }
@@ -67,7 +70,7 @@ class BoardService (
         val savedBoard = boardRepository.save(newBoard)
 
         val popupExp = boardSaveDto.popupExp
-        if (popupExp != null && boardSaveDto.boardCategory == BoardCategory.TEACHER) {
+        if (popupExp != null && boardSaveDto.boardCategory == TEACHER) {
             val currentDateTime = LocalDateTime.now()
             val newPopupExpTime = currentDateTime.plusDays(popupExp.toLong())
 
@@ -77,6 +80,10 @@ class BoardService (
             )
 
             popupRepository.save(newPopup)
+        }
+
+        if (savedBoard.boardCategory == TEACHER) {
+            sendEmailMentors(savedBoard.id, savedBoard.title)
         }
 
         return BoardListDto(
@@ -174,17 +181,23 @@ class BoardService (
             ) }
     }
 
-    private fun teacherBoardEmailSend(teacherBoardId: Long, teacherPostTitle: String) {
-        mailSender.send(getMessage(teacherBoardId, teacherPostTitle))
+    private fun sendEmailMentors(teacherBoardId: Long, teacherPostTitle: String) {
+        mentorRepository.findAll().forEach { mentor ->
+            teacherBoardEmailSend(teacherBoardId, teacherPostTitle, mentor.user.email)
+        }
     }
 
-    private fun getMessage(teacherBoardId: Long, teacherPostTitle: String): MimeMessage {
+    private fun teacherBoardEmailSend(teacherBoardId: Long, teacherPostTitle: String, sendEmail: String) {
+        mailSender.send(getMessage(teacherBoardId, teacherPostTitle, sendEmail))
+    }
+
+    private fun getMessage(teacherBoardId: Long, teacherPostTitle: String, sendEmail: String): MimeMessage {
         val message = mailSender.createMimeMessage()
         val messageHelper = MimeMessageHelper(message, "UTF-8")
 
         messageHelper.setSubject("GSM-Networking에 새로운 게시글이 등록되었습니다!")
         messageHelper.setText(createMailTemplate(teacherBoardId, teacherPostTitle), true)
-        messageHelper.setTo("s23012@gsm.hs.kr")
+        messageHelper.setTo(sendEmail)
 
         return message
     }
