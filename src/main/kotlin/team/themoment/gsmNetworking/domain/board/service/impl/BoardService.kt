@@ -181,32 +181,32 @@ class BoardService (
             ) }
     }
 
-    private fun sendEmailMentors(teacherBoardId: Long, teacherPostTitle: String) {
+    private fun sendEmailMentors(boardId: Long, postTitle: String) {
         mentorRepository.findAllMentorEmailDto().forEach { mentor ->
-            teacherBoardEmailSend(teacherBoardId, teacherPostTitle, mentor.email)
+            sendMail(boardId, postTitle, mentor.email)
         }
     }
 
-    private fun teacherBoardEmailSend(teacherBoardId: Long, teacherPostTitle: String, sendEmail: String) {
-        mailSender.send(getMessage(teacherBoardId, teacherPostTitle, sendEmail))
+    private fun sendMail(boardId: Long, postTitle: String, toEmail: String) {
+        mailSender.send(getMessage(boardId, postTitle, toEmail))
     }
 
-    private fun getMessage(teacherBoardId: Long, teacherPostTitle: String, sendEmail: String): MimeMessage {
+    private fun getMessage(boardId: Long, postTitle: String, toEmail: String): MimeMessage {
         val message = mailSender.createMimeMessage()
         val messageHelper = MimeMessageHelper(message, "UTF-8")
 
         messageHelper.setSubject("GSM-Networking에 새로운 게시글이 등록되었습니다!")
-        messageHelper.setText(createMailTemplate(teacherBoardId, teacherPostTitle), true)
-        messageHelper.setTo(sendEmail)
+        messageHelper.setText(createMailTemplate(boardId, postTitle), true)
+        messageHelper.setTo(toEmail)
 
         return message
     }
 
-    private fun createMailTemplate(teacherBoardId: Long, teacherPostTitle: String): String {
+    private fun createMailTemplate(boardId: Long, postTitle: String): String {
         val context = Context()
 
-        context.setVariable("teacherBoardId", teacherBoardId)
-        context.setVariable("teacherPostTitle", teacherPostTitle)
+        context.setVariable("teacherBoardId", boardId)
+        context.setVariable("teacherPostTitle", postTitle)
 
         return templateEngine.process("email-template", context)
     }
