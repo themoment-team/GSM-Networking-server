@@ -182,8 +182,8 @@ class BoardService (
     }
 
     private fun sendEmailMentors(teacherBoardId: Long, teacherPostTitle: String) {
-        mentorRepository.findAll().forEach { mentor ->
-            teacherBoardEmailSend(teacherBoardId, teacherPostTitle, mentor.user.email)
+        mentorRepository.findAllMentorEmailDto().forEach { mentor ->
+            teacherBoardEmailSend(teacherBoardId, teacherPostTitle, mentor.email)
         }
     }
 

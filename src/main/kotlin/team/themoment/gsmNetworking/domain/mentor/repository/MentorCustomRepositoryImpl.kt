@@ -103,7 +103,8 @@ class MentorCustomRepositoryImpl(
                 mentor.user.email
             ))
             .from(mentor)
-            .join(mentor.user, user)
-            .fetchJoin().fetch()
+            .innerJoin(mentor.user, user)
+            .on(mentor.user.id.eq(user.id))
+            .fetch()
     }
 }
