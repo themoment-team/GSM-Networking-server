@@ -83,7 +83,7 @@ class BoardService (
         }
 
         if (savedBoard.boardCategory == TEACHER) {
-            sendEmailMentors(savedBoard.id, savedBoard.title)
+            sendEmailToMentors(savedBoard.id, savedBoard.title)
         }
 
         return BoardListDto(
@@ -181,7 +181,7 @@ class BoardService (
             ) }
     }
 
-    private fun sendEmailMentors(boardId: Long, postTitle: String) {
+    private fun sendEmailToMentors(boardId: Long, postTitle: String) {
         mentorRepository.findAllMentorEmailDto().forEach { mentor ->
             sendMail(boardId, postTitle, mentor.email)
         }
