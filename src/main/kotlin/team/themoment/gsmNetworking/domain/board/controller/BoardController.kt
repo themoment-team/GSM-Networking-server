@@ -44,12 +44,14 @@ class BoardController (
         @Min(value = 0, message = "pageSize는 0 이상이어야 합니다.") @Max(value = 20, message = "pageSize는 20 이하여야 합니다.") @RequestParam pageSize: Long,
         @RequestParam(required = false) boardCategory: BoardCategory?
     ) : ResponseEntity<List<BoardListDto>> {
-        return ResponseEntity.ok(queryBoardListUseCase.queryBoardList(cursorId, pageSize, boardCategory))
+        val authenticationId = authenticatedUserManager.getName()
+        return ResponseEntity.ok(queryBoardListUseCase.queryBoardList(cursorId, pageSize, boardCategory, authenticationId))
     }
 
     @GetMapping("/{boardId}")
     fun queryBoardInfo(@PathVariable boardId: Long): ResponseEntity<BoardInfoDto> {
-        return ResponseEntity.ok(queryBoardInfoUseCase.queryBoardInfo(boardId))
+        val authenticationId = authenticatedUserManager.getName()
+        return ResponseEntity.ok(queryBoardInfoUseCase.queryBoardInfo(boardId, authenticationId))
     }
 
 }

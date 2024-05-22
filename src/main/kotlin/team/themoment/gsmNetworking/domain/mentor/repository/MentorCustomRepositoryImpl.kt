@@ -8,10 +8,7 @@ import org.hibernate.NonUniqueResultException
 import org.springframework.dao.IncorrectResultSizeDataAccessException
 import team.themoment.gsmNetworking.domain.mentor.domain.QCareer.career
 import team.themoment.gsmNetworking.domain.mentor.domain.QMentor.mentor
-import team.themoment.gsmNetworking.domain.mentor.dto.CompanyInfoDto
-import team.themoment.gsmNetworking.domain.mentor.dto.MentorInfoDto
-import team.themoment.gsmNetworking.domain.mentor.dto.MyCareerInfoDto
-import team.themoment.gsmNetworking.domain.mentor.dto.MyMentorInfoDto
+import team.themoment.gsmNetworking.domain.mentor.dto.*
 import team.themoment.gsmNetworking.domain.user.domain.QUser.user
 
 /**
@@ -97,5 +94,17 @@ class MentorCustomRepositoryImpl(
             throw IncorrectResultSizeDataAccessException(myMentorInfoDto.size)
         else
             myMentorInfoDto[0]
+    }
+
+    override fun findAllMentorEmailDto(): List<MentorEmailDto> {
+        return queryFactory
+            .select(Projections.constructor(
+                MentorEmailDto::class.java,
+                mentor.user.email
+            ))
+            .from(mentor)
+            .innerJoin(mentor.user, user)
+            .on(mentor.user.id.eq(user.id))
+            .fetch()
     }
 }

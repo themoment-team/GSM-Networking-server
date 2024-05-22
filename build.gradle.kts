@@ -39,6 +39,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
+	/* thymeleaf */
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
 	/** validation **/
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
@@ -64,6 +67,9 @@ dependencies {
 
 	/* aws */
 	implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.1")
+
+	/* emali */
+	implementation("org.springframework.boot:spring-boot-starter-mail:2.6.7")
 
 	/* security */
 	implementation("org.springframework.boot:spring-boot-starter-security")
