@@ -28,5 +28,8 @@ class Board (
     val comments: MutableList<Comment> = ArrayList(),
 
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val likes: MutableList<Like> = ArrayList()
+    val likes: MutableList<Like> = ArrayList(),
+
+    @Column(name = "is_pinned")
+    var isPinned: Boolean = false
 ): BaseIdTimestampEntity();

@@ -17,9 +17,7 @@ import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
 import team.themoment.gsmNetworking.domain.board.repository.BoardRepository
-import team.themoment.gsmNetworking.domain.board.service.QueryBoardInfoUseCase
-import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
-import team.themoment.gsmNetworking.domain.board.service.QueryBoardListUseCase
+import team.themoment.gsmNetworking.domain.board.service.*
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
 import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
 import team.themoment.gsmNetworking.domain.comment.dto.CommentListDto
@@ -31,6 +29,7 @@ import team.themoment.gsmNetworking.domain.popup.domain.Popup
 import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import java.time.LocalDateTime
+import java.util.Collections
 import javax.mail.internet.MimeMessage
 
 @Service
@@ -45,7 +44,9 @@ class BoardService (
     private val templateEngine: ISpringTemplateEngine
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
-    QueryBoardInfoUseCase {
+    QueryBoardInfoUseCase,
+    QueryPinnedBoardListUseCase,
+    UpdatePinStatusUseCase {
 
     @Transactional
     override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardListDto {
@@ -209,6 +210,45 @@ class BoardService (
         context.setVariable("teacherPostTitle", postTitle)
 
         return templateEngine.process("email-template", context)
+    }
+
+    @Transactional(readOnly = true)
+    override fun queryPinnedBoardList(authenticationId: Long): List<BoardListDto> {
+        val currentUser = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+        val boards = boardRepository.findPinnedBoards()
+
+        Collections.sort(boards, Comparator.comparing(Board::createdAt).reversed())
+
+        val recentBoards = boards.subList(0, boards.size.coerceAtMost(3))
+
+        return recentBoards.stream()
+            .map { board ->
+                BoardListDto(
+                    id = board.id,
+                    title = board.title,
+                    boardCategory = board.boardCategory,
+                    author = AuthorDto(
+                        name = board.author.name,
+                        generation = board.author.generation,
+                        profileUrl = board.author.profileUrl,
+                        defaultImgNumber = board.author.defaultImgNumber
+                    ),
+                    createdAt = board.createdAt,
+                    commentCount = board.comments.size,
+                    likeCount = board.likes.size,
+                    isLike = board.likes.stream().anyMatch { like -> like.user == currentUser }
+                )
+            }.toList()
+    }
+
+    @Transactional
+    override fun updatePinStatus(boardId: Long) {
+        val board = boardRepository.findById(boardId)
+            .orElseThrow { throw ExpectedException("존재하지않는 게시글입니다.", HttpStatus.NOT_FOUND) }
+
+        board.isPinned = !board.isPinned
     }
 
 }
