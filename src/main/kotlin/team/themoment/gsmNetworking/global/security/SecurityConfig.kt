@@ -118,7 +118,12 @@ class SecurityConfig(
             )
             // /user/profile-url
             .mvcMatchers("/api/v1/user/profile-url").hasAnyRole(
-                Authority.UNAUTHENTICATED.name,
+                Authority.TEMP_USER.name,
+                Authority.USER.name,
+                Authority.TEACHER.name
+            )
+            // /user/profile-number
+            .mvcMatchers("/api/v1/user/profile-number").hasAnyRole(
                 Authority.TEMP_USER.name,
                 Authority.USER.name,
                 Authority.TEACHER.name

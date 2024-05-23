@@ -37,7 +37,7 @@ class User(
     val snsUrl: String?,
 
     @Column(nullable = true)
-    val profileUrl: String?,
+    var profileUrl: String?,
 
     @Column(name = "default_img_number")
     var defaultImgNumber: Int = 0,
@@ -65,6 +65,10 @@ class User(
 
     fun updateProfileNumber(defaultImgNumber: Int) {
         this.defaultImgNumber = defaultImgNumber
+
+        if (this.profileUrl != null) {
+            this.profileUrl = null
+        }
     }
 
 }
