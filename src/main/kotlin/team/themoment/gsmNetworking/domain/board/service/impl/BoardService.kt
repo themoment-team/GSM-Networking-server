@@ -148,7 +148,8 @@ class BoardService (
             likeCount = currentBoard.likes.size,
             isLike = currentBoard.likes.stream().anyMatch {
                 like -> like.user == currentUser
-            }
+            },
+            isPinned = currentBoard.isPinned
         )
     }
 
