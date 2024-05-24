@@ -100,7 +100,8 @@ class BoardService (
             createdAt = savedBoard.createdAt,
             commentCount = 0,
             likeCount = 0,
-            isLike = false
+            isLike = false,
+            isPinned = savedBoard.isPinned
         )
 
     }
@@ -238,7 +239,8 @@ class BoardService (
                     createdAt = board.createdAt,
                     commentCount = board.comments.size,
                     likeCount = board.likes.size,
-                    isLike = board.likes.stream().anyMatch { like -> like.user == currentUser }
+                    isLike = board.likes.stream().anyMatch { like -> like.user == currentUser },
+                    isPinned = board.isPinned
                 )
             }.toList()
     }
