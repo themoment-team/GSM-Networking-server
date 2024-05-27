@@ -25,7 +25,6 @@ import javax.print.PrintService
 class MentorService(
     private val mentorRepository: MentorRepository,
     private val careerRepository: CareerRepository,
-    private val userRepository: UserRepository,
     private val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase,
     private val generateUserUseCase: GenerateUserUseCase,
     private val modifyUserInfoByIdUseCase: ModifyUserInfoByIdUseCase,
