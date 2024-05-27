@@ -122,6 +122,12 @@ class SecurityConfig(
                 Authority.USER.name,
                 Authority.TEACHER.name
             )
+            // /user/profile-number
+            .mvcMatchers("/api/v1/user/profile-number").hasAnyRole(
+                Authority.TEMP_USER.name,
+                Authority.USER.name,
+                Authority.TEACHER.name
+            )
             // /user
             .mvcMatchers("/api/v1/user/**").hasAnyRole(
                 Authority.USER.name,
