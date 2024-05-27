@@ -61,7 +61,7 @@ class SecurityConfig(
     private fun authorizeHttpRequests(http: HttpSecurity) {
         http.authorizeHttpRequests()
             // /mentor
-            .mvcMatchers("/api/v1/mentor/*").hasAnyRole(
+            .mvcMatchers("/api/v1/mentor/**").hasAnyRole(
                 Authority.USER.name,
                 Authority.TEACHER.name
             )
