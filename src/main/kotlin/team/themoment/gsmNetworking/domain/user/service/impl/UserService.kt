@@ -25,20 +25,13 @@ class UserService(
     QueryUserInfoByUserIdUseCase,
     QueryEmailByUserIdUseCase,
     QueryUserIsTeacherUsecase,
-    UpdateUserProfileNumberUseCase,
-    QueryUserByIdUseCase {
-
-    override fun queryUserById(authenticationId: Long): User {
-        val user = userRepository.findByAuthenticationId(authenticationId)
-            ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
-
-        return user
-    }
+    UpdateUserProfileNumberUseCase {
 
     @Transactional
     override fun generateUser(userSaveInfoDto: UserSaveInfoDto, authenticationId: Long): User {
         if(userRepository.existsByAuthenticationId(authenticationId)){
-            val user = queryUserById(authenticationId)
+            val user = userRepository.findByAuthenticationId(authenticationId)
+                ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
             checkExistUserByInfo(userSaveInfoDto, user)
 
@@ -73,7 +66,8 @@ class UserService(
 
     @Transactional
     override fun modifyUserInfoById(authenticationId: Long, userSaveInfoDto: UserSaveInfoDto) {
-        val user = queryUserById(authenticationId)
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
         checkExistUserByInfo(userSaveInfoDto, user)
 
@@ -110,7 +104,8 @@ class UserService(
 
     @Transactional
     override fun generateProfileUrl(authenticationId: Long, dto: ProfileUrlRegistrationDto) {
-        val user = queryUserById(authenticationId)
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
         profileUrlRegistered(user, dto.profileUrl)
     }
@@ -136,7 +131,8 @@ class UserService(
 
     @Transactional
     override fun deleteUserInfoByIdUseCase(authenticationId: Long): User {
-        val user = queryUserById(authenticationId)
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
         userRepository.delete(user)
         return user
@@ -144,7 +140,8 @@ class UserService(
 
     @Transactional(readOnly = true)
     override fun queryUserInfoById(authenticationId: Long): UserInfoDto {
-        val user = queryUserById(authenticationId)
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
         return UserInfoDto(
             id = user.id,
@@ -192,7 +189,8 @@ class UserService(
 
     @Transactional
     override fun updateUserProfileNumber(userProfileNumberDto: UserProfileNumberDto, authenticationId: Long) {
-        val user = queryUserById(authenticationId)
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
         user.updateProfileNumber(userProfileNumberDto.profileNumber)
         userRepository.save(user)

@@ -23,9 +23,6 @@ class Career(
     @Column(nullable = true)
     val companyUrl: String,
 
-    @Column(nullable = true)
-    var companyAddress: String?,
-
     @Column(nullable = false)
     val position: String,
 
@@ -46,7 +43,6 @@ class Career(
                     mentor = mentor,
                     companyName = it.companyName,
                     companyUrl = it.companyUrl ?: "",
-                    companyAddress = it.companyAddress ?: "",
                     position = it.position,
                     startDate = it.startDate,
                     endDate = it.endDate,

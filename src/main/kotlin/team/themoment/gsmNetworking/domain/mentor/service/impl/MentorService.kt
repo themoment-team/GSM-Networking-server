@@ -15,8 +15,6 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.domain.user.service.DeleteUserInfoByIdUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
 import team.themoment.gsmNetworking.domain.user.service.ModifyUserInfoByIdUseCase
-import team.themoment.gsmNetworking.domain.user.service.QueryUserByIdUseCase
-import javax.print.PrintService
 
 /**
  * 멘토 관련 로직이 담긴 클래스 입니다.
@@ -29,14 +27,12 @@ class MentorService(
     private val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase,
     private val generateUserUseCase: GenerateUserUseCase,
     private val modifyUserInfoByIdUseCase: ModifyUserInfoByIdUseCase,
-    private val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase,
-    private val queryUserByIdUseCase: QueryUserByIdUseCase
+    private val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase
 ) : QueryAllMentorsUseCase,
     MentorRegistrationUseCase,
     QueryMentorInfoByIdUseCase,
     DeleteMentorInfoByIdUseCase,
-    ModifyMentorInfoByIdUseCase,
-    GenerateCompanyAddressUseCase{
+    ModifyMentorInfoByIdUseCase {
 
     /**
      * 모든 멘토 리스트를 가져와서 리턴해주는 메서드 입니다.
@@ -77,7 +73,6 @@ class MentorService(
                 mentor = mentor,
                 companyName = it.companyName,
                 companyUrl = it.companyUrl ?: "",
-                companyAddress = it.companyAddress ?: "",
                 position = it.position,
                 startDate = it.startDate,
                 endDate = it.endDate,
@@ -112,7 +107,8 @@ class MentorService(
 
     @Transactional
     override fun modifyMentorInfoById(authenticationId: Long, mentorSaveInfoDto: MentorSaveInfoDto) {
-        val user = queryUserByIdUseCase.queryUserById(authenticationId)
+        val user = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
         val mentor = mentorRepository.findByUser(user)
             ?: throw ExpectedException("mentor를 찾을 수 없습니다", HttpStatus.NOT_FOUND)
 
@@ -129,12 +125,5 @@ class MentorService(
         modifyUserInfoByIdUseCase.modifyUserInfoById(mentor.user.authenticationId, userSaveInfoDto)
         careerRepository.deleteAllByMentor(mentor)
         careerRepository.saveAll(updateCareers)
-    }
-
-    @Transactional
-    override fun generateCompanyAddress( companyAddressRegistrationDto: CompanyAddressRegistrationDto) {
-        val career = careerRepository.findById(companyAddressRegistrationDto.id)
-            .orElseThrow { ExpectedException("career를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
-        career.companyAddress = companyAddressRegistrationDto.companyAddress
     }
 }
