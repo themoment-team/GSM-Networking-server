@@ -29,7 +29,6 @@ class BoardController (
     private val queryBoardListUseCase: QueryBoardListUseCase,
     private val queryBoardInfoUseCase: QueryBoardInfoUseCase,
     private val updatePinStatusUseCase: UpdatePinStatusUseCase,
-    private val queryPinnedBoardListUseCase: QueryPinnedBoardListUseCase,
     private val authenticatedUserManager: AuthenticatedUserManager
 ) {
 
@@ -61,13 +60,6 @@ class BoardController (
     ): ResponseEntity<Void> {
         updatePinStatusUseCase.updatePinStatus(boardId)
         return ResponseEntity.ok().build()
-    }
-
-    @GetMapping("/pin")
-    fun getPinBoardList(): ResponseEntity<List<BoardListDto>> {
-        val authenticationId = authenticatedUserManager.getName()
-        val pinnedBoardList = queryPinnedBoardListUseCase.queryPinnedBoardList(authenticationId)
-        return ResponseEntity.ok(pinnedBoardList)
     }
 
 }

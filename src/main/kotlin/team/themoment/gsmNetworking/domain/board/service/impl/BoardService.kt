@@ -45,7 +45,6 @@ class BoardService (
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
     QueryBoardInfoUseCase,
-    QueryPinnedBoardListUseCase,
     UpdatePinStatusUseCase {
 
     @Transactional
@@ -214,42 +213,17 @@ class BoardService (
         return templateEngine.process("email-template", context)
     }
 
-    @Transactional(readOnly = true)
-    override fun queryPinnedBoardList(authenticationId: Long): List<BoardListDto> {
-        val currentUser = userRepository.findByAuthenticationId(authenticationId)
-            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
-
-        val boards = boardRepository.findPinnedBoards()
-
-        Collections.sort(boards, Comparator.comparing(Board::createdAt).reversed())
-
-        val recentBoards = boards.subList(0, boards.size.coerceAtMost(3))
-
-        return recentBoards.stream()
-            .map { board ->
-                BoardListDto(
-                    id = board.id,
-                    title = board.title,
-                    boardCategory = board.boardCategory,
-                    author = AuthorDto(
-                        name = board.author.name,
-                        generation = board.author.generation,
-                        profileUrl = board.author.profileUrl,
-                        defaultImgNumber = board.author.defaultImgNumber
-                    ),
-                    createdAt = board.createdAt,
-                    commentCount = board.comments.size,
-                    likeCount = board.likes.size,
-                    isLike = board.likes.stream().anyMatch { like -> like.user == currentUser },
-                    isPinned = board.isPinned
-                )
-            }.toList()
-    }
-
     @Transactional
     override fun updatePinStatus(boardId: Long) {
         val board = boardRepository.findById(boardId)
             .orElseThrow { throw ExpectedException("존재하지않는 게시글입니다.", HttpStatus.NOT_FOUND) }
+
+        val pinnedBoards = boardRepository.findPinnedBoards()
+
+        if (pinnedBoards.size >= 3){
+            val oldPinnedBoard = pinnedBoards.first()
+            oldPinnedBoard.isPinned = false
+        }
 
         board.isPinned = !board.isPinned
     }
