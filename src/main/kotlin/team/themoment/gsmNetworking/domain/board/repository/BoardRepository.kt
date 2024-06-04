@@ -6,6 +6,5 @@ import team.themoment.gsmNetworking.domain.board.domain.Board
 
 interface BoardRepository : JpaRepository<Board, Long>, BoardCustomRepository {
 
-    @Query("select board from Board board where board.isPinned = true")
-    fun findPinnedBoards(): List<Board>
+    fun findBoardsByIsPinnedTrue(): List<Board>
 }

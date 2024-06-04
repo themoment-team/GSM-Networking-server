@@ -218,10 +218,10 @@ class BoardService (
         val board = boardRepository.findById(boardId)
             .orElseThrow { throw ExpectedException("존재하지않는 게시글입니다.", HttpStatus.NOT_FOUND) }
 
-        val pinnedBoards = boardRepository.findPinnedBoards()
+        val pinnedBoards = boardRepository.findBoardsByIsPinnedTrue()
 
         if (pinnedBoards.size >= 3){
-            val oldPinnedBoard = pinnedBoards.first()
+            val oldPinnedBoard = pinnedBoards.last()
             oldPinnedBoard.isPinned = false
         }
 
