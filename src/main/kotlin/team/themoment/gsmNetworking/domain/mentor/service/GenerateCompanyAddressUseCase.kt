@@ -4,5 +4,5 @@ import team.themoment.gsmNetworking.domain.mentor.dto.CompanyAddressRegistration
 
 interface GenerateCompanyAddressUseCase {
 
-    fun generateCompanyAddress(dto: CompanyAddressRegistrationDto)
+    fun generateCompanyAddress(companyAddressRegistrationDto: CompanyAddressRegistrationDto)
 }
