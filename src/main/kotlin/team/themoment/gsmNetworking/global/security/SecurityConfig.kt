@@ -139,6 +139,13 @@ class SecurityConfig(
                 Authority.TEMP_USER.name,
                 Authority.TEACHER.name
             )
+            // board
+            .mvcMatchers("/api/v1/board/*").hasAnyRole(
+                Authority.TEMP_USER.name,
+                Authority.USER.name,
+                Authority.ADMIN.name,
+                Authority.TEACHER.name
+            )
             // /gwangya
             .mvcMatchers(HttpMethod.GET, "/api/v1/gwangya/token").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
