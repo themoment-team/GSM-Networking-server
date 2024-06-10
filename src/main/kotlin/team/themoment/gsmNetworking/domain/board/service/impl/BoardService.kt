@@ -17,9 +17,7 @@ import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
 import team.themoment.gsmNetworking.domain.board.repository.BoardRepository
-import team.themoment.gsmNetworking.domain.board.service.QueryBoardInfoUseCase
-import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
-import team.themoment.gsmNetworking.domain.board.service.QueryBoardListUseCase
+import team.themoment.gsmNetworking.domain.board.service.*
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
 import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
 import team.themoment.gsmNetworking.domain.comment.dto.CommentListDto
@@ -31,6 +29,7 @@ import team.themoment.gsmNetworking.domain.popup.domain.Popup
 import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import java.time.LocalDateTime
+import java.util.Collections
 import javax.mail.internet.MimeMessage
 
 @Service
@@ -45,7 +44,8 @@ class BoardService (
     private val templateEngine: ISpringTemplateEngine
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
-    QueryBoardInfoUseCase {
+    QueryBoardInfoUseCase,
+    UpdatePinStatusUseCase {
 
     @Transactional
     override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardListDto {
@@ -99,7 +99,8 @@ class BoardService (
             createdAt = savedBoard.createdAt,
             commentCount = 0,
             likeCount = 0,
-            isLike = false
+            isLike = false,
+            isPinned = savedBoard.isPinned
         )
 
     }
@@ -146,7 +147,8 @@ class BoardService (
             likeCount = currentBoard.likes.size,
             isLike = currentBoard.likes.stream().anyMatch {
                 like -> like.user == currentUser
-            }
+            },
+            isPinned = currentBoard.isPinned
         )
     }
 
@@ -209,6 +211,21 @@ class BoardService (
         context.setVariable("teacherPostTitle", postTitle)
 
         return templateEngine.process("email-template", context)
+    }
+
+    @Transactional
+    override fun updatePinStatus(boardId: Long) {
+        val board = boardRepository.findById(boardId)
+            .orElseThrow { throw ExpectedException("존재하지않는 게시글입니다.", HttpStatus.NOT_FOUND) }
+
+        val pinnedBoards = boardRepository.findBoardsByIsPinnedTrue()
+
+        if (pinnedBoards.size >= 3){
+            val oldPinnedBoard = pinnedBoards.last()
+            oldPinnedBoard.isPinned = false
+        }
+
+        board.isPinned = !board.isPinned
     }
 
 }
