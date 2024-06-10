@@ -115,6 +115,8 @@ management:
       enabled: false
     ping:
       enabled: false
+    mail:
+      enabled: false
   server:
     port: ${ACTUATOR_SERVER_PORT}
 
