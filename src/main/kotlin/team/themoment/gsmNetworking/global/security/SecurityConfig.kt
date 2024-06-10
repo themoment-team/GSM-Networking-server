@@ -61,10 +61,6 @@ class SecurityConfig(
     private fun authorizeHttpRequests(http: HttpSecurity) {
         http.authorizeHttpRequests()
             // /mentor
-            .mvcMatchers("/api/v1/mentor/**").hasAnyRole(
-                Authority.USER.name,
-                Authority.TEACHER.name
-            )
             .mvcMatchers(HttpMethod.GET, "/api/v1/mentor").hasAnyRole(
                 Authority.TEMP_USER.name,
                 Authority.USER.name,
@@ -76,6 +72,10 @@ class SecurityConfig(
                 Authority.TEMP_USER.name
             )
             .mvcMatchers("/api/v1/mentor/my").hasAnyRole(
+                Authority.USER.name,
+                Authority.TEACHER.name
+            )
+            .mvcMatchers("/api/v1/mentor/**").hasAnyRole(
                 Authority.USER.name,
                 Authority.TEACHER.name
             )
