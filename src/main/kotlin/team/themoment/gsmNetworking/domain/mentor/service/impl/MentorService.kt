@@ -110,19 +110,19 @@ class MentorService(
     }
 
     @Transactional
-    override fun modifyMentorInfoById(authenticationId: Long, mentorSaveInfoDto: MentorSaveInfoDto) {
+    override fun modifyMentorInfoById(authenticationId: Long, mentorUpdateInfoDto: MentorSaveInfoDto) {
         val user = queryUserByIdUseCase.queryUserById(authenticationId)
         val mentor = mentorRepository.findByUser(user)
             ?: throw ExpectedException("mentor를 찾을 수 없습니다", HttpStatus.NOT_FOUND)
 
-        val updateCareers = Career.ofCareers(mentorSaveInfoDto.career, mentor)
+        val updateCareers = Career.ofCareers(mentorUpdateInfoDto.career, mentor)
 
         val userSaveInfoDto = UserSaveInfoDto(
-            name = mentorSaveInfoDto.name,
-            generation = mentorSaveInfoDto.generation,
-            phoneNumber = mentorSaveInfoDto.phoneNumber,
-            email = mentorSaveInfoDto.email,
-            snsUrl = mentorSaveInfoDto.snsUrl
+            name = mentorUpdateInfoDto.name,
+            generation = mentorUpdateInfoDto.generation,
+            phoneNumber = mentorUpdateInfoDto.phoneNumber,
+            email = mentorUpdateInfoDto.email,
+            snsUrl = mentorUpdateInfoDto.snsUrl
         )
 
         modifyUserInfoByIdUseCase.modifyUserInfoById(mentor.user.authenticationId, userSaveInfoDto)
