@@ -146,6 +146,10 @@ class SecurityConfig(
                 Authority.ADMIN.name,
                 Authority.TEACHER.name
             )
+            // pin
+            .mvcMatchers(HttpMethod.PATCH, "/api/v1/board/pin/*").hasAnyRole(
+                Authority.TEACHER.name
+            )
             // /gwangya
             .mvcMatchers(HttpMethod.GET, "/api/v1/gwangya/token").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
