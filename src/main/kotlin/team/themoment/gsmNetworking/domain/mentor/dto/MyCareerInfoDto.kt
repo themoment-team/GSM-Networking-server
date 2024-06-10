@@ -7,6 +7,7 @@ data class MyCareerInfoDto(
     val position: String,
     val companyName: String,
     val companyUrl: String?,
+    val companyAddress: String?,
     val startDate: LocalDate,
     val endDate: LocalDate?,
     val isWorking: Boolean

@@ -34,7 +34,8 @@ class MentorCustomRepositoryImpl(
                 Projections.constructor(
                     CompanyInfoDto::class.java,
                     career.companyName,
-                    career.companyUrl
+                    career.companyUrl,
+                    career.companyAddress
                 ),
                 mentor.user.snsUrl,
                 mentor.user.profileUrl,
@@ -80,6 +81,7 @@ class MentorCustomRepositoryImpl(
                                 career.position,
                                 career.companyName,
                                 career.companyUrl,
+                                career.companyAddress,
                                 career.startDate,
                                 career.endDate,
                                 career.isWorking
