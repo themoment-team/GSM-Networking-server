@@ -10,6 +10,8 @@ data class MentorCareerDto(
 
     val companyUrl: String?,
 
+    val companyAddress: String?,
+
     @field:NotBlank
     val position: String,
 

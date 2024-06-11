@@ -16,10 +16,9 @@ import team.themoment.gsmNetworking.domain.board.domain.BoardCategory.*
 import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
+import team.themoment.gsmNetworking.domain.board.dto.BoardUpdateDto
 import team.themoment.gsmNetworking.domain.board.repository.BoardRepository
-import team.themoment.gsmNetworking.domain.board.service.QueryBoardInfoUseCase
-import team.themoment.gsmNetworking.domain.board.service.SaveBoardUseCase
-import team.themoment.gsmNetworking.domain.board.service.QueryBoardListUseCase
+import team.themoment.gsmNetworking.domain.board.service.*
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
 import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
 import team.themoment.gsmNetworking.domain.comment.dto.CommentListDto
@@ -32,6 +31,7 @@ import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.FileUploadUseCase
 import java.time.LocalDateTime
+import java.util.Collections
 import javax.mail.internet.MimeMessage
 
 @Service
@@ -47,8 +47,10 @@ class BoardService (
     private val fileUploadUseCase: FileUploadUseCase
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
-    QueryBoardInfoUseCase {
-
+    QueryBoardInfoUseCase,
+    UpdatePinStatusUseCase,
+    UpdateBoardUseCase
+{
     @Transactional
     override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardListDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
@@ -105,7 +107,8 @@ class BoardService (
             commentCount = 0,
             likeCount = 0,
             isLike = false,
-            fileUrlsDto
+            isPinned = savedBoard.isPinned,
+            fileUrlsDto = fileUrlsDto
         )
 
     }
@@ -153,9 +156,12 @@ class BoardService (
             isLike = currentBoard.likes.stream().anyMatch {
                 like -> like.user == currentUser
             },
+            isPinned = currentBoard.isPinned,
             fileUrls = currentBoard.fileUrls
         )
     }
+
+
 
     private fun getFindComments(findComments: List<Comment>): List<CommentListDto> {
         return findComments.map { CommentListDto(
@@ -216,6 +222,68 @@ class BoardService (
         context.setVariable("teacherPostTitle", postTitle)
 
         return templateEngine.process("email-template", context)
+    }
+
+    @Transactional
+    override fun updatePinStatus(boardId: Long) {
+        val board = boardRepository.findById(boardId)
+            .orElseThrow { throw ExpectedException("존재하지않는 게시글입니다.", HttpStatus.NOT_FOUND) }
+
+        val pinnedBoards = boardRepository.findBoardsByIsPinnedTrue()
+
+        if (pinnedBoards.size >= 3){
+            val oldPinnedBoard = pinnedBoards.last()
+            oldPinnedBoard.isPinned = false
+        }
+
+        board.isPinned = !board.isPinned
+    }
+
+    @Transactional
+    override fun updateBoard(updateBoardDto: BoardUpdateDto, boardId: Long, authenticationId: Long): BoardInfoDto {
+        val board = boardRepository.findById(boardId)
+            .orElseThrow { throw ExpectedException("존재하지않는 게시글입니다.", HttpStatus.NOT_FOUND) }
+
+        val currentUser = userRepository.findByAuthenticationId(authenticationId)
+            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+
+        if (board.author.authenticationId != authenticationId)
+            throw ExpectedException("게시글의 작성자만 수정할 수 있습니다.", HttpStatus.BAD_REQUEST)
+
+        val updatedBoard = Board(
+            id = board.id,
+            createdAt = board.createdAt,
+            updatedAt = LocalDateTime.now(),
+            title = updateBoardDto.title,
+            content = updateBoardDto.content,
+            boardCategory = updateBoardDto.boardCategory,
+            author = currentUser,
+            comments = board.comments,
+            likes = board.likes,
+            isPinned = board.isPinned
+        )
+
+        val saveBoard = boardRepository.save(updatedBoard)
+
+        return BoardInfoDto(
+            id = saveBoard.id,
+            title = saveBoard.title,
+            content = saveBoard.content,
+            boardCategory = saveBoard.boardCategory,
+            author = AuthorDto(
+                name = saveBoard.author.name,
+                generation = saveBoard.author.generation,
+                profileUrl = saveBoard.author.profileUrl,
+                defaultImgNumber = saveBoard.author.defaultImgNumber
+            ),
+            comments = getFindComments(saveBoard.comments),
+            likeCount = saveBoard.likes.size,
+            createdAt = saveBoard.createdAt,
+            isPinned = saveBoard.isPinned,
+            isLike = saveBoard.likes.stream().anyMatch {
+                like -> like.user == currentUser
+            }
+        )
     }
 
 }
