@@ -17,6 +17,6 @@ data class BoardInfoDto (
     val comments: List<CommentListDto>,
     val likeCount: Int,
     val isLike: Boolean,
-    val isPinned: Boolean
+    val isPinned: Boolean,
     val fileUrls: List<String>
 )

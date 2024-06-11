@@ -282,7 +282,8 @@ class BoardService (
             isPinned = saveBoard.isPinned,
             isLike = saveBoard.likes.stream().anyMatch {
                 like -> like.user == currentUser
-            }
+            },
+            fileUrls = saveBoard.fileUrls
         )
     }
 
