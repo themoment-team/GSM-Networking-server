@@ -16,5 +16,6 @@ data class BoardInfoDto (
     val createdAt: LocalDateTime,
     val comments: List<CommentListDto>,
     val likeCount: Int,
-    val isLike: Boolean
+    val isLike: Boolean,
+    val fileUrls: List<String>
 )

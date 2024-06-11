@@ -36,7 +36,8 @@ class BoardCustomRepositoryImpl (
                     board.createdAt,
                     board.comments.size(),
                     board.likes.size(),
-                    likeCase(user)
+                    likeCase(user),
+                    board.fileUrls
                 )
             )
             .from(board)
@@ -63,7 +64,8 @@ class BoardCustomRepositoryImpl (
                     board.createdAt,
                     board.comments.size(),
                     board.likes.size(),
-                    likeCase(user)
+                    likeCase(user),
+                    board.fileUrls
                 )
             )
             .from(board)

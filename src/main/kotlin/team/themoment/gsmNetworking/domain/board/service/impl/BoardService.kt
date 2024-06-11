@@ -30,6 +30,7 @@ import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.popup.domain.Popup
 import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
+import team.themoment.gsmNetworking.thirdParty.aws.s3.service.FileUploadUseCase
 import java.time.LocalDateTime
 import javax.mail.internet.MimeMessage
 
@@ -42,7 +43,8 @@ class BoardService (
     private val popupRepository: PopupRepository,
     private val authenticationRepository: AuthenticationRepository,
     private val mailSender: JavaMailSender,
-    private val templateEngine: ISpringTemplateEngine
+    private val templateEngine: ISpringTemplateEngine,
+    private val fileUploadUseCase: FileUploadUseCase
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
     QueryBoardInfoUseCase {
@@ -60,11 +62,14 @@ class BoardService (
             throw ExpectedException("선생님이 아닌 유저는 선생님 카테고리를 이용할 수 없습니다.", HttpStatus.NOT_FOUND)
         }
 
+        val fileUrlsDto = fileUploadUseCase.fileUpload(boardSaveDto.files)
+
         val newBoard = Board(
             title = boardSaveDto.title,
             content = boardSaveDto.content,
             boardCategory = boardSaveDto.boardCategory,
-            author = currentUser
+            author = currentUser,
+            fileUrls = fileUrlsDto.fileUrls
         )
 
         val savedBoard = boardRepository.save(newBoard)
@@ -99,7 +104,8 @@ class BoardService (
             createdAt = savedBoard.createdAt,
             commentCount = 0,
             likeCount = 0,
-            isLike = false
+            isLike = false,
+            fileUrlsDto
         )
 
     }
@@ -146,7 +152,8 @@ class BoardService (
             likeCount = currentBoard.likes.size,
             isLike = currentBoard.likes.stream().anyMatch {
                 like -> like.user == currentUser
-            }
+            },
+            fileUrls = currentBoard.fileUrls
         )
     }
 
