@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.multipart.MultipartFile
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
