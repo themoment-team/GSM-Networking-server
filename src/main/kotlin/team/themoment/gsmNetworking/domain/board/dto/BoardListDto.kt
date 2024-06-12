@@ -16,5 +16,5 @@ data class BoardListDto (
     val likeCount: Int,
     val isLike: Boolean,
     val isPinned: Boolean,
-    val fileUrlsDto: FileUrlsDto
+    val fileUrls: FileUrlsDto
 )

@@ -6,6 +6,7 @@ import com.querydsl.jpa.JPAExpressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.domain.QBoard.board
+import team.themoment.gsmNetworking.domain.board.domain.QFile.file
 import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
 import team.themoment.gsmNetworking.domain.board.dto.FileUrlsDto
 import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
@@ -53,11 +54,14 @@ class BoardCustomRepositoryImpl(
                 board.isPinned,
                 Projections.constructor(
                     FileUrlsDto::class.java,
-                    board.fileUrls
+                    Projections.list(
+                        file.fileUrl
+                    )
                 )
             )
         )
             .from(board)
+            .leftJoin(file).on(board.eq(file.board))
             .where(eqCategory(boardCategory), board.id.lt(cursorId), board.isPinned.isFalse, board.id.notIn(pinnedIds))
             .orderBy(board.id.desc())
             .limit(overridePageSize)
@@ -101,12 +105,15 @@ class BoardCustomRepositoryImpl(
                 board.isPinned,
                 Projections.constructor(
                     FileUrlsDto::class.java,
-                    board.fileUrls
+                    Projections.list(
+                        file.fileUrl
+                    )
                 )
             )
         )
             .from(board)
             .orderBy(board.id.desc())
+            .leftJoin(file).on(board.eq(file.board))
             .where(eqCategory(boardCategory), board.isPinned.isFalse, board.id.notIn(pinnedIds))
             .limit(overridePageSize)
             .fetch()
@@ -118,7 +125,7 @@ class BoardCustomRepositoryImpl(
         return pinnedPosts.map { it.id }
     }
 
-    private fun overridePageSize(pageSize: Long, pinnedPostsSize:Long): Long {
+    private fun overridePageSize(pageSize: Long, pinnedPostsSize: Long): Long {
         return pageSize - pinnedPostsSize
     }
 
@@ -153,9 +160,16 @@ class BoardCustomRepositoryImpl(
                 board.likes.size(),
                 likeCase(user),
                 board.isPinned,
+                Projections.constructor(
+                    FileUrlsDto::class.java,
+                    Projections.list(
+                        file.fileUrl
+                    )
+                )
             )
         )
             .from(board)
+            .leftJoin(file).on(board.eq(file.board))
             .where(board.isPinned.isTrue, eqCategory(boardCategory))
             .orderBy(board.id.desc())
             .limit(3)

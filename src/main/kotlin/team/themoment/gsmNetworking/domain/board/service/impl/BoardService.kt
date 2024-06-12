@@ -13,11 +13,10 @@ import team.themoment.gsmNetworking.domain.auth.repository.AuthenticationReposit
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.domain.Board
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory.*
-import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
-import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
-import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
-import team.themoment.gsmNetworking.domain.board.dto.BoardUpdateDto
+import team.themoment.gsmNetworking.domain.board.domain.File
+import team.themoment.gsmNetworking.domain.board.dto.*
 import team.themoment.gsmNetworking.domain.board.repository.BoardRepository
+import team.themoment.gsmNetworking.domain.board.repository.FileRepository
 import team.themoment.gsmNetworking.domain.board.service.*
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
 import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
@@ -31,7 +30,6 @@ import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.FileUploadUseCase
 import java.time.LocalDateTime
-import java.util.Collections
 import javax.mail.internet.MimeMessage
 
 @Service
@@ -44,7 +42,8 @@ class BoardService (
     private val authenticationRepository: AuthenticationRepository,
     private val mailSender: JavaMailSender,
     private val templateEngine: ISpringTemplateEngine,
-    private val fileUploadUseCase: FileUploadUseCase
+    private val fileUploadUseCase: FileUploadUseCase,
+    private val fileRepository: FileRepository
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
     QueryBoardInfoUseCase,
@@ -71,10 +70,15 @@ class BoardService (
             content = boardSaveDto.content,
             boardCategory = boardSaveDto.boardCategory,
             author = currentUser,
-            fileUrls = fileUrlsDto.fileUrls
         )
 
         val savedBoard = boardRepository.save(newBoard)
+
+        val files = fileUrlsDto.fileUrls.map {
+            File(it, savedBoard)
+        }
+
+        fileRepository.saveAll(files)
 
         val popupExp = boardSaveDto.popupExp
         if (popupExp != null && boardSaveDto.boardCategory == TEACHER) {
@@ -108,7 +112,7 @@ class BoardService (
             likeCount = 0,
             isLike = false,
             isPinned = savedBoard.isPinned,
-            fileUrlsDto = fileUrlsDto
+            fileUrls = fileUrlsDto
         )
 
     }
@@ -137,6 +141,8 @@ class BoardService (
         val currentBoard = boardRepository.findById(boardId)
             .orElseThrow { ExpectedException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
+        val currentFiles = fileRepository.findFilesByBoard(currentBoard)
+
         val findComments = commentRepository.findAllByBoardAndParentCommentIsNull(currentBoard)
 
         return BoardInfoDto(
@@ -157,7 +163,11 @@ class BoardService (
                 like -> like.user == currentUser
             },
             isPinned = currentBoard.isPinned,
-            fileUrls = currentBoard.fileUrls
+            fileUrls = FileUrlsDto(
+                currentFiles.map {
+                    it.fileUrl
+                }
+            )
         )
     }
 
@@ -265,6 +275,8 @@ class BoardService (
 
         val saveBoard = boardRepository.save(updatedBoard)
 
+        val savedFiles = fileRepository.findFilesByBoard(saveBoard)
+
         return BoardInfoDto(
             id = saveBoard.id,
             title = saveBoard.title,
@@ -283,7 +295,11 @@ class BoardService (
             isLike = saveBoard.likes.stream().anyMatch {
                 like -> like.user == currentUser
             },
-            fileUrls = saveBoard.fileUrls
+            fileUrls = FileUrlsDto(
+                savedFiles.map {
+                    it.fileUrl
+                }
+            )
         )
     }
 

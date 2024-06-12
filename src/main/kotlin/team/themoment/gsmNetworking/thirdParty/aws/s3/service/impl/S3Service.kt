@@ -34,7 +34,7 @@ class S3Service(
             val fileUrls = multipartFile
                 .map {
                     s3Upload(it, it.contentType)
-                }.toMutableList()
+                }
 
             return FileUrlsDto(fileUrls)
         } catch (e: S3Exception) {

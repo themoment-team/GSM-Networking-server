@@ -10,7 +10,7 @@ import javax.persistence.FetchType.*
 
 @Entity
 @Table(name = "board")
-class Board (
+class Board(
 
     override val id: Long = 0,
 
@@ -28,11 +28,6 @@ class Board (
     @Column(name = "board_category")
     val boardCategory: BoardCategory,
 
-    @ElementCollection
-    @CollectionTable(name = "file_urls", joinColumns = [JoinColumn(name = "board_id")])
-    @Column(name = "file_urls")
-    val fileUrls: MutableList<String> = ArrayList(),
-
     @ManyToOne
     @JoinColumn(name = "author_id")
     val author: User,
@@ -44,5 +39,5 @@ class Board (
     val likes: MutableList<Like> = ArrayList(),
 
     @Column(name = "is_pinned")
-    var isPinned: Boolean = false
+    var isPinned: Boolean = false,
 ): BaseIdTimestampEntity();
