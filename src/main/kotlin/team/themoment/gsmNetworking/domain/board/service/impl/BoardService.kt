@@ -231,7 +231,7 @@ class BoardService (
 
         val pinnedBoards = boardRepository.findBoardsByIsPinnedTrue()
 
-        if (pinnedBoards.size >= 3){
+        if (pinnedBoards.size >= 3 && !board.isPinned){
             val oldPinnedBoard = pinnedBoards.last()
             oldPinnedBoard.isPinned = false
         }

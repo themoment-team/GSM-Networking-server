@@ -1,16 +1,14 @@
 package team.themoment.gsmNetworking.domain.board.repository
 
-import com.querydsl.core.types.ExpressionUtils
 import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.JPAExpressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
-import team.themoment.gsmNetworking.domain.board.domain.QBoard
 import team.themoment.gsmNetworking.domain.board.domain.QBoard.board
 import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
+import team.themoment.gsmNetworking.domain.board.dto.FileUrlsDto
 import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
-import team.themoment.gsmNetworking.domain.like.domain.QLike
 import team.themoment.gsmNetworking.domain.like.domain.QLike.like
 import team.themoment.gsmNetworking.domain.user.domain.User
 
@@ -27,7 +25,13 @@ class BoardCustomRepositoryImpl(
     ): List<BoardListDto> {
         val pinnedPosts = findPinnedPostsLimit3(user, boardCategory)
 
+        if (pinnedPosts.size >= pageSize) {
+            return pinnedPosts.take(pageSize.toInt())
+        }
+
         val pinnedIds = pinnedPosts.map { it.id }
+
+        val overridePageSize = (pageSize - pinnedPosts.size)
 
         val otherPosts = queryFactory.select(
             Projections.constructor(
@@ -47,13 +51,16 @@ class BoardCustomRepositoryImpl(
                 board.likes.size(),
                 likeCase(user),
                 board.isPinned,
-                board.fileUrls
+                Projections.constructor(
+                    FileUrlsDto::class.java,
+                    board.fileUrls
+                )
             )
         )
             .from(board)
             .where(eqCategory(boardCategory), board.id.lt(cursorId), board.isPinned.isFalse, board.id.notIn(pinnedIds))
             .orderBy(board.id.desc())
-            .limit(pageSize)
+            .limit(overridePageSize)
             .fetch()
 
         return pinnedPosts + otherPosts
@@ -86,7 +93,10 @@ class BoardCustomRepositoryImpl(
                 board.likes.size(),
                 likeCase(user),
                 board.isPinned,
-                board.fileUrls
+                Projections.constructor(
+                    FileUrlsDto::class.java,
+                    board.fileUrls
+                )
             )
         )
             .from(board)
