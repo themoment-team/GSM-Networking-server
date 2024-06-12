@@ -29,9 +29,9 @@ class BoardCustomRepositoryImpl(
             return pinnedPosts.take(pageSize.toInt())
         }
 
-        val pinnedIds = pinnedPosts.map { it.id }
+        val pinnedIds = getPinnedIds(pinnedPosts)
 
-        val overridePageSize = (pageSize - pinnedPosts.size)
+        val overridePageSize = overridePageSize(pageSize, pinnedPosts.size.toLong())
 
         val otherPosts = queryFactory.select(
             Projections.constructor(
@@ -73,7 +73,13 @@ class BoardCustomRepositoryImpl(
     ): List<BoardListDto> {
         val pinnedPosts = findPinnedPostsLimit3(user, boardCategory)
 
-        val pinnedIds = pinnedPosts.map { it.id }
+        if (pinnedPosts.size >= pageSize) {
+            return pinnedPosts.take(pageSize.toInt())
+        }
+
+        val pinnedIds = getPinnedIds(pinnedPosts)
+
+        val overridePageSize = overridePageSize(pageSize, pinnedPosts.size.toLong())
 
         val otherPosts = queryFactory.select(
             Projections.constructor(
@@ -102,10 +108,18 @@ class BoardCustomRepositoryImpl(
             .from(board)
             .orderBy(board.id.desc())
             .where(eqCategory(boardCategory), board.isPinned.isFalse, board.id.notIn(pinnedIds))
-            .limit(pageSize)
+            .limit(overridePageSize)
             .fetch()
 
         return pinnedPosts + otherPosts
+    }
+
+    private fun getPinnedIds(pinnedPosts: List<BoardListDto>): List<Long> {
+        return pinnedPosts.map { it.id }
+    }
+
+    private fun overridePageSize(pageSize: Long, pinnedPostsSize:Long): Long {
+        return pageSize - pinnedPostsSize
     }
 
     private fun eqCategory(boardCategory: BoardCategory?): BooleanExpression? =
