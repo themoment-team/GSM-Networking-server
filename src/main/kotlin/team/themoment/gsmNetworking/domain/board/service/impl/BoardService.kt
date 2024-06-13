@@ -91,6 +91,7 @@ class BoardService (
             title = savedBoard.title,
             boardCategory = savedBoard.boardCategory,
             author = AuthorDto(
+                id = savedBoard.author.id,
                 name = savedBoard.author.name,
                 generation = savedBoard.author.generation,
                 profileUrl = savedBoard.author.profileUrl,
@@ -137,6 +138,7 @@ class BoardService (
             content = currentBoard.content,
             boardCategory = currentBoard.boardCategory,
             author = AuthorDto(
+                id = currentBoard.author.id,
                 name = currentBoard.author.name,
                 generation = currentBoard.author.generation,
                 profileUrl = currentBoard.author.profileUrl,
@@ -157,6 +159,7 @@ class BoardService (
             commentId = it.id,
             comment = it.comment,
             author = AuthorDto(
+                id = it.author.id,
                 name = it.author.name,
                 generation = it.author.generation,
                 profileUrl = it.author.profileUrl,
@@ -173,6 +176,7 @@ class BoardService (
                     commentId = reply.id,
                     comment = reply.comment,
                     author = AuthorDto(
+                        id = reply.author.id,
                         name = reply.author.name,
                         generation = reply.author.generation,
                         profileUrl = reply.author.profileUrl,
