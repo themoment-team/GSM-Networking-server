@@ -29,13 +29,14 @@ class MentorService(
     private val generateUserUseCase: GenerateUserUseCase,
     private val modifyUserInfoByIdUseCase: ModifyUserInfoByIdUseCase,
     private val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase,
-    private val queryUserByIdUseCase: QueryUserByIdUseCase
+    private val queryUserByIdUseCase: QueryUserByIdUseCase,
 ) : QueryAllMentorsUseCase,
     MentorRegistrationUseCase,
     QueryMentorInfoByIdUseCase,
     DeleteMentorInfoByIdUseCase,
     ModifyMentorInfoByIdUseCase,
-    GenerateCompanyAddressUseCase{
+    GenerateCompanyAddressUseCase,
+    QueryAllMentorCompanyAddressUseCase {
 
     /**
      * 모든 멘토 리스트를 가져와서 리턴해주는 메서드 입니다.
@@ -139,4 +140,10 @@ class MentorService(
         career.lon = companyAddressRegistrationDto.lon
         careerRepository.save(career)
     }
+
+    @Transactional(readOnly = true)
+    override fun queryAllMentorCompanyAddress(): List<MentorCompanyAddressListDto> {
+
+    }
+
 }
