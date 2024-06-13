@@ -37,6 +37,7 @@ class BoardCustomRepositoryImpl(
                 board.boardCategory,
                 Projections.constructor(
                     AuthorDto::class.java,
+                    board.author.id,
                     board.author.name,
                     board.author.generation,
                     board.author.profileUrl,
@@ -75,6 +76,7 @@ class BoardCustomRepositoryImpl(
                 board.boardCategory,
                 Projections.constructor(
                     AuthorDto::class.java,
+                    board.author.id,
                     board.author.name,
                     board.author.generation,
                     board.author.profileUrl,
@@ -117,6 +119,7 @@ class BoardCustomRepositoryImpl(
                 board.boardCategory,
                 Projections.constructor(
                     AuthorDto::class.java,
+                    board.author.id,
                     board.author.name,
                     board.author.generation,
                     board.author.profileUrl,
