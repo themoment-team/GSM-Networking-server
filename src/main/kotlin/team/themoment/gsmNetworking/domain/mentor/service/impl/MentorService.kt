@@ -76,7 +76,8 @@ class MentorService(
                 mentor = mentor,
                 companyName = it.companyName,
                 companyUrl = it.companyUrl ?: "",
-                companyAddress = it.companyAddress ?: "",
+                lat = it.lat,
+                lon = it.lon,
                 position = it.position,
                 startDate = it.startDate,
                 endDate = it.endDate,
@@ -134,6 +135,8 @@ class MentorService(
     override fun generateCompanyAddress( companyAddressRegistrationDto: CompanyAddressRegistrationDto) {
         val career = careerRepository.findById(companyAddressRegistrationDto.id)
             .orElseThrow { ExpectedException("career를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
-        career.companyAddress = companyAddressRegistrationDto.companyAddress
+        career.lat = companyAddressRegistrationDto.lat
+        career.lon = companyAddressRegistrationDto.lon
+        careerRepository.save(career)
     }
 }
