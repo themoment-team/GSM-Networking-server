@@ -29,7 +29,6 @@ class BoardController (
     private val queryBoardInfoUseCase: QueryBoardInfoUseCase,
     private val updateBoardUseCase: UpdateBoardUseCase,
     private val updatePinStatusUseCase: UpdatePinStatusUseCase,
-    private val deleteFileUseCase: DeleteFileUseCase,
     private val authenticatedUserManager: AuthenticatedUserManager
 ) {
 
@@ -71,12 +70,4 @@ class BoardController (
         updatePinStatusUseCase.updatePinStatus(boardId)
         return ResponseEntity.ok().build()
     }
-
-    @DeleteMapping("/file/{id}")
-    fun deleteFile(@PathVariable id: Long): ResponseEntity<Void> {
-        val authenticationId = authenticatedUserManager.getName()
-        deleteFileUseCase.deleteFile(authenticationId, id)
-        return ResponseEntity.noContent().build()
-    }
-
 }

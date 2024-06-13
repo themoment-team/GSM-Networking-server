@@ -17,5 +17,9 @@ data class BoardUpdateDto (
     @field:NotNull
     @Enumerated(EnumType.STRING)
     val boardCategory: BoardCategory,
+    @field:Nullable
+    @field:Min(1)
+    @field:Max(30)
+    val popupExp: Int?,
     val files: List<MultipartFile>?
 )

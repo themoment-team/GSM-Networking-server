@@ -51,7 +51,6 @@ class BoardService(
     QueryBoardListUseCase,
     QueryBoardInfoUseCase,
     UpdatePinStatusUseCase,
-    DeleteFileUseCase,
     UpdateBoardUseCase {
     @Transactional
     override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardListDto {
@@ -77,24 +76,9 @@ class BoardService(
 
         val savedBoard = boardRepository.save(newBoard)
 
-        val fileListDto = uploadAndSaveFile(boardSaveDto.files, savedBoard)
+        uploadAndSaveFile(boardSaveDto.files, savedBoard)
 
-        val popupExp = boardSaveDto.popupExp
-        if (popupExp != null && boardSaveDto.boardCategory == TEACHER) {
-            val currentDateTime = LocalDateTime.now()
-            val newPopupExpTime = currentDateTime.plusDays(popupExp.toLong())
-
-            val newPopup = Popup(
-                board = savedBoard,
-                expTime = newPopupExpTime
-            )
-
-            popupRepository.save(newPopup)
-        }
-
-        if (savedBoard.boardCategory == TEACHER) {
-            sendEmailToMentors(savedBoard.id, savedBoard.title)
-        }
+        generatePopup(boardSaveDto.popupExp, boardSaveDto.boardCategory, savedBoard)
 
         return BoardListDto(
             id = savedBoard.id,
@@ -110,8 +94,7 @@ class BoardService(
             commentCount = 0,
             likeCount = 0,
             isLike = false,
-            isPinned = savedBoard.isPinned,
-            fileList = fileListDto
+            isPinned = savedBoard.isPinned
         )
 
     }
@@ -272,7 +255,16 @@ class BoardService(
             isPinned = board.isPinned
         )
 
+
         val saveBoard = boardRepository.save(updatedBoard)
+
+        generatePopup(updateBoardDto.popupExp, updateBoardDto.boardCategory, saveBoard)
+
+        fileRepository.deleteAllByBoard(saveBoard)
+
+        val currentFiles = fileRepository.findFilesByBoard(saveBoard)
+
+        deleteFile(currentFiles)
 
         val fileInfoDtoList = uploadAndSaveFile(updateBoardDto.files, saveBoard)
 
@@ -296,6 +288,20 @@ class BoardService(
             },
             fileList = fileInfoDtoList
         )
+    }
+
+    private fun generatePopup(popupExp: Int?, category: BoardCategory, board: Board) {
+        if (popupExp != null && category == TEACHER) {
+            val currentDateTime = LocalDateTime.now()
+            val newPopupExpTime = currentDateTime.plusDays(popupExp.toLong())
+
+            val newPopup = Popup(
+                board = board,
+                expTime = newPopupExpTime
+            )
+
+            popupRepository.save(newPopup)
+        }
     }
 
     private fun uploadAndSaveFile(files: List<MultipartFile>?, board: Board): List<FileInfoDto>? {
@@ -324,23 +330,11 @@ class BoardService(
         }
     }
 
-    override fun deleteFile(authenticationId: Long, fileId: Long) {
-        val currentUser = userRepository.findByAuthenticationId(authenticationId)
-            ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
-
-        val currentFile = fileRepository.findById(fileId).orElseThrow {
-            throw ExpectedException(
-                "존재하지 않는 파일입니다.",
-                HttpStatus.NOT_FOUND
-            )
+    private fun deleteFile(files: List<File>) {
+        files.forEach {
+            deleteS3FileUseCase.deleteS3File(it.fileUrl)
         }
 
-        deleteS3FileUseCase.deleteS3File(currentFile.fileUrl)
-
-        if (currentFile.board.author != currentUser) {
-            throw ExpectedException("자신의 게시글에 업로드한 파일만 삭제할 수 있습니다.", HttpStatus.BAD_REQUEST)
-        }
-
-        fileRepository.delete(currentFile)
+        fileRepository.deleteAll(files)
     }
 }
