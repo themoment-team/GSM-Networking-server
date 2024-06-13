@@ -7,6 +7,7 @@ import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.mentor.domain.Career
 import team.themoment.gsmNetworking.domain.mentor.domain.Mentor
 import team.themoment.gsmNetworking.domain.mentor.dto.*
+import team.themoment.gsmNetworking.domain.mentor.repository.CareerCustomRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.CareerRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.mentor.service.*
@@ -143,7 +144,7 @@ class MentorService(
 
     @Transactional(readOnly = true)
     override fun queryAllMentorCompanyAddress(): List<MentorCompanyAddressListDto> {
-
+        return careerRepository.queryAllCompanyAddress()
     }
 
 }
