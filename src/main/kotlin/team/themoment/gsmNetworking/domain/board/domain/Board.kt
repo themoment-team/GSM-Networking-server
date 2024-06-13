@@ -4,12 +4,20 @@ import team.themoment.gsmNetworking.common.domain.BaseIdTimestampEntity
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
 import team.themoment.gsmNetworking.domain.like.domain.Like
 import team.themoment.gsmNetworking.domain.user.domain.User
+import java.time.LocalDateTime
 import javax.persistence.*
 import javax.persistence.FetchType.*
 
 @Entity
 @Table(name = "board")
 class Board (
+
+    override val id: Long = 0,
+
+    override var createdAt: LocalDateTime = LocalDateTime.now(),
+
+    override var updatedAt: LocalDateTime = LocalDateTime.now(),
+
     @Column(name = "title", length = 50)
     val title: String,
 
