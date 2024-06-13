@@ -268,6 +268,7 @@ class BoardService (
             content = saveBoard.content,
             boardCategory = saveBoard.boardCategory,
             author = AuthorDto(
+                id = saveBoard.author.id,
                 name = saveBoard.author.name,
                 generation = saveBoard.author.generation,
                 profileUrl = saveBoard.author.profileUrl,
