@@ -65,7 +65,7 @@ class MentorCustomRepositoryImpl(
                 groupBy(career.mentor.id).list(
                     Projections.constructor(
                         MyMentorInfoDto::class.java,
-                        mentor.id,
+                        mentor.user.id,
                         mentor.user.name,
                         mentor.user.email,
                         mentor.user.phoneNumber,
