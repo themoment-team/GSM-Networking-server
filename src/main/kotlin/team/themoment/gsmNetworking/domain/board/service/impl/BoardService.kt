@@ -31,6 +31,7 @@ import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.FileUploadUseCase
 import java.time.LocalDateTime
+import java.util.Arrays
 import java.util.Collections
 import javax.mail.internet.MimeMessage
 
@@ -52,7 +53,7 @@ class BoardService (
     UpdateBoardUseCase
 {
     @Transactional
-    override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardListDto {
+    override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardInfoDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
@@ -93,9 +94,10 @@ class BoardService (
             sendEmailToMentors(savedBoard.id, savedBoard.title)
         }
 
-        return BoardListDto(
+        return BoardInfoDto(
             id = savedBoard.id,
             title = savedBoard.title,
+            content = savedBoard.content,
             boardCategory = savedBoard.boardCategory,
             author = AuthorDto(
                 id = savedBoard.author.id,
@@ -105,11 +107,11 @@ class BoardService (
                 defaultImgNumber = savedBoard.author.defaultImgNumber
             ),
             createdAt = savedBoard.createdAt,
-            commentCount = 0,
+            comments = Arrays.asList(),
             likeCount = 0,
             isLike = false,
             isPinned = savedBoard.isPinned,
-            fileUrlsDto = fileUrlsDto
+            fileUrls = fileUrlsDto.fileUrls
         )
 
     }

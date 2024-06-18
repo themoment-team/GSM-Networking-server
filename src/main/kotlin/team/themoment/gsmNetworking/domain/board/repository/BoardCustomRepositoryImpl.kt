@@ -48,7 +48,6 @@ class BoardCustomRepositoryImpl(
                 board.likes.size(),
                 likeCase(user),
                 board.isPinned,
-                board.fileUrls
             )
         )
             .from(board)
@@ -88,7 +87,6 @@ class BoardCustomRepositoryImpl(
                 board.likes.size(),
                 likeCase(user),
                 board.isPinned,
-                board.fileUrls
             )
         )
             .from(board)
