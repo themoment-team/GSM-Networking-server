@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service
 import org.springframework.util.StringUtils
 import org.springframework.web.multipart.MultipartFile
 import team.themoment.gsmNetworking.common.exception.ExpectedException
-import team.themoment.gsmNetworking.domain.board.dto.FileUrlsDto
 import team.themoment.gsmNetworking.thirdParty.aws.s3.properties.S3Properties
+import team.themoment.gsmNetworking.thirdParty.aws.s3.service.DeleteS3FileUseCase
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.FileUploadUseCase
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.ImageUploadUseCase
 import java.time.LocalDateTime
@@ -20,7 +20,8 @@ class S3Service(
     private val s3Template: S3Template,
     private val s3Properties: S3Properties,
 ) : ImageUploadUseCase,
-    FileUploadUseCase {
+    FileUploadUseCase,
+    DeleteS3FileUseCase {
 
     override fun imageUpload(multipartFile: MultipartFile): String {
         val originFileName = multipartFile.originalFilename
@@ -29,17 +30,13 @@ class S3Service(
         return s3Upload(multipartFile, validateFileExtension(fileExtension))
     }
 
-    override fun fileUpload(multipartFile: List<MultipartFile>): FileUrlsDto {
-        try {
-            val fileUrls = multipartFile
-                .map {
-                    s3Upload(it, it.contentType)
-                }.toMutableList()
+    override fun fileUpload(multipartFile: List<MultipartFile>): List<String> {
+        val fileUrls = multipartFile
+            .map {
+                s3Upload(it, it.contentType)
+            }
 
-            return FileUrlsDto(fileUrls)
-        } catch (e: S3Exception) {
-            throw ExpectedException("AWS S3에서 오류 발생", HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        return fileUrls
     }
 
     private fun s3Upload(multipartFile: MultipartFile, contentType: String?): String {
@@ -74,5 +71,14 @@ class S3Service(
 
     private fun addS3BucketDomain(fileName: String): String {
         return s3Properties.bucketDomain + fileName
+    }
+
+    override fun deleteS3File(fileUrl: String) {
+        try {
+            val fileName = fileUrl.removePrefix(s3Properties.bucketDomain)
+            s3Template.deleteObject(s3Properties.bucketName, fileName)
+        } catch (e: S3Exception) {
+            throw ExpectedException("AWS S3에서 파일 삭제 중 오류 발생", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 }

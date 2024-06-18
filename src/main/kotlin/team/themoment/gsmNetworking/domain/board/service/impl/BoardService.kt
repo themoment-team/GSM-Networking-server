@@ -5,6 +5,7 @@ import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
 import org.thymeleaf.context.Context
 import org.thymeleaf.spring5.ISpringTemplateEngine
 import team.themoment.gsmNetworking.common.exception.ExpectedException
@@ -13,11 +14,10 @@ import team.themoment.gsmNetworking.domain.auth.repository.AuthenticationReposit
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.domain.Board
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory.*
-import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
-import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
-import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
-import team.themoment.gsmNetworking.domain.board.dto.BoardUpdateDto
+import team.themoment.gsmNetworking.domain.board.domain.File
+import team.themoment.gsmNetworking.domain.board.dto.*
 import team.themoment.gsmNetworking.domain.board.repository.BoardRepository
+import team.themoment.gsmNetworking.domain.board.repository.FileRepository
 import team.themoment.gsmNetworking.domain.board.service.*
 import team.themoment.gsmNetworking.domain.comment.domain.Comment
 import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
@@ -29,13 +29,13 @@ import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.popup.domain.Popup
 import team.themoment.gsmNetworking.domain.popup.repository.PopupRepository
 import team.themoment.gsmNetworking.domain.user.repository.UserRepository
+import team.themoment.gsmNetworking.thirdParty.aws.s3.service.DeleteS3FileUseCase
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.FileUploadUseCase
 import java.time.LocalDateTime
-import java.util.Collections
 import javax.mail.internet.MimeMessage
 
 @Service
-class BoardService (
+class BoardService(
     private val boardRepository: BoardRepository,
     private val userRepository: UserRepository,
     private val mentorRepository: MentorRepository,
@@ -44,13 +44,14 @@ class BoardService (
     private val authenticationRepository: AuthenticationRepository,
     private val mailSender: JavaMailSender,
     private val templateEngine: ISpringTemplateEngine,
-    private val fileUploadUseCase: FileUploadUseCase
+    private val fileUploadUseCase: FileUploadUseCase,
+    private val deleteS3FileUseCase: DeleteS3FileUseCase,
+    private val fileRepository: FileRepository,
 ) : SaveBoardUseCase,
     QueryBoardListUseCase,
     QueryBoardInfoUseCase,
     UpdatePinStatusUseCase,
-    UpdateBoardUseCase
-{
+    UpdateBoardUseCase {
     @Transactional
     override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardListDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
@@ -60,38 +61,24 @@ class BoardService (
             .orElseThrow { throw ExpectedException("유저의 권한 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
 
         if (boardSaveDto.boardCategory == TEACHER
-            && authentication.authority != Authority.TEACHER) {
+            && authentication.authority != Authority.TEACHER
+        ) {
             throw ExpectedException("선생님이 아닌 유저는 선생님 카테고리를 이용할 수 없습니다.", HttpStatus.NOT_FOUND)
         }
 
-        val fileUrlsDto = fileUploadUseCase.fileUpload(boardSaveDto.files)
 
         val newBoard = Board(
             title = boardSaveDto.title,
             content = boardSaveDto.content,
             boardCategory = boardSaveDto.boardCategory,
             author = currentUser,
-            fileUrls = fileUrlsDto.fileUrls
         )
 
         val savedBoard = boardRepository.save(newBoard)
 
-        val popupExp = boardSaveDto.popupExp
-        if (popupExp != null && boardSaveDto.boardCategory == TEACHER) {
-            val currentDateTime = LocalDateTime.now()
-            val newPopupExpTime = currentDateTime.plusDays(popupExp.toLong())
+        uploadAndSaveFile(boardSaveDto.files, savedBoard)
 
-            val newPopup = Popup(
-                board = savedBoard,
-                expTime = newPopupExpTime
-            )
-
-            popupRepository.save(newPopup)
-        }
-
-        if (savedBoard.boardCategory == TEACHER) {
-            sendEmailToMentors(savedBoard.id, savedBoard.title)
-        }
+        generatePopup(boardSaveDto.popupExp, boardSaveDto.boardCategory, savedBoard)
 
         return BoardListDto(
             id = savedBoard.id,
@@ -107,26 +94,27 @@ class BoardService (
             commentCount = 0,
             likeCount = 0,
             isLike = false,
-            isPinned = savedBoard.isPinned,
-            fileUrlsDto = fileUrlsDto
+            isPinned = savedBoard.isPinned
         )
 
     }
 
     @Transactional(readOnly = true)
-    override fun queryBoardList(cursorId: Long,
-                                pageSize: Long,
-                                boardCategory: BoardCategory?,
-                                authenticationId: Long): List<BoardListDto> {
+    override fun queryBoardList(
+        cursorId: Long,
+        pageSize: Long,
+        boardCategory: BoardCategory?,
+        authenticationId: Long,
+    ): List<BoardListDto> {
 
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
 
         return if (cursorId == 0L)
-                boardRepository.findPageWithRecentBoard(pageSize, boardCategory, currentUser)
-            else
-                boardRepository.findPageByCursorId(cursorId, pageSize, boardCategory, currentUser)
+            boardRepository.findPageWithRecentBoard(pageSize, boardCategory, currentUser)
+        else
+            boardRepository.findPageByCursorId(cursorId, pageSize, boardCategory, currentUser)
     }
 
     @Transactional(readOnly = true)
@@ -136,6 +124,8 @@ class BoardService (
 
         val currentBoard = boardRepository.findById(boardId)
             .orElseThrow { ExpectedException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+
+        val currentFiles = fileRepository.findFilesByBoard(currentBoard)
 
         val findComments = commentRepository.findAllByBoardAndParentCommentIsNull(currentBoard)
 
@@ -153,29 +143,30 @@ class BoardService (
             createdAt = currentBoard.createdAt,
             comments = getFindComments(findComments),
             likeCount = currentBoard.likes.size,
-            isLike = currentBoard.likes.stream().anyMatch {
-                like -> like.user == currentUser
+            isLike = currentBoard.likes.stream().anyMatch { like ->
+                like.user == currentUser
             },
             isPinned = currentBoard.isPinned,
-            fileUrls = currentBoard.fileUrls
+            fileList = ofFileInfoDtoList(currentFiles)
         )
     }
 
-
-
     private fun getFindComments(findComments: List<Comment>): List<CommentListDto> {
-        return findComments.map { CommentListDto(
-            commentId = it.id,
-            comment = it.comment,
-            author = AuthorDto(
-                name = it.author.name,
-                generation = it.author.generation,
-                profileUrl = it.author.profileUrl,
-                defaultImgNumber = it.author.defaultImgNumber
-            ),
-            replies = getFindReplies(it)
-        ) }
+        return findComments.map {
+            CommentListDto(
+                commentId = it.id,
+                comment = it.comment,
+                author = AuthorDto(
+                    name = it.author.name,
+                    generation = it.author.generation,
+                    profileUrl = it.author.profileUrl,
+                    defaultImgNumber = it.author.defaultImgNumber
+                ),
+                replies = getFindReplies(it)
+            )
+        }
     }
+
 
     private fun getFindReplies(parentComment: Comment): List<ReplyDto> {
         return commentRepository.findAllByParentComment(parentComment).map { reply ->
@@ -191,7 +182,8 @@ class BoardService (
                     ),
                     replyCommentId = reply.repliedComment?.id
                 )
-            ) }
+            )
+        }
     }
 
     private fun sendEmailToMentors(boardId: Long, postTitle: String) {
@@ -231,7 +223,7 @@ class BoardService (
 
         val pinnedBoards = boardRepository.findBoardsByIsPinnedTrue()
 
-        if (pinnedBoards.size >= 3){
+        if (pinnedBoards.size >= 3 && !board.isPinned) {
             val oldPinnedBoard = pinnedBoards.last()
             oldPinnedBoard.isPinned = false
         }
@@ -263,7 +255,18 @@ class BoardService (
             isPinned = board.isPinned
         )
 
+
         val saveBoard = boardRepository.save(updatedBoard)
+
+        generatePopup(updateBoardDto.popupExp, updateBoardDto.boardCategory, saveBoard)
+
+        fileRepository.deleteAllByBoard(saveBoard)
+
+        val currentFiles = fileRepository.findFilesByBoard(saveBoard)
+
+        deleteFile(currentFiles)
+
+        val fileInfoDtoList = uploadAndSaveFile(updateBoardDto.files, saveBoard)
 
         return BoardInfoDto(
             id = saveBoard.id,
@@ -280,11 +283,58 @@ class BoardService (
             likeCount = saveBoard.likes.size,
             createdAt = saveBoard.createdAt,
             isPinned = saveBoard.isPinned,
-            isLike = saveBoard.likes.stream().anyMatch {
-                like -> like.user == currentUser
+            isLike = saveBoard.likes.stream().anyMatch { like ->
+                like.user == currentUser
             },
-            fileUrls = saveBoard.fileUrls
+            fileList = fileInfoDtoList
         )
     }
 
+    private fun generatePopup(popupExp: Int?, category: BoardCategory, board: Board) {
+        if (popupExp != null && category == TEACHER) {
+            val currentDateTime = LocalDateTime.now()
+            val newPopupExpTime = currentDateTime.plusDays(popupExp.toLong())
+
+            val newPopup = Popup(
+                board = board,
+                expTime = newPopupExpTime
+            )
+
+            popupRepository.save(newPopup)
+        }
+    }
+
+    private fun uploadAndSaveFile(files: List<MultipartFile>?, board: Board): List<FileInfoDto>? {
+        if (files != null) {
+
+            val fileUrls = fileUploadUseCase.fileUpload(files)
+
+            val fileObjects = fileUrls.map {
+                File(it, board)
+            }
+
+            val savedFiles = fileRepository.saveAll(fileObjects)
+
+            return ofFileInfoDtoList(savedFiles)
+        }
+
+        return null
+    }
+
+    private fun ofFileInfoDtoList(files: List<File>): List<FileInfoDto> {
+        return files.map {
+            FileInfoDto(
+                it.id,
+                it.fileUrl
+            )
+        }
+    }
+
+    private fun deleteFile(files: List<File>) {
+        files.forEach {
+            deleteS3FileUseCase.deleteS3File(it.fileUrl)
+        }
+
+        fileRepository.deleteAll(files)
+    }
 }

@@ -5,7 +5,7 @@ import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
 import java.time.LocalDateTime
 
-data class BoardListDto (
+data class BoardListDto(
     val id: Long,
     val title: String,
     val boardCategory: BoardCategory,
@@ -15,6 +15,5 @@ data class BoardListDto (
     val commentCount: Int,
     val likeCount: Int,
     val isLike: Boolean,
-    val isPinned: Boolean,
-    val fileUrlsDto: FileUrlsDto
+    val isPinned: Boolean
 )
