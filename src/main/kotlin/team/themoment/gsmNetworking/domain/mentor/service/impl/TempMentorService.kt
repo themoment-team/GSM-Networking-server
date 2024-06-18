@@ -39,7 +39,8 @@ class TempMentorService(
                 company = CompanyInfoDto(
                     name = tempMentor.companyName,
                     url = tempMentor.companyUrl,
-                    address = ""
+                    lat = null,
+                    lon = null
                 ),
                 snsUrl = tempMentor.sns,
                 defaultImgNumber = tempMentor.defaultImgNumber
@@ -69,7 +70,8 @@ class TempMentorService(
             company = CompanyInfoDto(
                 name = tempMentor.companyName,
                 url = tempMentor.companyUrl,
-                address = ""
+                lat = null,
+                lon = null
             ),
             snsUrl = tempMentor.sns,
             defaultImgNumber = tempMentor.defaultImgNumber
@@ -94,7 +96,8 @@ class TempMentorService(
                 company = CompanyInfoDto(
                     name = tempMentor.companyName,
                     url = tempMentor.companyUrl,
-                    address = ""
+                    lat = null,
+                    lon = null
                 ),
                 snsUrl = tempMentor.sns,
                 defaultImgNumber = tempMentor.defaultImgNumber

@@ -35,7 +35,8 @@ class MentorCustomRepositoryImpl(
                     CompanyInfoDto::class.java,
                     career.companyName,
                     career.companyUrl,
-                    career.companyAddress
+                    career.lat,
+                    career.lon
                 ),
                 mentor.user.snsUrl,
                 mentor.user.profileUrl,
@@ -81,7 +82,8 @@ class MentorCustomRepositoryImpl(
                                 career.position,
                                 career.companyName,
                                 career.companyUrl,
-                                career.companyAddress,
+                                career.lat,
+                                career.lon,
                                 career.startDate,
                                 career.endDate,
                                 career.isWorking

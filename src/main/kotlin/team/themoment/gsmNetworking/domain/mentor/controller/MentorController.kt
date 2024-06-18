@@ -25,7 +25,8 @@ class MentorController(
     private val deleteMentorInfoByIdUseCase: DeleteMentorInfoByIdUseCase,
     private val modifyMentorInfoByIdUseCase: ModifyMentorInfoByIdUseCase,
     private val authenticatedUserManager: AuthenticatedUserManager,
-    private val generateCompanyAddressUseCase: GenerateCompanyAddressUseCase
+    private val generateCompanyAddressUseCase: GenerateCompanyAddressUseCase,
+    private val queryAllMentorCompanyAddressUseCase: QueryAllMentorCompanyAddressUseCase
 ) {
 
     @PostMapping
@@ -66,6 +67,11 @@ class MentorController(
     fun companyAddressRegistration(@RequestBody @Valid dto: CompanyAddressRegistrationDto): ResponseEntity<Void> {
         generateCompanyAddressUseCase.generateCompanyAddress(dto)
         return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
+
+    @GetMapping("/marker")
+    fun queryAllMentorAddress(): ResponseEntity<List<MentorCompanyAddressListDto>> {
+        return ResponseEntity.ok(queryAllMentorCompanyAddressUseCase.queryAllMentorCompanyAddress())
     }
 
 }

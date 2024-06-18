@@ -7,6 +7,7 @@ import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.mentor.domain.Career
 import team.themoment.gsmNetworking.domain.mentor.domain.Mentor
 import team.themoment.gsmNetworking.domain.mentor.dto.*
+import team.themoment.gsmNetworking.domain.mentor.repository.CareerCustomRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.CareerRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.mentor.service.*
@@ -29,13 +30,14 @@ class MentorService(
     private val generateUserUseCase: GenerateUserUseCase,
     private val modifyUserInfoByIdUseCase: ModifyUserInfoByIdUseCase,
     private val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase,
-    private val queryUserByIdUseCase: QueryUserByIdUseCase
+    private val queryUserByIdUseCase: QueryUserByIdUseCase,
 ) : QueryAllMentorsUseCase,
     MentorRegistrationUseCase,
     QueryMentorInfoByIdUseCase,
     DeleteMentorInfoByIdUseCase,
     ModifyMentorInfoByIdUseCase,
-    GenerateCompanyAddressUseCase{
+    GenerateCompanyAddressUseCase,
+    QueryAllMentorCompanyAddressUseCase {
 
     /**
      * 모든 멘토 리스트를 가져와서 리턴해주는 메서드 입니다.
@@ -76,7 +78,8 @@ class MentorService(
                 mentor = mentor,
                 companyName = it.companyName,
                 companyUrl = it.companyUrl ?: "",
-                companyAddress = it.companyAddress ?: "",
+                lat = it.lat,
+                lon = it.lon,
                 position = it.position,
                 startDate = it.startDate,
                 endDate = it.endDate,
@@ -134,6 +137,14 @@ class MentorService(
     override fun generateCompanyAddress( companyAddressRegistrationDto: CompanyAddressRegistrationDto) {
         val career = careerRepository.findById(companyAddressRegistrationDto.id)
             .orElseThrow { ExpectedException("career를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
-        career.companyAddress = companyAddressRegistrationDto.companyAddress
+        career.lat = companyAddressRegistrationDto.lat
+        career.lon = companyAddressRegistrationDto.lon
+        careerRepository.save(career)
     }
+
+    @Transactional(readOnly = true)
+    override fun queryAllMentorCompanyAddress(): List<MentorCompanyAddressListDto> {
+        return careerRepository.queryAllCompanyAddress()
+    }
+
 }

@@ -7,7 +7,7 @@ import team.themoment.gsmNetworking.domain.mentor.domain.Mentor
 /**
  * Career Entity를 위한 Repository 인터페이스 입니다.
  */
-interface CareerRepository : CrudRepository<Career, Long> {
+interface CareerRepository : CrudRepository<Career, Long>, CareerCustomRepository {
 
     fun deleteByMentor(mentor: Mentor)
 
