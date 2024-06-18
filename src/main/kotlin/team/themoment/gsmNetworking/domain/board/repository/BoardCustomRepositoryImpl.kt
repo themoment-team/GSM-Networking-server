@@ -47,7 +47,8 @@ class BoardCustomRepositoryImpl(
                 board.comments.size(),
                 board.likes.size(),
                 likeCase(user),
-                board.isPinned
+                board.isPinned,
+                board.fileUrls
             )
         )
             .from(board)
@@ -86,7 +87,8 @@ class BoardCustomRepositoryImpl(
                 board.comments.size(),
                 board.likes.size(),
                 likeCase(user),
-                board.isPinned
+                board.isPinned,
+                board.fileUrls
             )
         )
             .from(board)
