@@ -67,6 +67,12 @@ class SecurityConfig(
                 Authority.ADMIN.name,
                 Authority.TEACHER.name
             )
+            .mvcMatchers("/api/v1/mentor/marker").hasAnyRole(
+                Authority.TEMP_USER.name,
+                Authority.USER.name,
+                Authority.ADMIN.name,
+                Authority.TEACHER.name
+            )
             .mvcMatchers(HttpMethod.POST, "/api/v1/mentor").hasAnyRole(
                 Authority.UNAUTHENTICATED.name,
                 Authority.TEMP_USER.name

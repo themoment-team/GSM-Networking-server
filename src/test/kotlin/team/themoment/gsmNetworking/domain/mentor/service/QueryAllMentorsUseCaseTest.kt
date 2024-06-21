@@ -55,7 +55,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             company = CompanyInfoDto(
                 name = "ABC 회사",
                 url = "https://www.abc-company.com",
-                address = "광주광역시 광산구 상무대로 312"
+                lon = 0.0,
+                lat = 0.0
             ),
             sns = "https://www.instagram.com/a",
             profileUrl = "https://www.instagram.com/img/a",
@@ -71,7 +72,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             company = CompanyInfoDto(
                 name = "DEF 회사",
                 url = "https://www.def-company.com",
-                address = "광주광역시 광산구 상무대로 312"
+                lon = 0.0,
+                lat = 0.0
             ),
             sns = "https://www.instagram.com/b",
             profileUrl = "https://www.instagram.com/img/b",
@@ -87,7 +89,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             company = CompanyInfoDto(
                 name = "GHI 회사",
                 url = "https://www.ghi-company.com",
-                address = "광주광역시 광산구 상무대로 312"
+                lon = 0.0,
+                lat = 0.0
             ),
             sns = "https://www.instagram.com/c",
             profileUrl = "https://www.instagram.com/img/c",
@@ -103,7 +106,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             company = CompanyInfoDto(
                 name = "JKL 회사",
                 url = "https://www.jkl-company.com",
-                address = "광주광역시 광산구 상무대로 312"
+                lon = 0.0,
+                lat = 0.0
             ),
             sns = "https://www.instagram.com/d",
             profileUrl = "https://www.instagram.com/img/d",
@@ -122,7 +126,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             company = CompanyInfoDto(
                 name = "GHI 회사",
                 url = "https://www.ghi-company.com",
-                address = "광주광역시 광산구 상무대로 312"
+                lon = 0.0,
+                lat = 0.0
             ),
             snsUrl = "https://www.instagram.com/c",
             defaultImgNumber = 4
@@ -136,7 +141,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             company = CompanyInfoDto(
                 name = "JKL 회사",
                 url = "https://www.jkl-company.com",
-                address = "광주광역시 광산구 상무대로 312"
+                lon = 0.0,
+                lat = 0.0
             ),
             snsUrl = "https://www.instagram.com/d",
             defaultImgNumber = 0
@@ -150,7 +156,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             company = CompanyInfoDto(
                 name = "MNO 회사",
                 url = "https://www.mno-company.com",
-                address = "광주광역시 광산구 상무대로 312"
+                lon = 0.0,
+                lat = 0.0
             ),
             snsUrl = "https://www.instagram.com/e",
             defaultImgNumber = 1
@@ -164,7 +171,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             company = CompanyInfoDto(
                 name = "PQR 회사",
                 url = "https://www.pqr-company.com",
-                address = "광주광역시 광산구 상무대로 312"
+                lon = 0.0,
+                lat = 0.0
             ),
             snsUrl = "https://www.instagram.com/f",
             defaultImgNumber = 2
@@ -180,7 +188,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
         company = CompanyInfoDto(
             name = "ABC 회사",
             url = "https://www.abc-company.com",
-            address = "광주광역시 광산구 상무대로 312"
+            lon = 0.0,
+            lat = 0.0
         ),
         sns = "https://www.instagram.com/a",
         profileUrl = "https://www.instagram.com/img/a",
@@ -197,7 +206,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
         company = CompanyInfoDto(
             name = "ABC 회사",
             url = "https://www.abc-company.com",
-            address = "광주광역시 광산구 상무대로 312"
+            lon = 0.0,
+            lat = 0.0
         ),
         snsUrl = "https://www.instagram.com/a",
         defaultImgNumber = 4

@@ -6,7 +6,7 @@ import team.themoment.gsmNetworking.domain.comment.dto.AuthorDto
 import team.themoment.gsmNetworking.domain.comment.dto.CommentListDto
 import java.time.LocalDateTime
 
-data class BoardInfoDto(
+data class BoardInfoDto (
     val id: Long,
     val title: String,
     val content: String,

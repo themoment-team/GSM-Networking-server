@@ -6,5 +6,6 @@ data class CompanyInfoDto(
     val name: String,
     @field:JsonProperty("URL")
     val url: String?,
-    val address: String?
+    val lat: Double?,
+    val lon: Double?
 )

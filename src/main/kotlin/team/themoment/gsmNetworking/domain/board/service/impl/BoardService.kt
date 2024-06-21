@@ -32,6 +32,7 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.DeleteS3FileUseCase
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.FileUploadUseCase
 import java.time.LocalDateTime
+import java.util.*
 import javax.mail.internet.MimeMessage
 
 @Service
@@ -53,7 +54,7 @@ class BoardService(
     UpdatePinStatusUseCase,
     UpdateBoardUseCase {
     @Transactional
-    override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardListDto {
+    override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardInfoDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
@@ -76,25 +77,29 @@ class BoardService(
 
         val savedBoard = boardRepository.save(newBoard)
 
-        uploadAndSaveFile(boardSaveDto.files, savedBoard)
+        val fileInfoDtos = uploadAndSaveFile(boardSaveDto.files, savedBoard)
 
         generatePopup(boardSaveDto.popupExp, boardSaveDto.boardCategory, savedBoard)
 
-        return BoardListDto(
+        return BoardInfoDto(
             id = savedBoard.id,
             title = savedBoard.title,
+            content = savedBoard.content,
             boardCategory = savedBoard.boardCategory,
             author = AuthorDto(
+                id = savedBoard.author.id,
                 name = savedBoard.author.name,
                 generation = savedBoard.author.generation,
                 profileUrl = savedBoard.author.profileUrl,
                 defaultImgNumber = savedBoard.author.defaultImgNumber
             ),
             createdAt = savedBoard.createdAt,
-            commentCount = 0,
+            comments = Arrays.asList(),
             likeCount = 0,
             isLike = false,
-            isPinned = savedBoard.isPinned
+            isPinned = savedBoard.isPinned,
+            fileList = fileInfoDtos
+
         )
 
     }
@@ -135,6 +140,7 @@ class BoardService(
             content = currentBoard.content,
             boardCategory = currentBoard.boardCategory,
             author = AuthorDto(
+                id = currentBoard.author.id,
                 name = currentBoard.author.name,
                 generation = currentBoard.author.generation,
                 profileUrl = currentBoard.author.profileUrl,
@@ -157,6 +163,7 @@ class BoardService(
                 commentId = it.id,
                 comment = it.comment,
                 author = AuthorDto(
+                    id = it.author.id,
                     name = it.author.name,
                     generation = it.author.generation,
                     profileUrl = it.author.profileUrl,
@@ -175,6 +182,7 @@ class BoardService(
                     commentId = reply.id,
                     comment = reply.comment,
                     author = AuthorDto(
+                        id = reply.author.id,
                         name = reply.author.name,
                         generation = reply.author.generation,
                         profileUrl = reply.author.profileUrl,
@@ -274,6 +282,7 @@ class BoardService(
             content = saveBoard.content,
             boardCategory = saveBoard.boardCategory,
             author = AuthorDto(
+                id = saveBoard.author.id,
                 name = saveBoard.author.name,
                 generation = saveBoard.author.generation,
                 profileUrl = saveBoard.author.profileUrl,

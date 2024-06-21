@@ -36,6 +36,7 @@ class BoardCustomRepositoryImpl(
                 board.boardCategory,
                 Projections.constructor(
                     AuthorDto::class.java,
+                    board.author.id,
                     board.author.name,
                     board.author.generation,
                     board.author.profileUrl,
@@ -45,7 +46,7 @@ class BoardCustomRepositoryImpl(
                 board.comments.size(),
                 board.likes.size(),
                 likeCase(user),
-                board.isPinned
+                board.isPinned,
             )
         )
             .from(board)
@@ -76,6 +77,7 @@ class BoardCustomRepositoryImpl(
                 board.boardCategory,
                 Projections.constructor(
                     AuthorDto::class.java,
+                    board.author.id,
                     board.author.name,
                     board.author.generation,
                     board.author.profileUrl,
@@ -85,7 +87,7 @@ class BoardCustomRepositoryImpl(
                 board.comments.size(),
                 board.likes.size(),
                 likeCase(user),
-                board.isPinned
+                board.isPinned,
             )
         )
             .from(board)
@@ -118,6 +120,7 @@ class BoardCustomRepositoryImpl(
                 board.boardCategory,
                 Projections.constructor(
                     AuthorDto::class.java,
+                    board.author.id,
                     board.author.name,
                     board.author.generation,
                     board.author.profileUrl,
