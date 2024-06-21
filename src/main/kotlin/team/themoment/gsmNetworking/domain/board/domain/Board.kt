@@ -10,7 +10,7 @@ import javax.persistence.FetchType.*
 
 @Entity
 @Table(name = "board")
-class Board (
+class Board(
 
     override val id: Long = 0,
 
@@ -44,5 +44,5 @@ class Board (
     val likes: MutableList<Like> = ArrayList(),
 
     @Column(name = "is_pinned")
-    var isPinned: Boolean = false
+    var isPinned: Boolean = false,
 ): BaseIdTimestampEntity();

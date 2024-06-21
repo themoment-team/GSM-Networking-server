@@ -3,6 +3,7 @@ package team.themoment.gsmNetworking.domain.board.controller
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
-import team.themoment.gsmNetworking.domain.board.dto.BoardInfoDto
-import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
-import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
-import team.themoment.gsmNetworking.domain.board.dto.BoardUpdateDto
+import team.themoment.gsmNetworking.domain.board.dto.*
 import team.themoment.gsmNetworking.domain.board.service.*
 import javax.validation.Valid
 import javax.validation.constraints.Max
@@ -72,5 +70,4 @@ class BoardController (
         updatePinStatusUseCase.updatePinStatus(boardId)
         return ResponseEntity.ok().build()
     }
-
 }

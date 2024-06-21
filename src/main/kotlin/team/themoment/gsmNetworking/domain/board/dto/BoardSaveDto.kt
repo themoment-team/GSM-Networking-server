@@ -21,5 +21,5 @@ data class BoardSaveDto (
     @field:Min(1)
     @field:Max(30)
     val popupExp: Int?,
-    val files: List<MultipartFile>
+    val files: List<MultipartFile>?
 )
