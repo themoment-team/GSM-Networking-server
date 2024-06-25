@@ -82,7 +82,7 @@ class BoardService(
 
         var fileInfoDtoList = emptyList<FileInfoDto>()
 
-        if (files.isNotEmpty()){
+        if (files.isEmpty()){
             fileInfoDtoList = uploadAndSaveFile(files, savedBoard)
         }
 
