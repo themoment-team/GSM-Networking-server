@@ -62,7 +62,7 @@ class BoardController (
     @PatchMapping("/{boardId}")
     fun updateBoard(
         @PathVariable boardId: Long,
-        @Valid @RequestPart("content") boardUpdateDto: BoardUpdateDto,
+        @Valid @RequestPart(value = "content", required = true) boardUpdateDto: BoardUpdateDto,
         @RequestPart(value = "files", required = false) files: List<MultipartFile>
         ) : ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
