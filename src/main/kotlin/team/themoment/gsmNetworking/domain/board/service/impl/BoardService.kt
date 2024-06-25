@@ -32,7 +32,6 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.DeleteS3FileUseCase
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.FileUploadUseCase
 import java.time.LocalDateTime
-import java.util.*
 import javax.mail.internet.MimeMessage
 
 @Service
@@ -54,7 +53,11 @@ class BoardService(
     UpdatePinStatusUseCase,
     UpdateBoardUseCase {
     @Transactional
-    override fun saveBoard(boardSaveDto: BoardSaveDto, authenticationId: Long): BoardInfoDto {
+    override fun saveBoard(
+        boardSaveDto: BoardSaveDto,
+        files: List<MultipartFile?>,
+        authenticationId: Long,
+    ): BoardInfoDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
             ?: throw ExpectedException("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
@@ -77,7 +80,11 @@ class BoardService(
 
         val savedBoard = boardRepository.save(newBoard)
 
-        val fileInfoDtos = uploadAndSaveFile(boardSaveDto.files, savedBoard)
+        var fileInfoDtoList = emptyList<FileInfoDto>()
+
+        if (files.isNotEmpty()){
+            fileInfoDtoList = uploadAndSaveFile(files, savedBoard)
+        }
 
         generatePopup(boardSaveDto.popupExp, boardSaveDto.boardCategory, savedBoard)
 
@@ -94,12 +101,11 @@ class BoardService(
                 defaultImgNumber = savedBoard.author.defaultImgNumber
             ),
             createdAt = savedBoard.createdAt,
-            comments = Arrays.asList(),
+            comments = listOf(),
             likeCount = 0,
             isLike = false,
             isPinned = savedBoard.isPinned,
-            fileList = fileInfoDtos
-
+            fileList = fileInfoDtoList
         )
 
     }
@@ -240,7 +246,12 @@ class BoardService(
     }
 
     @Transactional
-    override fun updateBoard(updateBoardDto: BoardUpdateDto, boardId: Long, authenticationId: Long): BoardInfoDto {
+    override fun updateBoard(
+        updateBoardDto: BoardUpdateDto,
+        files: List<MultipartFile>?,
+        boardId: Long,
+        authenticationId: Long,
+    ): BoardInfoDto {
         val board = boardRepository.findById(boardId)
             .orElseThrow { throw ExpectedException("존재하지않는 게시글입니다.", HttpStatus.NOT_FOUND) }
 
@@ -274,7 +285,11 @@ class BoardService(
 
         deleteFile(currentFiles)
 
-        val fileInfoDtoList = uploadAndSaveFile(updateBoardDto.files, saveBoard)
+        var fileInfoDtoList = emptyList<FileInfoDto>()
+
+        if (files != null){
+            fileInfoDtoList = uploadAndSaveFile(files, saveBoard)
+        }
 
         return BoardInfoDto(
             id = saveBoard.id,
@@ -313,21 +328,16 @@ class BoardService(
         }
     }
 
-    private fun uploadAndSaveFile(files: List<MultipartFile>?, board: Board): List<FileInfoDto>? {
-        if (files != null) {
+    private fun uploadAndSaveFile(files: List<MultipartFile?>, board: Board): List<FileInfoDto> {
+        val fileUrls = fileUploadUseCase.fileUpload(files)
 
-            val fileUrls = fileUploadUseCase.fileUpload(files)
-
-            val fileObjects = fileUrls.map {
-                File(it, board)
-            }
-
-            val savedFiles = fileRepository.saveAll(fileObjects)
-
-            return ofFileInfoDtoList(savedFiles)
+        val fileObjects = fileUrls.map {
+            File(it, board)
         }
 
-        return null
+        val savedFiles = fileRepository.saveAll(fileObjects)
+
+        return ofFileInfoDtoList(savedFiles)
     }
 
     private fun ofFileInfoDtoList(files: List<File>): List<FileInfoDto> {
@@ -346,4 +356,5 @@ class BoardService(
 
         fileRepository.deleteAll(files)
     }
+
 }

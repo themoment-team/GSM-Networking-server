@@ -30,27 +30,29 @@ class S3Service(
         return s3Upload(multipartFile, validateFileExtension(fileExtension))
     }
 
-    override fun fileUpload(multipartFile: List<MultipartFile>): List<String> {
+    override fun fileUpload(multipartFile: List<MultipartFile?>): List<String> {
         val fileUrls = multipartFile
             .map {
-                s3Upload(it, it.contentType)
+                s3Upload(it, it?.contentType)
             }
 
         return fileUrls
     }
 
-    private fun s3Upload(multipartFile: MultipartFile, contentType: String?): String {
+    private fun s3Upload(multipartFile: MultipartFile?, contentType: String?): String {
         try {
-            val originFileName = multipartFile.originalFilename
+            val originFileName = multipartFile?.originalFilename
             val fileExtension = StringUtils.getFilenameExtension(originFileName)
                 ?: throw ExpectedException("파일 확장자가 존재 하지 않는 파일입니다.", HttpStatus.BAD_REQUEST)
             val fileName = createFileName(fileExtension)
-            s3Template.upload(
-                s3Properties.bucketName,
-                fileName,
-                multipartFile.inputStream,
-                ObjectMetadata.builder().contentType(contentType).build()
-            )
+            multipartFile?.inputStream?.let {
+                s3Template.upload(
+                    s3Properties.bucketName,
+                    fileName,
+                    it,
+                    ObjectMetadata.builder().contentType(contentType).build()
+                )
+            }
             return addS3BucketDomain(fileName)
         } catch (e: S3Exception) {
             throw ExpectedException("AWS S3에서 오류 발생", HttpStatus.INTERNAL_SERVER_ERROR)

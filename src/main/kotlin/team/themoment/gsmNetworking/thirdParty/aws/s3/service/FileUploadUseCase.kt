@@ -4,5 +4,5 @@ import org.springframework.web.multipart.MultipartFile
 
 interface FileUploadUseCase {
 
-    fun fileUpload(multipartFile: List<MultipartFile>): List<String>
+    fun fileUpload(multipartFile: List<MultipartFile?>): List<String>
 }

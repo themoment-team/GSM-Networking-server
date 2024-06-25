@@ -20,6 +20,5 @@ data class BoardUpdateDto (
     @field:Nullable
     @field:Min(1)
     @field:Max(30)
-    val popupExp: Int?,
-    val files: List<MultipartFile>?
+    val popupExp: Int?
 )
