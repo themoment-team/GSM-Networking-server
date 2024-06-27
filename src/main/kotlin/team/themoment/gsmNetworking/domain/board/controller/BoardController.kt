@@ -63,7 +63,7 @@ class BoardController (
     fun updateBoard(
         @PathVariable boardId: Long,
         @Valid @RequestPart(value = "content", required = true) boardUpdateDto: BoardUpdateDto,
-        @RequestPart(value = "files", required = false) files: List<MultipartFile>
+        @RequestPart(value = "files", required = false) files: List<MultipartFile?>
         ) : ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
         return ResponseEntity.ok(updateBoardUseCase.updateBoard(boardUpdateDto, files, boardId, authenticationId))
