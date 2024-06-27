@@ -82,7 +82,7 @@ class BoardService(
 
         var fileInfoDtoList = emptyList<FileInfoDto>()
 
-        if (files.isEmpty()){
+        if (files.isNotEmpty()){
             fileInfoDtoList = uploadAndSaveFile(files, savedBoard)
         }
 
@@ -248,7 +248,7 @@ class BoardService(
     @Transactional
     override fun updateBoard(
         updateBoardDto: BoardUpdateDto,
-        files: List<MultipartFile>?,
+        files: List<MultipartFile?>,
         boardId: Long,
         authenticationId: Long,
     ): BoardInfoDto {
@@ -287,7 +287,7 @@ class BoardService(
 
         var fileInfoDtoList = emptyList<FileInfoDto>()
 
-        if (files != null){
+        if (files.isNotEmpty()){
             fileInfoDtoList = uploadAndSaveFile(files, saveBoard)
         }
 
