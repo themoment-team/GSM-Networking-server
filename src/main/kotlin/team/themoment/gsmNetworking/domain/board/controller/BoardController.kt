@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 import team.themoment.gsmNetworking.common.manager.AuthenticatedUserManager
 import team.themoment.gsmNetworking.domain.board.domain.BoardCategory
 import team.themoment.gsmNetworking.domain.board.dto.*
@@ -33,9 +35,12 @@ class BoardController (
 ) {
 
     @PostMapping
-    fun saveBoard(@Valid @RequestBody boardSaveDto: BoardSaveDto): ResponseEntity<BoardInfoDto> {
+    fun saveBoard(
+        @Valid @RequestPart("content") boardSaveDto: BoardSaveDto,
+        @RequestPart(value = "files", required = false) files: List<MultipartFile?>
+    ): ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
-        return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardUseCase.saveBoard(boardSaveDto, authenticationId))
+        return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardUseCase.saveBoard(boardSaveDto, files, authenticationId))
     }
 
     @GetMapping
@@ -57,10 +62,11 @@ class BoardController (
     @PatchMapping("/{boardId}")
     fun updateBoard(
         @PathVariable boardId: Long,
-        @RequestBody boardUpdateDto: BoardUpdateDto
+        @Valid @RequestPart(value = "content", required = true) boardUpdateDto: BoardUpdateDto,
+        @RequestPart(value = "files", required = false) files: List<MultipartFile>
         ) : ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
-        return ResponseEntity.ok(updateBoardUseCase.updateBoard(boardUpdateDto, boardId, authenticationId))
+        return ResponseEntity.ok(updateBoardUseCase.updateBoard(boardUpdateDto, files, boardId, authenticationId))
     }
 
     @PatchMapping("/pin/{boardId}")
