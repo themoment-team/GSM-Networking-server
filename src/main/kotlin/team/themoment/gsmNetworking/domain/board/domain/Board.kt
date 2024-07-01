@@ -28,11 +28,6 @@ class Board(
     @Column(name = "board_category")
     val boardCategory: BoardCategory,
 
-    @ElementCollection
-    @CollectionTable(name = "file_urls", joinColumns = [JoinColumn(name = "board_id")])
-    @Column(name = "file_urls")
-    val fileUrls: MutableList<String> = ArrayList(),
-
     @ManyToOne
     @JoinColumn(name = "author_id")
     val author: User,
@@ -42,6 +37,9 @@ class Board(
 
     @OneToMany(mappedBy = "board", fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val likes: MutableList<Like> = ArrayList(),
+
+    @OneToMany(mappedBy = "board", fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val files: MutableList<File> = ArrayList(),
 
     @Column(name = "is_pinned")
     var isPinned: Boolean = false,
