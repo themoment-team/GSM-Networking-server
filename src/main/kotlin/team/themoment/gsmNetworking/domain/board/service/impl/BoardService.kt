@@ -83,7 +83,7 @@ class BoardService(
         var fileInfoDtoList = emptyList<FileInfoDto>()
 
         if (files.isNotEmpty()){
-            fileInfoDtoList = uploadAndSaveFile(files, savedBoard)
+            fileInfoDtoList = uploadAndSaveFile(files.filterNotNull(), savedBoard)
         }
 
         generatePopup(boardSaveDto.popupExp, boardSaveDto.boardCategory, savedBoard)
@@ -288,7 +288,7 @@ class BoardService(
         var fileInfoDtoList = emptyList<FileInfoDto>()
 
         if (files.isNotEmpty()){
-            fileInfoDtoList = uploadAndSaveFile(files, saveBoard)
+            fileInfoDtoList = uploadAndSaveFile(files.filterNotNull(), saveBoard)
         }
 
         return BoardInfoDto(
@@ -328,12 +328,8 @@ class BoardService(
         }
     }
 
-    private fun uploadAndSaveFile(files: List<MultipartFile?>, board: Board): List<FileInfoDto> {
-        val fileUrls = fileUploadUseCase.fileUpload(files)
-
-        val fileObjects = fileUrls.map {
-            File(it, board)
-        }
+    private fun uploadAndSaveFile(files: List<MultipartFile>, board: Board): List<FileInfoDto> {
+        val fileObjects = fileUploadUseCase.fileUpload(files, board)
 
         val savedFiles = fileRepository.saveAll(fileObjects)
 
@@ -344,6 +340,7 @@ class BoardService(
         return files.map {
             FileInfoDto(
                 it.id,
+                it.fileName,
                 it.fileUrl
             )
         }
