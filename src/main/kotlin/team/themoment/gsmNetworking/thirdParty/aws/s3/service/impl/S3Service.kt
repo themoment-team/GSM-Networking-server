@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service
 import org.springframework.util.StringUtils
 import org.springframework.web.multipart.MultipartFile
 import team.themoment.gsmNetworking.common.exception.ExpectedException
+import team.themoment.gsmNetworking.domain.board.domain.Board
+import team.themoment.gsmNetworking.domain.board.domain.File
 import team.themoment.gsmNetworking.thirdParty.aws.s3.properties.S3Properties
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.DeleteS3FileUseCase
 import team.themoment.gsmNetworking.thirdParty.aws.s3.service.FileUploadUseCase
@@ -30,22 +32,22 @@ class S3Service(
         return s3Upload(multipartFile, validateFileExtension(fileExtension))
     }
 
-    override fun fileUpload(multipartFile: List<MultipartFile?>): List<String> {
-        val fileUrls = multipartFile
+    override fun fileUpload(multipartFile: List<MultipartFile>, board: Board): List<File>{
+        val fileObject = multipartFile
             .map {
-                s3Upload(it, it?.contentType)
+                File(s3Upload(it, it.contentType), it.originalFilename.toString(), board)
             }
 
-        return fileUrls
+        return fileObject
     }
 
-    private fun s3Upload(multipartFile: MultipartFile?, contentType: String?): String {
+    private fun s3Upload(multipartFile: MultipartFile, contentType: String?): String {
         try {
-            val originFileName = multipartFile?.originalFilename
+            val originFileName = multipartFile.originalFilename
             val fileExtension = StringUtils.getFilenameExtension(originFileName)
                 ?: throw ExpectedException("파일 확장자가 존재 하지 않는 파일입니다.", HttpStatus.BAD_REQUEST)
             val fileName = createFileName(fileExtension)
-            multipartFile?.inputStream?.let {
+            multipartFile.inputStream.let {
                 s3Template.upload(
                     s3Properties.bucketName,
                     fileName,

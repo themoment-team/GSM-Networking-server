@@ -37,10 +37,11 @@ class BoardController (
     @PostMapping
     fun saveBoard(
         @Valid @RequestPart("content") boardSaveDto: BoardSaveDto,
-        @RequestPart(value = "files", required = false) files: List<MultipartFile?>
+        @RequestPart(value = "files", required = false) files: List<MultipartFile>?
     ): ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
-        return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardUseCase.saveBoard(boardSaveDto, files, authenticationId))
+        val nonNullFiles = files ?: emptyList()
+        return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardUseCase.saveBoard(boardSaveDto, nonNullFiles, authenticationId))
     }
 
     @GetMapping
@@ -63,10 +64,11 @@ class BoardController (
     fun updateBoard(
         @PathVariable boardId: Long,
         @Valid @RequestPart(value = "content", required = true) boardUpdateDto: BoardUpdateDto,
-        @RequestPart(value = "files", required = false) files: List<MultipartFile?>
+        @RequestPart(value = "files", required = false) files: List<MultipartFile>?
         ) : ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
-        return ResponseEntity.ok(updateBoardUseCase.updateBoard(boardUpdateDto, files, boardId, authenticationId))
+        val nonNullFiles = files ?: emptyList()
+        return ResponseEntity.ok(updateBoardUseCase.updateBoard(boardUpdateDto, nonNullFiles, boardId, authenticationId))
     }
 
     @PatchMapping("/pin/{boardId}")

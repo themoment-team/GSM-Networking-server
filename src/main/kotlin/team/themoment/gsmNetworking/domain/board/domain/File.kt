@@ -11,6 +11,8 @@ import javax.persistence.Table
 class File (
     val fileUrl: String,
 
+    val fileName: String,
+
     @ManyToOne
     @JoinColumn(name = "board_id")
     val board: Board,

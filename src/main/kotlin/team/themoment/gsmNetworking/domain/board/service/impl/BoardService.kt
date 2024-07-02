@@ -55,7 +55,7 @@ class BoardService(
     @Transactional
     override fun saveBoard(
         boardSaveDto: BoardSaveDto,
-        files: List<MultipartFile?>,
+        files: List<MultipartFile>,
         authenticationId: Long,
     ): BoardInfoDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
@@ -83,7 +83,7 @@ class BoardService(
         var fileInfoDtoList = emptyList<FileInfoDto>()
 
         if (files.isNotEmpty()){
-            fileInfoDtoList = uploadAndSaveFile(files, savedBoard)
+            fileInfoDtoList = uploadAndSaveFile(files.filterNotNull(), savedBoard)
         }
 
         generatePopup(boardSaveDto.popupExp, boardSaveDto.boardCategory, savedBoard)
@@ -248,7 +248,7 @@ class BoardService(
     @Transactional
     override fun updateBoard(
         updateBoardDto: BoardUpdateDto,
-        files: List<MultipartFile?>,
+        files: List<MultipartFile>,
         boardId: Long,
         authenticationId: Long,
     ): BoardInfoDto {
@@ -328,12 +328,8 @@ class BoardService(
         }
     }
 
-    private fun uploadAndSaveFile(files: List<MultipartFile?>, board: Board): List<FileInfoDto> {
-        val fileUrls = fileUploadUseCase.fileUpload(files)
-
-        val fileObjects = fileUrls.map {
-            File(it, board)
-        }
+    private fun uploadAndSaveFile(files: List<MultipartFile>, board: Board): List<FileInfoDto> {
+        val fileObjects = fileUploadUseCase.fileUpload(files, board)
 
         val savedFiles = fileRepository.saveAll(fileObjects)
 
@@ -344,6 +340,7 @@ class BoardService(
         return files.map {
             FileInfoDto(
                 it.id,
+                it.fileName,
                 it.fileUrl
             )
         }
