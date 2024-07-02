@@ -55,7 +55,7 @@ class BoardService(
     @Transactional
     override fun saveBoard(
         boardSaveDto: BoardSaveDto,
-        files: List<MultipartFile?>,
+        files: List<MultipartFile>,
         authenticationId: Long,
     ): BoardInfoDto {
         val currentUser = userRepository.findByAuthenticationId(authenticationId)
@@ -248,7 +248,7 @@ class BoardService(
     @Transactional
     override fun updateBoard(
         updateBoardDto: BoardUpdateDto,
-        files: List<MultipartFile?>,
+        files: List<MultipartFile>,
         boardId: Long,
         authenticationId: Long,
     ): BoardInfoDto {
@@ -288,7 +288,7 @@ class BoardService(
         var fileInfoDtoList = emptyList<FileInfoDto>()
 
         if (files.isNotEmpty()){
-            fileInfoDtoList = uploadAndSaveFile(files.filterNotNull(), saveBoard)
+            fileInfoDtoList = uploadAndSaveFile(files, saveBoard)
         }
 
         return BoardInfoDto(

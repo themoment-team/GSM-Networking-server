@@ -37,7 +37,7 @@ class BoardController (
     @PostMapping
     fun saveBoard(
         @Valid @RequestPart("content") boardSaveDto: BoardSaveDto,
-        @RequestPart(value = "files", required = false) files: List<MultipartFile?>?
+        @RequestPart(value = "files", required = false) files: List<MultipartFile>?
     ): ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
         val nonNullFiles = files ?: emptyList()
@@ -64,7 +64,7 @@ class BoardController (
     fun updateBoard(
         @PathVariable boardId: Long,
         @Valid @RequestPart(value = "content", required = true) boardUpdateDto: BoardUpdateDto,
-        @RequestPart(value = "files", required = false) files: List<MultipartFile?>?
+        @RequestPart(value = "files", required = false) files: List<MultipartFile>?
         ) : ResponseEntity<BoardInfoDto> {
         val authenticationId = authenticatedUserManager.getName()
         val nonNullFiles = files ?: emptyList()

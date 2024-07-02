@@ -6,5 +6,5 @@ import team.themoment.gsmNetworking.domain.board.dto.BoardListDto
 import team.themoment.gsmNetworking.domain.board.dto.BoardSaveDto
 
 interface SaveBoardUseCase {
-    fun saveBoard(boardSaveDto: BoardSaveDto, files: List<MultipartFile?>, authenticationId: Long): BoardInfoDto
+    fun saveBoard(boardSaveDto: BoardSaveDto, files: List<MultipartFile>, authenticationId: Long): BoardInfoDto
 }
