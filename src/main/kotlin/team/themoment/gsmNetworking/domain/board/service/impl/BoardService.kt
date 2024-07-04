@@ -93,12 +93,13 @@ class BoardService(
             title = savedBoard.title,
             content = savedBoard.content,
             boardCategory = savedBoard.boardCategory,
-            author = AuthorDto(
+            author = BoardAuthorDto(
                 id = savedBoard.author.id,
                 name = savedBoard.author.name,
                 generation = savedBoard.author.generation,
                 profileUrl = savedBoard.author.profileUrl,
-                defaultImgNumber = savedBoard.author.defaultImgNumber
+                defaultImgNumber = savedBoard.author.defaultImgNumber,
+                phoneNumber = savedBoard.author.phoneNumber
             ),
             createdAt = savedBoard.createdAt,
             comments = listOf(),
@@ -145,12 +146,13 @@ class BoardService(
             title = currentBoard.title,
             content = currentBoard.content,
             boardCategory = currentBoard.boardCategory,
-            author = AuthorDto(
+            author = BoardAuthorDto(
                 id = currentBoard.author.id,
                 name = currentBoard.author.name,
                 generation = currentBoard.author.generation,
                 profileUrl = currentBoard.author.profileUrl,
-                defaultImgNumber = currentBoard.author.defaultImgNumber
+                defaultImgNumber = currentBoard.author.defaultImgNumber,
+                phoneNumber = currentBoard.author.phoneNumber
             ),
             createdAt = currentBoard.createdAt,
             comments = getFindComments(findComments),
@@ -296,12 +298,13 @@ class BoardService(
             title = saveBoard.title,
             content = saveBoard.content,
             boardCategory = saveBoard.boardCategory,
-            author = AuthorDto(
+            author = BoardAuthorDto(
                 id = saveBoard.author.id,
                 name = saveBoard.author.name,
                 generation = saveBoard.author.generation,
                 profileUrl = saveBoard.author.profileUrl,
-                defaultImgNumber = saveBoard.author.defaultImgNumber
+                defaultImgNumber = saveBoard.author.defaultImgNumber,
+                phoneNumber = saveBoard.author.phoneNumber
             ),
             comments = getFindComments(saveBoard.comments),
             likeCount = saveBoard.likes.size,

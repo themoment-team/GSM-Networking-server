@@ -23,6 +23,7 @@ data class TempMentorInfoDto(
         sns = snsUrl,
         profileUrl = null,
         registered = false,
-        defaultImgNumber = defaultImgNumber
+        defaultImgNumber = defaultImgNumber,
+        phoneNumber = null,
     )
 }

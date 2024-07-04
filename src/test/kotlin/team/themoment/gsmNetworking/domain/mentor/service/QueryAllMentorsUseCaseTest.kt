@@ -61,7 +61,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             sns = "https://www.instagram.com/a",
             profileUrl = "https://www.instagram.com/img/a",
             registered = true,
-            defaultImgNumber = 0
+            defaultImgNumber = 0,
+            phoneNumber = "01000000000"
         ),
         MentorInfoDto(
             id = 2L,
@@ -78,7 +79,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             sns = "https://www.instagram.com/b",
             profileUrl = "https://www.instagram.com/img/b",
             registered = true,
-            defaultImgNumber = 1
+            defaultImgNumber = 1,
+            phoneNumber = "01000000000"
         ),
         MentorInfoDto(
             id = 3L,
@@ -95,7 +97,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             sns = "https://www.instagram.com/c",
             profileUrl = "https://www.instagram.com/img/c",
             registered = true,
-            defaultImgNumber = 2
+            defaultImgNumber = 2,
+            phoneNumber = "01000000000"
         ),
         MentorInfoDto(
             id = 4L,
@@ -112,7 +115,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             sns = "https://www.instagram.com/d",
             profileUrl = "https://www.instagram.com/img/d",
             registered = true,
-            defaultImgNumber = 3
+            defaultImgNumber = 3,
+            phoneNumber = "01000000000"
         )
     )
 
@@ -194,7 +198,8 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
         sns = "https://www.instagram.com/a",
         profileUrl = "https://www.instagram.com/img/a",
         registered = true,
-        defaultImgNumber = 3
+        defaultImgNumber = 3,
+        phoneNumber = "01000000000"
     )
 
     val sameUserTempMentor = TempMentorInfoDto(
