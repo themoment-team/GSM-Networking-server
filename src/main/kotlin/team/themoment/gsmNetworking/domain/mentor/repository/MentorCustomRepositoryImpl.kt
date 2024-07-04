@@ -41,7 +41,8 @@ class MentorCustomRepositoryImpl(
                 mentor.user.snsUrl,
                 mentor.user.profileUrl,
                 mentor.registered,
-                mentor.user.defaultImgNumber
+                mentor.user.defaultImgNumber,
+                mentor.user.phoneNumber
             )
         )
             .from(mentor, career)
