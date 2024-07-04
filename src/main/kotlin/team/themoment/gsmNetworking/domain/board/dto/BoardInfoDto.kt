@@ -11,7 +11,7 @@ data class BoardInfoDto (
     val title: String,
     val content: String,
     val boardCategory: BoardCategory,
-    val author: AuthorDto,
+    val author: BoardAuthorDto,
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val createdAt: LocalDateTime,
     val comments: List<CommentListDto>,
