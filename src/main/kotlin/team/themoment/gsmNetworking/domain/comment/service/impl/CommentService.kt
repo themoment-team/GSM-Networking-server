@@ -56,6 +56,7 @@ class CommentService (
             commentId = savedComment.id,
             comment = savedComment.comment,
             author = AuthorDto (
+                id = savedComment.author.id,
                 name = savedComment.author.name,
                 generation = savedComment.author.generation,
                 profileUrl = savedComment.author.profileUrl,
@@ -75,6 +76,7 @@ class CommentService (
             commentId = comment.id,
             comment = comment.comment,
             author = AuthorDto(
+                id = comment.author.id,
                 name = comment.author.name,
                 generation = comment.author.generation,
                 profileUrl = comment.author.profileUrl,
@@ -90,6 +92,7 @@ class CommentService (
                 commentId = it.id,
                 comment = it.comment,
                 author = AuthorDto(
+                    id = it.author.id,
                     name = it.author.name,
                     generation = it.author.generation,
                     profileUrl = it.author.profileUrl,

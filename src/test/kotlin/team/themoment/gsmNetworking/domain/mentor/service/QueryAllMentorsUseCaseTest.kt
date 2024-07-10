@@ -19,28 +19,29 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.domain.user.service.DeleteUserInfoByIdUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
 import team.themoment.gsmNetworking.domain.user.service.ModifyUserInfoByIdUseCase
+import team.themoment.gsmNetworking.domain.user.service.QueryUserByIdUseCase
 
 @SpringBootTest(classes = [QueryAllMentorsUseCase::class])
 class QueryAllMentorsUseCaseTest : BehaviorSpec({
 
     val mentorRepository: MentorRepository = mockk()
     val careerRepository: CareerRepository = mockk()
-    val userRepository: UserRepository = mockk()
     val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase = mockk()
     val generateUserUseCase: GenerateUserUseCase = mockk()
     val modifyUserInfoByIdUseCase: ModifyUserInfoByIdUseCase = mockk()
     val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase = mockk()
+    val queryUserByIdUseCase: QueryUserByIdUseCase = mockk()
 
 
     val queryAllMentorsUseCase: QueryAllMentorsUseCase =
         MentorService(
             mentorRepository,
             careerRepository,
-            userRepository,
             queryAllTempMentorsUseCase,
             generateUserUseCase,
             modifyUserInfoByIdUseCase,
-            deleteUserInfoByIdUseCase
+            deleteUserInfoByIdUseCase,
+            queryUserByIdUseCase
         )
 
     //TODO 더미데이터가 코드를 너무 많이 차지하는데...
@@ -53,12 +54,15 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             position = "디자이너",
             company = CompanyInfoDto(
                 name = "ABC 회사",
-                url = "https://www.abc-company.com"
+                url = "https://www.abc-company.com",
+                lon = 0.0,
+                lat = 0.0
             ),
             sns = "https://www.instagram.com/a",
             profileUrl = "https://www.instagram.com/img/a",
             registered = true,
-            defaultImgNumber = 0
+            defaultImgNumber = 0,
+            phoneNumber = "01000000000"
         ),
         MentorInfoDto(
             id = 2L,
@@ -68,12 +72,15 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             position = "개발자",
             company = CompanyInfoDto(
                 name = "DEF 회사",
-                url = "https://www.def-company.com"
+                url = "https://www.def-company.com",
+                lon = 0.0,
+                lat = 0.0
             ),
             sns = "https://www.instagram.com/b",
             profileUrl = "https://www.instagram.com/img/b",
             registered = true,
-            defaultImgNumber = 1
+            defaultImgNumber = 1,
+            phoneNumber = "01000000000"
         ),
         MentorInfoDto(
             id = 3L,
@@ -83,12 +90,15 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             position = "디자이너",
             company = CompanyInfoDto(
                 name = "GHI 회사",
-                url = "https://www.ghi-company.com"
+                url = "https://www.ghi-company.com",
+                lon = 0.0,
+                lat = 0.0
             ),
             sns = "https://www.instagram.com/c",
             profileUrl = "https://www.instagram.com/img/c",
             registered = true,
-            defaultImgNumber = 2
+            defaultImgNumber = 2,
+            phoneNumber = "01000000000"
         ),
         MentorInfoDto(
             id = 4L,
@@ -98,12 +108,15 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             position = "마케터",
             company = CompanyInfoDto(
                 name = "JKL 회사",
-                url = "https://www.jkl-company.com"
+                url = "https://www.jkl-company.com",
+                lon = 0.0,
+                lat = 0.0
             ),
             sns = "https://www.instagram.com/d",
             profileUrl = "https://www.instagram.com/img/d",
             registered = true,
-            defaultImgNumber = 3
+            defaultImgNumber = 3,
+            phoneNumber = "01000000000"
         )
     )
 
@@ -116,7 +129,9 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             position = "개발자",
             company = CompanyInfoDto(
                 name = "GHI 회사",
-                url = "https://www.ghi-company.com"
+                url = "https://www.ghi-company.com",
+                lon = 0.0,
+                lat = 0.0
             ),
             snsUrl = "https://www.instagram.com/c",
             defaultImgNumber = 4
@@ -129,7 +144,9 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             position = "기획자",
             company = CompanyInfoDto(
                 name = "JKL 회사",
-                url = "https://www.jkl-company.com"
+                url = "https://www.jkl-company.com",
+                lon = 0.0,
+                lat = 0.0
             ),
             snsUrl = "https://www.instagram.com/d",
             defaultImgNumber = 0
@@ -142,7 +159,9 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             position = "개발자",
             company = CompanyInfoDto(
                 name = "MNO 회사",
-                url = "https://www.mno-company.com"
+                url = "https://www.mno-company.com",
+                lon = 0.0,
+                lat = 0.0
             ),
             snsUrl = "https://www.instagram.com/e",
             defaultImgNumber = 1
@@ -155,7 +174,9 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
             position = "개발자",
             company = CompanyInfoDto(
                 name = "PQR 회사",
-                url = "https://www.pqr-company.com"
+                url = "https://www.pqr-company.com",
+                lon = 0.0,
+                lat = 0.0
             ),
             snsUrl = "https://www.instagram.com/f",
             defaultImgNumber = 2
@@ -170,12 +191,15 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
         position = "디자이너",
         company = CompanyInfoDto(
             name = "ABC 회사",
-            url = "https://www.abc-company.com"
+            url = "https://www.abc-company.com",
+            lon = 0.0,
+            lat = 0.0
         ),
         sns = "https://www.instagram.com/a",
         profileUrl = "https://www.instagram.com/img/a",
         registered = true,
-        defaultImgNumber = 3
+        defaultImgNumber = 3,
+        phoneNumber = "01000000000"
     )
 
     val sameUserTempMentor = TempMentorInfoDto(
@@ -186,7 +210,9 @@ class QueryAllMentorsUseCaseTest : BehaviorSpec({
         position = "디자이너",
         company = CompanyInfoDto(
             name = "ABC 회사",
-            url = "https://www.abc-company.com"
+            url = "https://www.abc-company.com",
+            lon = 0.0,
+            lat = 0.0
         ),
         snsUrl = "https://www.instagram.com/a",
         defaultImgNumber = 4

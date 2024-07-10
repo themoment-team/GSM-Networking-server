@@ -7,7 +7,7 @@ import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.validation.constraints.*
 
-data class BoardSaveDto (
+data class BoardUpdateDto (
     @field:NotBlank
     @field:Size(max = 50)
     val title: String,

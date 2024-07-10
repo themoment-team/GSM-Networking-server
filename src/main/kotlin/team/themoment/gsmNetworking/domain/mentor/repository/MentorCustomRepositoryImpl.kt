@@ -34,12 +34,15 @@ class MentorCustomRepositoryImpl(
                 Projections.constructor(
                     CompanyInfoDto::class.java,
                     career.companyName,
-                    career.companyUrl
+                    career.companyUrl,
+                    career.lat,
+                    career.lon
                 ),
                 mentor.user.snsUrl,
                 mentor.user.profileUrl,
                 mentor.registered,
-                mentor.user.defaultImgNumber
+                mentor.user.defaultImgNumber,
+                mentor.user.phoneNumber
             )
         )
             .from(mentor, career)
@@ -64,7 +67,7 @@ class MentorCustomRepositoryImpl(
                 groupBy(career.mentor.id).list(
                     Projections.constructor(
                         MyMentorInfoDto::class.java,
-                        mentor.id,
+                        mentor.user.id,
                         mentor.user.name,
                         mentor.user.email,
                         mentor.user.phoneNumber,
@@ -80,6 +83,8 @@ class MentorCustomRepositoryImpl(
                                 career.position,
                                 career.companyName,
                                 career.companyUrl,
+                                career.lat,
+                                career.lon,
                                 career.startDate,
                                 career.endDate,
                                 career.isWorking

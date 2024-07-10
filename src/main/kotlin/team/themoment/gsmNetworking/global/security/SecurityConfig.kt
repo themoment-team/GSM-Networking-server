@@ -61,11 +61,13 @@ class SecurityConfig(
     private fun authorizeHttpRequests(http: HttpSecurity) {
         http.authorizeHttpRequests()
             // /mentor
-            .mvcMatchers("/api/v1/mentor/*").hasAnyRole(
+            .mvcMatchers(HttpMethod.GET, "/api/v1/mentor").hasAnyRole(
+                Authority.TEMP_USER.name,
                 Authority.USER.name,
+                Authority.ADMIN.name,
                 Authority.TEACHER.name
             )
-            .mvcMatchers(HttpMethod.GET, "/api/v1/mentor").hasAnyRole(
+            .mvcMatchers("/api/v1/mentor/marker").hasAnyRole(
                 Authority.TEMP_USER.name,
                 Authority.USER.name,
                 Authority.ADMIN.name,
@@ -76,6 +78,10 @@ class SecurityConfig(
                 Authority.TEMP_USER.name
             )
             .mvcMatchers("/api/v1/mentor/my").hasAnyRole(
+                Authority.USER.name,
+                Authority.TEACHER.name
+            )
+            .mvcMatchers("/api/v1/mentor/**").hasAnyRole(
                 Authority.USER.name,
                 Authority.TEACHER.name
             )
@@ -137,6 +143,17 @@ class SecurityConfig(
             .mvcMatchers("/api/v1/file").hasAnyRole(
                 Authority.USER.name,
                 Authority.TEMP_USER.name,
+                Authority.TEACHER.name
+            )
+            // board
+            .mvcMatchers("/api/v1/board/*").hasAnyRole(
+                Authority.TEMP_USER.name,
+                Authority.USER.name,
+                Authority.ADMIN.name,
+                Authority.TEACHER.name
+            )
+            // pin
+            .mvcMatchers(HttpMethod.PATCH, "/api/v1/board/pin/*").hasAnyRole(
                 Authority.TEACHER.name
             )
             // /gwangya

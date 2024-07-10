@@ -7,6 +7,7 @@ import team.themoment.gsmNetworking.common.exception.ExpectedException
 import team.themoment.gsmNetworking.domain.mentor.domain.Career
 import team.themoment.gsmNetworking.domain.mentor.domain.Mentor
 import team.themoment.gsmNetworking.domain.mentor.dto.*
+import team.themoment.gsmNetworking.domain.mentor.repository.CareerCustomRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.CareerRepository
 import team.themoment.gsmNetworking.domain.mentor.repository.MentorRepository
 import team.themoment.gsmNetworking.domain.mentor.service.*
@@ -15,6 +16,8 @@ import team.themoment.gsmNetworking.domain.user.repository.UserRepository
 import team.themoment.gsmNetworking.domain.user.service.DeleteUserInfoByIdUseCase
 import team.themoment.gsmNetworking.domain.user.service.GenerateUserUseCase
 import team.themoment.gsmNetworking.domain.user.service.ModifyUserInfoByIdUseCase
+import team.themoment.gsmNetworking.domain.user.service.QueryUserByIdUseCase
+import javax.print.PrintService
 
 /**
  * 멘토 관련 로직이 담긴 클래스 입니다.
@@ -23,16 +26,18 @@ import team.themoment.gsmNetworking.domain.user.service.ModifyUserInfoByIdUseCas
 class MentorService(
     private val mentorRepository: MentorRepository,
     private val careerRepository: CareerRepository,
-    private val userRepository: UserRepository,
     private val queryAllTempMentorsUseCase: QueryAllTempMentorsUseCase,
     private val generateUserUseCase: GenerateUserUseCase,
     private val modifyUserInfoByIdUseCase: ModifyUserInfoByIdUseCase,
-    private val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase
+    private val deleteUserInfoByIdUseCase: DeleteUserInfoByIdUseCase,
+    private val queryUserByIdUseCase: QueryUserByIdUseCase,
 ) : QueryAllMentorsUseCase,
     MentorRegistrationUseCase,
     QueryMentorInfoByIdUseCase,
     DeleteMentorInfoByIdUseCase,
-    ModifyMentorInfoByIdUseCase {
+    ModifyMentorInfoByIdUseCase,
+    GenerateCompanyAddressUseCase,
+    QueryAllMentorCompanyAddressUseCase {
 
     /**
      * 모든 멘토 리스트를 가져와서 리턴해주는 메서드 입니다.
@@ -73,6 +78,8 @@ class MentorService(
                 mentor = mentor,
                 companyName = it.companyName,
                 companyUrl = it.companyUrl ?: "",
+                lat = it.lat,
+                lon = it.lon,
                 position = it.position,
                 startDate = it.startDate,
                 endDate = it.endDate,
@@ -106,24 +113,38 @@ class MentorService(
     }
 
     @Transactional
-    override fun modifyMentorInfoById(authenticationId: Long, mentorSaveInfoDto: MentorSaveInfoDto) {
-        val user = userRepository.findByAuthenticationId(authenticationId)
-            ?: throw ExpectedException("user를 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
+    override fun modifyMentorInfoById(authenticationId: Long, mentorUpdateInfoDto: MentorSaveInfoDto) {
+        val user = queryUserByIdUseCase.queryUserById(authenticationId)
         val mentor = mentorRepository.findByUser(user)
             ?: throw ExpectedException("mentor를 찾을 수 없습니다", HttpStatus.NOT_FOUND)
 
-        val updateCareers = Career.ofCareers(mentorSaveInfoDto.career, mentor)
+        val updateCareers = Career.ofCareers(mentorUpdateInfoDto.career, mentor)
 
         val userSaveInfoDto = UserSaveInfoDto(
-            name = mentorSaveInfoDto.name,
-            generation = mentorSaveInfoDto.generation,
-            phoneNumber = mentorSaveInfoDto.phoneNumber,
-            email = mentorSaveInfoDto.email,
-            snsUrl = mentorSaveInfoDto.snsUrl
+            name = mentorUpdateInfoDto.name,
+            generation = mentorUpdateInfoDto.generation,
+            phoneNumber = mentorUpdateInfoDto.phoneNumber,
+            email = mentorUpdateInfoDto.email,
+            snsUrl = mentorUpdateInfoDto.snsUrl
         )
 
         modifyUserInfoByIdUseCase.modifyUserInfoById(mentor.user.authenticationId, userSaveInfoDto)
         careerRepository.deleteAllByMentor(mentor)
         careerRepository.saveAll(updateCareers)
     }
+
+    @Transactional
+    override fun generateCompanyAddress( companyAddressRegistrationDto: CompanyAddressRegistrationDto) {
+        val career = careerRepository.findById(companyAddressRegistrationDto.id)
+            .orElseThrow { ExpectedException("career를 찾을 수 없습니다.", HttpStatus.NOT_FOUND) }
+        career.lat = companyAddressRegistrationDto.lat
+        career.lon = companyAddressRegistrationDto.lon
+        careerRepository.save(career)
+    }
+
+    @Transactional(readOnly = true)
+    override fun queryAllMentorCompanyAddress(): List<MentorCompanyAddressListDto> {
+        return careerRepository.queryAllCompanyAddress()
+    }
+
 }

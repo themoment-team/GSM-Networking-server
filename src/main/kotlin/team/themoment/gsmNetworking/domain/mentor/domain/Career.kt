@@ -23,6 +23,12 @@ class Career(
     @Column(nullable = true)
     val companyUrl: String,
 
+    @Column(nullable = true)
+    var lat: Double?,
+
+    @Column(nullable = true)
+    var lon: Double?,
+
     @Column(nullable = false)
     val position: String,
 
@@ -43,6 +49,8 @@ class Career(
                     mentor = mentor,
                     companyName = it.companyName,
                     companyUrl = it.companyUrl ?: "",
+                    lat = it.lat,
+                    lon = it.lon,
                     position = it.position,
                     startDate = it.startDate,
                     endDate = it.endDate,

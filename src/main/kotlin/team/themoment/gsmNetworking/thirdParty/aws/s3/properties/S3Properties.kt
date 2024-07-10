@@ -7,5 +7,5 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties("spring.cloud.aws.s3")
 class S3Properties(
     val bucketName: String,
-    val imageBucketDomain: String
+    val bucketDomain: String
 )

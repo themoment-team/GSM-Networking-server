@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -24,6 +25,8 @@ class MentorController(
     private val deleteMentorInfoByIdUseCase: DeleteMentorInfoByIdUseCase,
     private val modifyMentorInfoByIdUseCase: ModifyMentorInfoByIdUseCase,
     private val authenticatedUserManager: AuthenticatedUserManager,
+    private val generateCompanyAddressUseCase: GenerateCompanyAddressUseCase,
+    private val queryAllMentorCompanyAddressUseCase: QueryAllMentorCompanyAddressUseCase
 ) {
 
     @PostMapping
@@ -58,6 +61,17 @@ class MentorController(
         val authenticationId = authenticatedUserManager.getName()
         modifyMentorInfoByIdUseCase.modifyMentorInfoById(authenticationId, dto)
         return ResponseEntity.noContent().build()
+    }
+
+    @PatchMapping("/career/company-address")
+    fun companyAddressRegistration(@RequestBody @Valid dto: CompanyAddressRegistrationDto): ResponseEntity<Void> {
+        generateCompanyAddressUseCase.generateCompanyAddress(dto)
+        return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
+
+    @GetMapping("/marker")
+    fun queryAllMentorAddress(): ResponseEntity<List<MentorCompanyAddressListDto>> {
+        return ResponseEntity.ok(queryAllMentorCompanyAddressUseCase.queryAllMentorCompanyAddress())
     }
 
 }
